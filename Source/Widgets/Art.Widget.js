@@ -47,6 +47,15 @@ ART.Widget = new Class({
 		return this.element = new Element('div');
 	},
 
+	setContent: function(){
+		$A(arguments).each(function(arg) {
+			var elements = $$($(arg)||arg);
+			if (elements.length) this.element.empty().adopt(elements)
+			else this.element.set('html', arg);
+		}, this);
+		return this;
+	},
+
 	// render placeholder
 
 	render: function(style){

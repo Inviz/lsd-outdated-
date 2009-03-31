@@ -9,8 +9,11 @@
 		"Art.Paint":{
 			"deps":["Art"],
 			"desc":"Contains Paint API and core shapes."
+		},
+		"Color.Beta":{
+			"deps":["Color.Beta"],
+			"desc":"See: http://github.com/kamicane/mootools-color/"
 		}
-
 	},
 	"Icons": {
 		"Window.Icons":{
@@ -30,7 +33,7 @@
 			"desc":"Element foundation class for all Art widgets."
 		},
 		"Art.Button":{
-			"deps":["Element.Event", "Color", "Art.Widget", "Pill.Shapes"],
+			"deps":["Element.Event", "Color.Beta", "Art.Widget", "Pill.Shapes"],
 			"desc":"A basic button widget."
 		},
 		"Art.Window":{

@@ -6,7 +6,8 @@
 			verify: "Do you see a slick button?",
 			before: function(){
 				try {
-					$(new ART.Button()).setContent('foo').inject('test');
+					var button = new ART.Button().setContent('foo');
+					$(button).inject('test');
 				} catch(e) {
 					dbug.log(e)
 				}
