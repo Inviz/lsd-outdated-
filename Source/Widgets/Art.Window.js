@@ -148,8 +148,26 @@ ART.Window = new Class({
 		this.render();
 	},
 	
-	setContent: function(){
-		this.content.adopt(arguments);
+	setContent: function(parts){
+		var setter = function(element, content) {
+			var elements = $$($(content)||content);
+			if (elements.length) element.empty().adopt(elements)
+			else element.set('html', content);
+		}
+		if ($type(parts) == "object") {
+		/*	{
+				header: 'hi there',
+				content: [DOM Element],
+				footer: <html string>
+			} */
+			$each(parts, function(content, part) {
+				setter(this[part], content);
+			}, this);
+		} else {
+			$A(arguments).each(function(arg) {
+				setter(this.content, content);
+			}, this);
+		}
 		return this;
 	},
 	

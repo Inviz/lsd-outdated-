@@ -3,12 +3,12 @@
 // Base widget class. Based on » http://gist.github.com/85837
 
 ART.Widget = new Class({
-	
+
 	Implements: [Options, Events],
-	
+
 	ns: 'art',
 	name: 'widget',
-	
+
 	options: {
 		// onShow: $empty,
 		// onHide: $empty,
@@ -16,9 +16,10 @@ ART.Widget = new Class({
 		// onBlur: $empty,
 		// onEnable: $empty,
 		// onDisable: $empty,
+		// onDestroy: $empty,
 		style: null
 	},
-	
+
 	style: {
 		base: null,
 		active: null,
@@ -26,33 +27,33 @@ ART.Widget = new Class({
 		focused: null,
 		hidden: null
 	},
-	
+
 	initialize: function(options){
 		if (options) this.setOptions(options);
-		
+
 		if (this.options.style) this.style = $merge(this.style, this.options.style);
-		
+
 		this.prefix = this.ns + '-' + this.name;
 		this.element = new Element('div');
 		this.element.addClass(this.ns).addClass(this.prefix);
-		
+
 		this.style.now = $unlink(this.style.base);
 
 		// initial render
 		this.render();
 	},
-	
+
 	// render placeholder
-	
+
 	render: function(style){
 		if (style) $extend(this.style.now, style);
-		
+
 		this.element.setStyles(this.style.now);
 		return this;
 	},
-	
+
 	// special states
-	
+
 	hide: function(){
 		if (!this.hidden){
 			this.hidden = true;
@@ -62,7 +63,7 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
 	activate: function(){
 		if (!this.active){
 			this.active = true;
@@ -72,7 +73,7 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
 	focus: function(){
 		if (!this.focused){
 			this.focused = true;
@@ -82,7 +83,7 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
 	disable: function(){
 		if (!this.disabled){
 			this.disabled = true;
@@ -92,9 +93,9 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
 	// normal states
-	
+
 	show: function(){
 		if (this.hidden){
 			this.hidden = false;
@@ -104,7 +105,7 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
 	deactivate: function(){
 		if (this.active){
 			this.active = false;
@@ -114,7 +115,7 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
 	blur: function(){
 		if (this.focused){
 			this.focused = false;
@@ -124,7 +125,7 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
 	enable: function(){
 		if (this.disabled){
 			this.disabled = false;
@@ -134,11 +135,17 @@ ART.Widget = new Class({
 		}
 		return this;
 	},
-	
+
+	destroy: function(){
+		this.element.destroy();
+		this.fireEvent('destroy');
+		return this;
+	},
+
 	// toElement
-	
+
 	toElement: function(){
 		return this.element;
 	}
-	
+
 });
