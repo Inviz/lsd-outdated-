@@ -4,8 +4,9 @@ UnitTester.title = 'Interactive Tests';
 window.addEvent('load', function(){
 	new UnitTester({
 		mootoolsCore : '../../core',
-		Sample			 : '..'
+		mootoolsMore : '../../more',
+		mootoolsArt : '..'
 	},{
-		Sample : 'UserTests'
+		Art : 'UserTests'
 	});
 });

@@ -1,5 +1,5 @@
 {
-	"UtilityClasses": {
-	  "RadClass" : ['all']
+	"Widgets": {
+	  "Art.Button" : ['all']
 	}
 }

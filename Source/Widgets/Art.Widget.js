@@ -34,13 +34,17 @@ ART.Widget = new Class({
 		if (this.options.style) this.style = $merge(this.style, this.options.style);
 
 		this.prefix = this.ns + '-' + this.name;
-		this.element = new Element('div');
+		this.makeElement();
 		this.element.addClass(this.ns).addClass(this.prefix);
 
 		this.style.now = $unlink(this.style.base);
 
 		// initial render
 		this.render();
+	},
+
+	makeElement: function(){
+		return this.element = new Element('div');
 	},
 
 	// render placeholder

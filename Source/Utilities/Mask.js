@@ -31,31 +31,26 @@ var Mask = new Class({
 
 	options: {
 		//injectWhere: null,
-		elementsToHide: 'select, embed, object',
-		hideOnClick: true,
-		id: 'modalOverlay'
+		elementsToHide: (Browser.Engine.trident4 || (Browser.Engine.gecko && !Browser.Engine.gecko19 && Browser.Platform.mac)) ? 'select, embed, object' : null,
+		hideOnClick: false,
+		id: null
 	},
 
 	initialize: function(target, options){
 		this.setOptions(options);
 		this.target = $(target) || document.body;
 		if (this.target == document.body && !Browser.Engine.trident4) this.style.base.position = 'fixed';
-		this.element = $(this.modalOptions.layerId) || new Element('div', {id: this.modalOptions.layerId});
-		this.inject();
 		this.style.base = $merge(this.style.base, {
 			width:(window.getScrollSize().x),
 			height:(window.getScrollSize().y)
 		}, this.options.style);
-		this.render(base);
+		this.parent();
+		this.inject();
 	},
 
 	inject: function(target, where){
 		var where = where || this.options.injectWhere || this.target == document.body ? 'inside' : 'after';
 		this.element.inject(this.target, where);
-	},
-
-	toElement: function(){
-		return this.element;
 	},
 
 	resize: function(){
@@ -78,8 +73,8 @@ var Mask = new Class({
 	},
 
 	togglePopThroughElements: function(opacity){
-		if (Browser.Engine.trident4 || (Browser.Engine.gecko && Browser.Platform.mac)) {
-			this.target.getElements(this.modalOptions.elementsToHide).each(function(sel){
+		if (this.options.elementsToHide) {
+			this.target.getElements(this.options.elementsToHide).each(function(sel){
 				sel.setStyle('opacity', opacity);
 			});
 		}

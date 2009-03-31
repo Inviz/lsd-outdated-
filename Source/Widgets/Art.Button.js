@@ -2,6 +2,8 @@
 
 // Button Widget. Work in progress.
 
+hsb = $HSB;
+
 ART.Button = new Class({
 	
 	Extends: ART.Widget,
