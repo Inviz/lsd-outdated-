@@ -1,4 +1,7 @@
 {
+	"Utilities": {
+		"Mask":['all']
+	},
 	"Widgets": {
 	  "Art.Button" : ['all']
 	}

@@ -50,8 +50,8 @@ ART.Widget = new Class({
 	setContent: function(){
 		$A(arguments).each(function(arg) {
 			var elements = $$($(arg)||arg);
-			if (elements.length) this.element.empty().adopt(elements)
-			else this.element.set('html', arg);
+			if (elements.length) $(this.paint).empty().adopt(elements)
+			else $(this.paint).set('html', arg);
 		}, this);
 		return this;
 	},

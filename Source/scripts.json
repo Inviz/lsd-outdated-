@@ -57,7 +57,7 @@
 	},
 	"Utilities":{
 		"Mask":{
-			"deps":["Class.Extras", "Class.Binds", "Element.Position", "Art.Widget"],
+			"deps":["Class.Extras", "Class.Binds", "Element.Event", "Element.Position", "Art.Widget"],
 			"desc":"Overlays an element (such as the document body) with a semi-translucent element."
 		},
 		"StyleWriter":{

@@ -5,11 +5,12 @@ Script: Mask.js
 License:
 	http://www.clientcide.com/wiki/cnet-libraries#license
 */
+
 var Mask = new Class({
 
 	Binds: ['resize'],
 
-	Extends: Art.Widget,
+	Extends: ART.Widget,
 
 	style: {
 
@@ -31,21 +32,38 @@ var Mask = new Class({
 
 	options: {
 		//injectWhere: null,
-		elementsToHide: (Browser.Engine.trident4 || (Browser.Engine.gecko && !Browser.Engine.gecko19 && Browser.Platform.mac)) ? 'select, embed, object' : null,
+		useIframeShim: true,
+		elementsToHide: 'select, embed, object',
+		hideElements: false,
 		hideOnClick: false,
 		id: null
 	},
 
 	initialize: function(target, options){
-		this.setOptions(options);
 		this.target = $(target) || document.body;
-		if (this.target == document.body && !Browser.Engine.trident4) this.style.base.position = 'fixed';
+		if (this.target == document.body) {
+			if(!Browser.Engine.trident4) this.style.base.position = 'fixed';
+			this.options.useIframeShim = false;
+			this.options.hideElements = true;
+		}
+		this.setOptions(options);
 		this.style.base = $merge(this.style.base, {
-			width:(window.getScrollSize().x),
-			height:(window.getScrollSize().y)
+			width:(this.target.getScrollSize().x),
+			height:(this.target.getScrollSize().y)
 		}, this.options.style);
 		this.parent();
 		this.inject();
+	},
+
+	position: function(){
+		var dim = this.target.getComputedSize();
+		this.element.setStyles({
+			width: this.style.base.width||dim.totalWidth,
+			height: this.style.base.height||dim.totalHeight,
+		}).position({
+			relativeTo: this.target,
+			position: 'upperLeft'
+		});
 	},
 
 	inject: function(target, where){
@@ -62,12 +80,14 @@ var Mask = new Class({
 
 	show: function(){
 		this.target.addEvent('resize', this.resize);
+		this.position();
 		this.togglePopThroughElements(0);
 		return this.parent.apply(this, arguments);
 	},
 
 	hide: function(){
 		this.togglePopThroughElements(1);
+		this.position();
 		this.target.removeEvent('resize', this.resize);
 		return this.parent.apply(this, arguments);
 	},
@@ -78,6 +98,37 @@ var Mask = new Class({
 				sel.setStyle('opacity', opacity);
 			});
 		}
+	}
+
+});
+
+Element.Properties.mask = {
+
+	set: function(options){
+		var mask = this.retrieve('mask');
+		return this.eliminate('mask').store('mask:options', $extend({link: 'cancel'}, options));
+	},
+
+	get: function(options){
+		if (options || !this.retrieve('mask')){
+			if (options || !this.retrieve('mask:options')) this.set('mask', options);
+			this.store('mask', new Mask(this, this.retrieve('mask:options')));
+		}
+		return this.retrieve('mask');
+	}
+
+};
+
+Element.implement({
+
+	mask: function(options){
+		this.get('mask', options).show();
+		return this;
+	},
+
+	unmask: function(options){
+		this.get('mask', options).hide();
+		return this;
 	}
 
 });
