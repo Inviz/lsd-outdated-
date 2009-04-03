@@ -1,0 +1,68 @@
+{
+
+	"Core": {
+
+		"Art":{
+			"deps":["Class", "Element"],
+			"desc":"Core Graphics API for MooTools."
+		},
+		"Art.Paint":{
+			"deps":["Art"],
+			"desc":"Contains Paint API and core shapes."
+		},
+		"Color.Beta":{
+			"deps":["Color.Beta"],
+			"desc":"See: http://github.com/kamicane/mootools-color/"
+		}
+	},
+	"Icons": {
+		"Window.Icons":{
+			"deps":["Art.Paint"],
+			"desc":"Icons for popup windows (close, maximize, search, etc)."
+		}
+	},
+	"Shapes":{
+		"Pill.Shapes":{
+			"deps":["Art.Paint"],
+			"desc":"Rounded rectangle shortcuts."
+		}
+	},
+	"Widgets":{
+		"Art.Widget":{
+			"deps":["Art", "Class.Extras", "Element.Style"],
+			"desc":"Element foundation class for all Art widgets."
+		},
+		"Art.Button":{
+			"deps":["Element.Event", "Color.Beta", "Art.Widget", "Pill.Shapes"],
+			"desc":"A basic button widget."
+		},
+		"Art.Window":{
+			"deps":["Art.Button", "Window.Icons"],
+			"desc":"Default window decoration for MooTools ART."
+		}
+	},
+	"StickyWin":{
+		"StickyWin":{
+			"deps":["Art.Widget", "Element.Position", "Element.Event", "Class.Binds"],
+			"desc":"A window manager."
+		},
+		"StickyWin.Fx":{
+			"deps":["StickyWin", "Fx.Tween"],
+			"desc":"Implements fading for StickyWin."
+		},
+		"StickyWin.Drag":{
+			"deps":["StickyWin", "Drag.Move"],
+			"desc":"Implements dragging and resizing for StickyWin."
+		}
+	},
+	"Utilities":{
+		"Mask":{
+			"deps":["Class.Extras", "Class.Binds", "Element.Event", "Element.Position", "Art.Widget"],
+			"desc":"Overlays an element (such as the document body) with a semi-translucent element."
+		},
+		"StyleWriter":{
+			"deps": ["Class", "DomReady", "Element"],
+			"desc": "Provides a simple method for injecting a css style element into the DOM if it's not already present."
+		}
+	}
+}

@@ -1,0 +1,9 @@
+# list of paths to necessary scripts.json
+:dependency_paths:
+  - '../core/Source'        # Mootools Core
+  - '../more/Source'        # Mootools More
+  - '../clientcide/Source'  # clientcide
+  - './Source'              # This project
+
+# output file path
+:build_path: './lib.js'
