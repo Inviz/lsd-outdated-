@@ -58,22 +58,24 @@ ART.Paint.lookupFont = function(name, font){
 		}
 	};
 
-	ART.Paint.implement('text', function(font, size, text){
-		if (typeof font == 'string') font = ART.Paint.lookupFont(font);
-		if (!font) return this;
+	ART.Paint.implement({
+		text: function(font, size, text){
+			if (typeof font == 'string') font = ART.Paint.lookupFont(font);
+			if (!font) return this;
 
-		this.save();
-		var width = 0;
-		size = size / font.units;
-		this.shift({x: 0, y: Math.round(size * font.ascent)});
-		Array.each(text, function(t){
-			var glyph = font.glyphs[t] || font.glyphs[' '];
-			if (glyph.d) renderGlyph(this, size, 'm' + glyph.d);
-			var w = size * (glyph.w || font.width);
-			width += w;
-			this.shift({x: w, y: 0});
-		}, this);
-		return this.restore();
+			this.save();
+			var width = 0;
+			size = size / font.units;
+			this.shift({x: 0, y: Math.round(size * font.ascent)});
+			Array.each(text, function(t){
+				var glyph = font.glyphs[t] || font.glyphs[' '];
+				if (glyph.d) renderGlyph(this, size, 'm' + glyph.d);
+				var w = size * (glyph.w || font.width);
+				width += w;
+				this.shift({x: w, y: 0});
+			}, this);
+			return this.restore();
+		}
 	});
 	
 })();
