@@ -39,6 +39,11 @@
 		"ART.Text": {
 			"deps": ["ART.Paint"],
 			"desc": "Adds font drawing support (thanks to Cufón), and implements the text method to ART.Paint."
+		},
+
+		"ART.Sheet": {
+			"deps": ["SubtleSlickParse"],
+			"desc": "Simplifies widget style definition by using css-like selector syntax."
 		}
 
 	},
@@ -60,12 +65,12 @@
 	"Widgets": {
 		
 		"ART.Widget.Button": {
-			"deps": ["ART.Widget", "ART.Text"],
+			"deps": ["ART.Widget", "ART.Sheet", "ART.Text"],
 			"desc": "Button widget."
 		},
 		
 		"ART.Widget.Window": {
-			"deps": ["ART.Widget", "ART.Text"],
+			"deps": ["ART.Widget", "ART.Sheet", "ART.Text"],
 			"desc": "Window widget."
 		}
 		

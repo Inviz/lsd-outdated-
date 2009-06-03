@@ -74,11 +74,14 @@ ART.Widget.Button = new Class({
 		this.parent();
 		if (!this.paint) return this;
 		var style = ART.Sheet.lookupStyle(this.getSelector());
-		var font = ART.Paint.lookupFont(style.font);
-		var fontBounds = font.measure(style.fontSize, this.options.label);
+		
+		if (this.options.label) {
+			var font = ART.Paint.lookupFont(style.font);
+			var fontBounds = font.measure(style.fontSize, this.options.label);
 
-		if (!style.width) style.width = (fontBounds.x + style.padding[1] + style.padding[3] + 2).round();
-		if (!style.height) style.height = (fontBounds.y + style.padding[0] + style.padding[2] + 2).round();
+			if (!style.width) style.width = (fontBounds.x + style.padding[1] + style.padding[3] + 2).round();
+			if (!style.height) style.height = (fontBounds.y + style.padding[0] + style.padding[2] + 2).round();
+		}
 
 		this.paint.resize({x: style.width, y: style.height + 1});
 		this.element.setStyles({width: style.width, height: style.height + 1});
