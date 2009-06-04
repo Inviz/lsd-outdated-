@@ -8,9 +8,6 @@ License:
 // Window Widget. Work in progress.
 
 ART.Sheet.defineStyle('window', {
-	'height': 300,
-	'width': 400,
-	
 	'button-margin': 20,
 	'button-top': 5,
 	
