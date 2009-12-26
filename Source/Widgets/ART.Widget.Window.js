@@ -19,7 +19,7 @@ ART.Sheet.define('window', {
 	'border-radius': 5,
 	'border-color': hsb(0, 0, 0, 0.5),
 	
-	'stroke-width': 4,
+	'stroke-width': 1,
 	'stroke-color': hsb(0, 0, 0, 0.4),
 	'stroke-join': 'round',
 	'background-color': hsb(0, 0, 0, 0.5)

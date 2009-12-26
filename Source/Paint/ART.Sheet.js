@@ -17,6 +17,7 @@ ART.Sheet = {};
 			if (chunk.tag && chunk.tag != '*'){
 				result.push(chunk.tag);
 			}
+			if (chunk.id)	result.push('#' + chunk.id);
 			if (chunk.pseudos) chunk.pseudos.each(function(pseudo){
 				result.push(':' + pseudo.name);
 			});
@@ -31,21 +32,26 @@ ART.Sheet = {};
 		specificity = 0;
 		selector.each(function(chunk){
 			if (chunk.tag && chunk.tag != '*') specificity++;
+			if (chunk.id) specificity += 100;
 			specificity += (chunk.pseudos || []).length;
-			specificity += (chunk.classes || []).length * 100;
+			specificity += (chunk.classes || []).length * 10;
 		});
 		return specificity;
 	};
 
-	ART.Sheet.defineStyle = function(selectors, style){
+	ART.Sheet.define = function(selectors, style){
 		SubtleSlickParse(selectors).each(function(selector){
 			var rule = {
 				'specificity': getSpecificity(selector),
 				'selector': parseSelector(selector),
 				'style': {}
 			};
-			for (var p in style) rule.style[p.camelCase()] = style[p];
+			for (p in style) rule.style[p.camelCase()] = style[p];
 			rules.push(rule);
+
+			rules.sort(function(a, b){
+				return a.specificity - b.specificity;
+			});
 		});
 	};
 
@@ -55,25 +61,32 @@ ART.Sheet = {};
 		}, this);
 	};
 
-	ART.Sheet.lookupStyle = function(selector){
-		var style = {};
-		rules.sort(function(a, b){
-			return a.specificity - b.specificity;
-		});
-
-		selector = parseSelector(SubtleSlickParse(selector)[0]);
+	var cache = {};
+	
+	ART.Sheet.lookup = function(selector){
+		if (cache[selector]) return cache[selector];
+		
+		var result = {styles: {}, rules: []}
+		
+		var parsed = parseSelector(SubtleSlickParse(selector)[0]);
 		rules.each(function(rule){
-			var i = rule.selector.length - 1, j = selector.length - 1;
-			if (!containsAll(selector[j], rule.selector[i])) return;
+			var i = rule.selector.length - 1, j = parsed.length - 1;
+			if (!containsAll(parsed[j], rule.selector[i])) return;
 			while (i-- > 0){
 				while (true){
 					if (j-- <= 0) return;
-					if (containsAll(selector[j], rule.selector[i])) break;
+					if (containsAll(parsed[j], rule.selector[i])) break;
 				}
 			}
-			$mixin(style, rule.style);
+			result.rules.push(rule.selector.map(function(b) { return b.join("") }).join(" "));
+			
+			
+			$mixin(result.styles, rule.style);
 		});
-		return style;
+		
+		cache[selector] = result;
+		
+		return result;
 	};
 
 })();

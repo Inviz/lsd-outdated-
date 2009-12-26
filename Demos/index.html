@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>ART Demo</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" type="text/css" media="screen" href="Assets/Styles/Window.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="Assets/Styles/Common.css" />
+	
+	<script src="../Specs/Assets/Scripts/mootools.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Specs/Assets/Scripts/mootools-color.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Specs/Assets/Scripts/slickparser.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Specs/Assets/Scripts/touch.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript" src="../Source/Extras/Class.Extras.Ext.js"></script>
+	<script type="text/javascript" src="../Source/Extras/Class.Refactor.js"></script>
+	<script type="text/javascript" src="../Source/Extras/Element.Ext.js"></script>
+	<script type="text/javascript" src="../Source/Extras/Widget.js"></script>
+	
+	<script src="../Source/Base/ART.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Paint/ART.Sheet.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Base/ART.Widget.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="../Source/Paint/ART.Adapter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Paint/ART.Adapter.Canvas.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Paint/ART.Adapter.VML.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Paint/ART.Paint.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Paint/ART.Shape.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Paint/ART.Text.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="../Source/Base/ART.Layout.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Base/ART.Widget.Element.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Base/ART.Widget.Paint.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="../Source/Fonts/MgOpen.Moderna.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Fonts/MgOpen.Moderna.Bold.js" type="text/javascript" charset="utf-8"></script>
+	
+	
+	<script src="Paint/ART.Sheet.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="../Source/Widgets/ART.Widget.Button.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Window.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Section.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Container.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Glyph.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Scrollbar.js" type="text/javascript" charset="utf-8"></script>
+	
+	
+	<script src="../Source/Moo/Moo.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Moo/Moo.Application.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Moo/Moo.Container.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script>
+	  window.addEvent('domready', function() {
+	    try {
+  			//console.profile('Creating widget');
+  	    $w = new Moo.Application(123)	
+  			$w.header.title.setContent('Hello')
+  			//console.profileEnd();
+  		} catch (e) {
+  			if (e.toArgs) console.warn.apply(console, e.toArgs())
+  			else throw e
+  		}
+	  });
+	</script>
+</head>
+<body>
+</body>
+</html>

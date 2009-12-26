@@ -12,15 +12,15 @@ ART.Adapter = new Class({
 	style: {
 		'fill': false,
 		'stroke': false,
-		'fill-color': 'rgb(0, 0, 0)',
-		'stroke-color': 'rgb(0, 0, 0)',
-		'stroke-width': 1,
-		'stroke-cap': 'round',
-		'stroke-join': 'round',
-		'shadow-color': null,
-		'shadow-blur': 0,
-		'shadow-offset-x': 0,
-		'shadow-offset-y': 0
+		'fillColor': 'rgb(0, 0, 0)',
+		'strokeColor': 'rgb(0, 0, 0)',
+		'strokeWidth': 1,
+		'strokeCap': 'round',
+		'strokeJoin': 'round',
+		'shadowColor': null,
+		'shadowBlur': 0,
+		'shadowOffsetX': 0,
+		'shadowOffsetY': 0
 	},
 	
 	initialize: function(){

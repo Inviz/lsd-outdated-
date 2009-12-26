@@ -1,0 +1,21 @@
+canvas {
+  display: block; }
+
+v\:* {
+  background: transparent; }
+
+.art.window .header .buttons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5; }
+.art.window .header .title {
+  z-index: 4;
+  text-align: center; }
+  .art.window .header .title .container {
+    font-size: 12px;
+    text-shadow: 0 1px 0 #e5e5ee;
+    filter: dropshadow(color=#e5e5ee,offX=0,offY=1px);
+    color: #555; }
+.art.window canvas ~ *, .art.window canvas .container {
+  position: relative; }
