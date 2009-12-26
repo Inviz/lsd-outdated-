@@ -120,8 +120,6 @@ ART.Widget = new Class({
 			this.styles.found = found;
 		}
 		
-		console.log('render', this.selector, 'found styles', found, this.styles)
-		
 		$mixin(this.styles.given, style);
 		this.setStyles(this.styles.given)
 		
@@ -253,7 +251,7 @@ ART.Widget = new Class({
 	
 	setElementStyle: function(property, value) {
 		if (Element.Styles[property] || Element.Styles.More[property]) {
-			this.element.setStyle(property, value);
+			if (this.styles.element[property] != value) this.element.setStyle(property, value);
 			this.styles.element[property] = value;
 			return true;
 		}	

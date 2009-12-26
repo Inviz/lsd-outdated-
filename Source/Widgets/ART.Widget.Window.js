@@ -207,7 +207,6 @@ ART.Widget.Window = new Class({
 		var height = this.getStyle('height') - (this.styles.current.strokeWidth || 0);
 		
 		
-		console.log(this.getPaintOffsetXY(), this.styles.current.shadowBlur, this.styles.current.shadowOffsetX)
 		if (style.reflectionColor) {
 			this.paint.start(this.getPaintOffsetXY());
 			this.paint.shape('rounded-rectangle', {x: width, y: height}, this.getPaintStyle('borderRadius'));
