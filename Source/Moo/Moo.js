@@ -1,0 +1,2 @@
+var Moo = {};
+Moo.ART = {};

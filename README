@@ -1,0 +1,11 @@
+My vision of ART-like library
+
+Some of key changes:
+- Layout & flow (canvas elements can inherit width of parent, new widgets can be composed using HAML-like ML). Each single widget has Element-complaint API, so you can inject, append or whatever.
+- Combination of elements and canvas-widgets. Canvas elements can use usual CSS properties like border, padding, float or whatever.
+- Lazy rendering (tries to render as few things as possible)
+- Code is DRY-er (e.g. one line to define a new set of states, all logic of managing content is abstracted away)
+
+Code in this repo is not enough to run things, but i'll make a working example if people are interested.
+
+Take a look at ART.Widget.Window, for example.
