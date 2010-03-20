@@ -25,8 +25,7 @@ ART.Sheet.define('window', {
 
 
 ART.Sheet.define('window.hud', {		
-	'border-radius': 15,
-	'border-color': hsb(0, 0, 0, 1)
+	'corner-radius': 15
 });
 
 
@@ -34,23 +33,23 @@ ART.Sheet.define('window.hud #content', {
 	'stroke-cap': 'square',
 	'stroke-color-y': 0,
 	'height': 70,
-	'background-color': {0: hsb(0, 0, 0, 0.6), 1: hsb(0, 0, 20, 0.5)},
-	'reflection-color': {0: hsb(0, 0, 100, 0.6), 1: hsb(0, 0, 10, 0)}
+	'background-color': [hsb(0, 0, 0, 0.6), hsb(0, 0, 20, 0.5)],
+	'reflection-color': [hsb(0, 0, 100, 0.6), hsb(0, 0, 10, 0)]
 });
 
 
 
 ART.Sheet.define('window.hud #header', {
-	'border-radius-top-left': 'inherit',
-	'border-radius-top-right': 'inherit',
+	'corner-radius-top-left': 'inherit',
+	'corner-radius-top-right': 'inherit',
 	'height': 26,
-	'background-color': {0: hsb(0, 0, 0, 0.55), 1: hsb(0, 0, 0, 0.5)},
-	'reflection-color': {0: hsb(0, 0, 0, 0), 1: hsb(0, 0, 0, 0)}
+	'background-color': [hsb(0, 0, 0, 0.55), hsb(0, 0, 0, 0.5)],
+	'reflection-color': [hsb(0, 0, 0, 0), hsb(0, 0, 0, 0)]
 });
 
 ART.Sheet.define('window.hud #content', {
-  'border-radius-bottom-left': 'inherit',
-  'border-radius-bottom-right': 'inherit',
+  'corner-radius-bottom-left': 'inherit',
+  'corner-radius-bottom-right': 'inherit',
 });
 
 
@@ -58,25 +57,24 @@ ART.Sheet.define('window.hud button', {
 	'height': 16,
 	'width': 16,
 	'cursor': 'pointer',
-	'background-color': {0: hsb(0, 0, 0, 0.4), 1: hsb(0, 0, 0, 0.5)},
-	'reflection-color': {0: hsb(0, 0, 0, 0.3), 1: hsb(0, 0, 0, 0)},
+	'background-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
+	'reflection-color': [hsb(0, 0, 0, 0.3), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.2),
 	'border-color': hsb(82, 0, 100, 0.5),
 	'glyph-color': hsb(82, 0, 100, 0.5),
-	'border-radius': 7,
+	'corner-radius': 7,
 	'float': 'left',
 	'margin-left': 5
 });
 
 
 ART.Sheet.define('window.hud #buttons #close', {
-	'glyph': 'close-icon',
 	'stroke-width': 1,
 	'stroke-color': hsb(82, 0, 100, 0.3),
 	'glyph-height': 8,
 	'glyph-width': 8,
-	'glyph-top': 4,
-	'glyph-left': 4
+	'glyph-top': 2,
+	'glyph-left': 2
 });
 
 ART.Sheet.define('window #footer, window #content, window #header', {	
@@ -85,16 +83,16 @@ ART.Sheet.define('window #footer, window #content, window #header', {
 });
 
 ART.Sheet.define('window.fancy', {		
-	'border-radius': 5
+	'corner-radius': 5
 });
 
 
 ART.Sheet.define('window.fancy #header', {
-	'border-radius-top-left': 'inherit',
-	'border-radius-top-right': 'inherit',
+	'corner-radius-top-left': 'inherit',
+	'corner-radius-top-right': 'inherit',
 	'height': 'auto',
-	'background-color': {0: hsb(0, 0, 80), 1: hsb(0, 0, 60)},
-	'reflection-color': {0: hsb(0, 0, 100, 1), 1: hsb(0, 0, 0, 0)},
+	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
 	'border-bottom-width': 1,
 	'border-bottom-style': 'solid',
 	'border-bottom-color': '#979797'
@@ -103,8 +101,8 @@ ART.Sheet.define('window.fancy #header', {
 ART.Sheet.define('window.fancy #header #toolbar', {
 	'height': 30,
 	'clear': 'both',
-	'background-color': {0: hsb(0, 0, 80), 1: hsb(0, 0, 60)},
-	'reflection-color': {0: hsb(0, 0, 100, 1), 1: hsb(0, 0, 0, 0)},
+	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
 	'border-bottom-width': 1,
 	'border-bottom-style': 'solid',
 	'border-bottom-color': '#979797'
@@ -114,16 +112,16 @@ ART.Sheet.define('window.fancy #content', {
 	'stroke-cap': 'square',
 	'stroke-color-y': 0,
 	'height': 150,
-	'background-color': {0: hsb(0, 0, 80, 0.3), 1: hsb(0, 0, 70, 0.4)},
-	'reflection-color': {0: hsb(0, 0, 100, 0.3), 1: hsb(0, 0, 0, 0)}
+	'background-color': [hsb(0, 0, 80, 0.3), hsb(0, 0, 70, 0.4)],
+	'reflection-color': [hsb(0, 0, 100, 0.3), hsb(0, 0, 0, 0)]
 });
 
 
 ART.Sheet.define('window.fancy #footer', {	
-	'border-radius-bottom-left': 'inherit',
-	'border-radius-bottom-right': 'inherit',
-	'background-color': {0: hsb(0, 0, 80), 1: hsb(0, 0, 70)},
-	'reflection-color': {0: hsb(0, 0, 100, 1), 1: hsb(0, 0, 0, 0)},
+	'corner-radius-bottom-left': 'inherit',
+	'corner-radius-bottom-right': 'inherit',
+	'background-color': [hsb(0, 0, 80), hsb(0, 0, 70)],
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
 	'height': 16,
 	'border-top-width': 1,
 	'border-top-style': 'solid',
@@ -142,8 +140,8 @@ ART.Sheet.define('window.fancy button', {
 	'height': 14,
 	'width': 14,
 	'cursor': 'pointer',
-	'background-color': {0: hsb(0, 0, 75), 1: hsb(0, 0, 55)},
-	'reflection-color': {0: hsb(0, 0, 95), 1: hsb(0, 0, 0, 0)},
+	'background-color': [hsb(0, 0, 75), hsb(0, 0, 55)],
+	'reflection-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.4),
 	'border-color': hsb(0, 0, 45),
 	'glyph-color': hsb(0, 0, 0, 0.6),
@@ -153,32 +151,31 @@ ART.Sheet.define('window.fancy button', {
 });
 
 ART.Sheet.define('window.fancy button:active', {
-	'reflection-color': {0: hsb(205, 25, 60), 1: hsb(0, 0, 0, 0)},
+	'reflection-color': [hsb(205, 25, 60), hsb(0, 0, 0, 0)],
 	'border-color': hsb(200, 35, 45),
 	'glyph-color': hsb(0, 0, 100)
 });
 
 ART.Sheet.define('window #buttons button', {
 	'glyph-height': 8,
-	'glyph-width': 8,
-	'glyph-top': 3,
-	'glyph-left': 3
+	'glyph-width': 8
 });
 
 ART.Sheet.define('window.fancy #buttons #close', {
-	'glyph': 'close-icon',
 	'glyph-height': 6,
-	'glyph-width': 6,
-	'glyph-top': 4,
-	'glyph-left': 4
+	'glyph-width': 6
+});
+
+ART.Sheet.define('window #close', {
+	'glyph': ART.Glyphs.smallCross
 });
 
 ART.Sheet.define('window #minimize', {
-	'glyph': 'minus-icon'
+	'glyph': ART.Glyphs.smallMinus
 });
 
 ART.Sheet.define('window #maximize', {
-	'glyph': 'plus-icon'
+	'glyph': ART.Glyphs.smallPlus
 });
 
 ART.Sheet.define('window:collapsed #minimize', {
@@ -186,8 +183,8 @@ ART.Sheet.define('window:collapsed #minimize', {
 });
 
 ART.Sheet.define('window:collapsed #content', {
-	'background-color': {0: hsb(0, 0, 80, 0.5), 1: hsb(0, 0, 70, 0.7)},
-	'reflection-color': {0: hsb(0, 0, 100, 0.5), 1: hsb(0, 0, 0, 0)},
+	'background-color': [hsb(0, 0, 80, 0.5), hsb(0, 0, 70, 0.7)],
+	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 0, 0)],
 });
 
 ART.Sheet.define('window:collapsed #maximize', {
@@ -199,10 +196,13 @@ ART.Sheet.define('window #maximize', {
 });
 
 ART.Sheet.define('window #handle', {
-	'glyph': 'drag-handle',
-	'glyph-color': hsb(0, 0, 100, 0.5),
-	'glyph-width': 10,
-	'glyph-height': 10,
+	'glyph': ART.Glyphs.resize,
+	'glyph-color': hsb(0, 0, 50, 0.5),
+	'glyph-width': 15,
+	'glyph-height': 15,
+	'glyph-top': 2,
+  'glyph-left': 0,
+  
 	
 	'width': 15,
 	'height': 15,
@@ -211,8 +211,6 @@ ART.Sheet.define('window #handle', {
 	'touchable': true,
 	
 	'float': 'right',
-	'margin-right': 2,
-	'margin-top': 3,
 	'cursor': 'se-resize'
 })
 
@@ -251,56 +249,39 @@ ART.Widget.Window = new Class({
 		this.hide();
 	},
 	
+	build: function() {
+    if (!this.parent.apply(this, arguments)) return;
+	  this.layers = {
+	    border: new ART.Rectangle,
+	    background: new ART.Rectangle,
+	    fill: new ART.Rectangle
+	  }
+	  return true;
+	},
+	
 	render: function() {
 		if (!this.parent.apply(this, arguments)) return;
 		
 		var style = this.styles.current;
-		var width = this.getStyle('width') + (this.styles.current.strokeWidth || 0);
-		var height = this.getStyle('height') - (this.styles.current.strokeWidth || 0);
+		var width = this.getStyle('width')// + (this.styles.current.strokeWidth || 0);
+		var height = this.getStyle('height')// - (this.styles.current.strokeWidth || 0);
 		
+		var rad0 = [style.cornerRadiusTopLeft, style.cornerRadiusTopRight, style.cornerRadiusBottomRight, style.cornerRadiusBottomLeft];
+		var radM1 = [style.cornerRadiusTopLeft - 1, style.cornerRadiusTopRight - 1, style.cornerRadiusBottomRight - 1, style.cornerRadiusBottomLeft - 1];
+    
+		//make the border
+		this.layers.border.draw(width, height, rad0);
+		this.layers.border.fill.apply(this.layers.border, $splat(style.borderColor));
+
+		//reflection
+		this.layers.fill.draw(width - 2, height - 2, radM1);
+		this.layers.fill.fill.apply(this.layers.fill, $splat(style.reflectionColor));
+		this.layers.fill.translate(1, 1);
 		
-		if (style.reflectionColor) {
-			this.paint.start(this.getPaintOffsetXY());
-			this.paint.shape('rounded-rectangle', {x: width, y: height}, this.getPaintStyle('borderRadius'));
-			this.paint.end({
-				fill: !!style.reflectionColor, 
-				fillColor: style.reflectionColor
-			});
-		}
-		
-		
-		var opts = {
-			fill: !!style.backgroundColor, 
-			fillColor: style.backgroundColor
-		};
-		
-		if (style.shadowBlur && style.shadowColor) {
-			$extend(opts, {
-				shadowBlur: style.shadowBlur,
-				shadowColor: style.shadowColor,
-				shadowOffsetX: style.shadowOffsetX || 0,
-				shadowOffsetY: style.shadowOffsetY || 0, 
-				
-				stroke: (style.strokeWidth && style.strokeColor), 
-				strokeColor: style.strokeColor, 
-				strokeWidth: style.strokeWidth
-			})
-		}
-		
-		var offset = this.getPaintOffset();
-		$(this.paint).setStyles({
-		  'left': - offset.left,
-		  'top': - offset.top
-		})
-		console.log('window offset', offset, opts)
-		this.paint.start(this.getPaintOffsetXY(offset));
-		this.paint.shape('rounded-rectangle', {x: width, y: height}, this.getPaintStyle('borderRadius'));
-		this.paint.end(opts);
-		
-		this.paint.start(this.getPaintOffsetXY(offset));
-		this.paint.shape('rounded-rectangle', {x: width, y: height}, this.getPaintStyle('borderRadius'));
-		this.paint.end({clip: true});
-		
+		//background
+		this.layers.background.draw(width - 2, height - 2, radM1);
+		this.layers.background.fill.apply(this.layers.background, $splat(style.backgroundColor));
+		this.layers.background.translate(1, 2);
 		
 		return true;
 	}

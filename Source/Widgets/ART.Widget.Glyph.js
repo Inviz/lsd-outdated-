@@ -15,18 +15,22 @@ ART.Widget.Glyph = new Class({
 		if (this.options.name) this.styles.current.glyphName = this.options.name;
 	},
 	
+	build: function() {
+	  if (!this.parent.apply(this, arguments)) return
+		this.layers = {
+		  glyph: new ART.Shape
+		}
+		return true;
+	},
+	
 	render: function() {
 		if (!this.parent.apply(this, arguments)) return;
-		if (!this.paint) return;
 		if (!this.styles.current.touchable && !this.properties.contains('active')) this.properties.push('active')
-		
-		this.paint.start({x: this.styles.current.width, y: 0});
-		this.paint.shape(this.styles.current.glyphName, this.styles.current.glyphWidth || this.styles.current.width)
-		this.paint.end({'stroke': true, 'strokeColor': this.styles.current.glyphColor});
-
-		this.paint.start({x: this.styles.current.width - 1, y: 0});
-		this.paint.shape(this.styles.current.glyphName, this.styles.current.glyphHeight || this.styles.current.height)
-		this.paint.end({'stroke': true, 'strokeColor': this.styles.current.shadowColor});
+		var style = this.styles.current;
+		this.layers.glyph.draw(this.styles.current.glyph);
+		this.glyphBounds = this.layers.glyph.measure();
+		this.layers.glyph.fill.apply(this.layers.glyph, $splat(style.glyphColor));
+		this.layers.glyph.translate(style.glyphLeft, style.glyphTop);
 		
 		return true;
 	}

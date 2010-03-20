@@ -9,31 +9,40 @@ ART.Widget.Section = new Class({
 		}
 	},
 	
-	properties: ['borderRadius', 'offset'],
+	properties: ['cornerRadius', 'offset'],
 
+  build: function() {
+    if (!this.parent.apply(this, arguments)) return false;
+    
+    this.layers = {
+      border: new ART.Rectangle,
+		  fill: new ART.Rectangle,
+		  background: new ART.Rectangle
+		}
+		return true;
+  },
+  
 	render: function() {
 		if (!this.parent.apply(this, arguments)) return;
 		
 		var style = this.styles.current;
+		var width = this.getStyle('width');
+		var height = this.getStyle('height');
 		
 		var strokeWidth = style.strokeWidth || 0;
-		var width = this.getStyle('width')
-		var height = this.getStyle('height')
 		
-		this.paint.start({x: strokeWidth / 2, y: strokeWidth / 2});
-		this.paint.shape('rounded-rectangle', {x: width, y: height}, this.getPaintStyle('borderRadius'));
-		this.paint.end({
-			'fill': true, 
-			'fillColor': style.reflectionColor, 
-			
-			'stroke': !!style.strokeWidth, 
-			'strokeColor': style.strokeColor, 
-			'strokeWidth': style.strokeWidth
-		});
+    
+		//make the border
+		this.layers.border.draw(width, height, this.getPaintStyle('cornerRadius'));
+		this.layers.border.fill.apply(this.layers.border, $splat(style.borderColor));
 
-		this.paint.start({x: strokeWidth, y: strokeWidth});
-		this.paint.shape('rounded-rectangle', {x: width, y: height}, this.getPaintStyle('borderRadius'));
-		this.paint.end({'fill': true, 'fillColor': style.backgroundColor});
+		//reflection
+		this.layers.fill.draw(width, height, this.getPaintStyle('cornerRadius'));
+		this.layers.fill.fill.apply(this.layers.fill, $splat(style.reflectionColor));
+		
+		//background
+		this.layers.background.draw(width, height, this.getPaintStyle('cornerRadius'));
+		this.layers.background.fill.apply(this.layers.background, $splat(style.backgroundColor));
 		
 		return true;
 	}

@@ -1,4 +1,4 @@
-canvas {
+svg {
   display: block; }
 
 v\:* {
@@ -32,5 +32,5 @@ v\:* {
     font-size: 1.2em;
     color: #ccc;
     text-align: center; }
-  .art.window canvas ~ *, .art.window canvas .container {
+  .art.window svg ~ *, .art.window svg .container {
     position: relative; }

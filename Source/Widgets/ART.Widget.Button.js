@@ -21,15 +21,15 @@ ART.Sheet.define('button', {
 	'glyph-color': hsb(0, 0, 0, 0.8),
 	'glyph-height': 13,
 	'glyph-width': 13,
-	'glyph-top': 2,
-	'glyph-left': 2,
+	'glyph-top': 1,
+	'glyph-left': 1,
 
 	'pill': false,
 
-	'border-radius': 3,
-	'background-color': {0: hsb(0, 0, 80), 1: hsb(0, 0, 60)},
+	'corner-radius': 3,
+	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
 	'border-color': hsb(0, 0, 0, 0.7),
-	'reflection-color': {0: hsb(0, 0, 100, 1), 1: hsb(0, 0, 0, 0)},
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.6)
 });
 
@@ -58,6 +58,18 @@ ART.Widget.Button = new Class({
 		this.fireEvent('click', arguments);
 	},
 	
+	build: function() {
+	  if (!this.parent.apply(this, arguments)) return;
+
+    this.layers = {
+      border: new ART.Rectangle,
+      fill: new ART.Rectangle,
+      background: new ART.Rectangle,
+      glyph: new ART.Shape
+    }
+		return true;
+	},
+	
 	render: function(){
 		this.parent.apply(this, arguments);
 		if (!this.paint) return this;
@@ -65,47 +77,35 @@ ART.Widget.Button = new Class({
 		var style = this.styles.current;
 		
 		
-		if (this.options.label) {
-			var font = ART.Paint.lookupFont(style.font);
-			var fontBounds = font.measure(style.fontSize, this.options.label);
+		var rad0 = [style.cornerRadiusTopLeft, style.cornerRadiusTopRight, style.cornerRadiusBottomRight, style.cornerRadiusBottomLeft];
+		var radM1 = [style.cornerRadiusTopLeft - 1, style.cornerRadiusTopRight - 1, style.cornerRadiusBottomRight - 1, style.cornerRadiusBottomLeft - 1];
+    
+		this.layers.glyph.draw(style.glyph);
+		this.glyphBounds = this.layers.glyph.measure();
+		this.layers.glyph.fill.apply(this.layers.glyph, $splat(style.glyphColor));
+		this.layers.glyph.translate(style.glyphLeft, style.glyphTop);
+    
+		//make the border
+		this.layers.border.draw(style.width, style.height, rad0);
+		this.layers.border.fill.apply(this.layers.border, $splat(style.borderColor));
 
-			if (!style.width) style.width = (fontBounds.x + style.padding[1] + style.padding[3] + 2).round();
-			if (!style.height) style.height = (fontBounds.y + style.padding[0] + style.padding[2] + 2).round();
-		}
+		//reflection
+		this.layers.fill.draw(style.width - 2, style.height - 2, radM1);
+		this.layers.fill.fill.apply(this.layers.fill, $splat(style.reflectionColor));
+		this.layers.fill.translate(1, 1);
 		
-		
-		this.paint.resize({x: style.width, y: style.height + 1});
-		this.element.setStyles({width: style.width, height: style.height + 1});
-
-		var shape = (style.pill) ? (style.width > style.height) ? 'horizontal-pill' : 'vertical-pill' : 'rounded-rectangle';
-
-		this.paint.start({x: 0, y: 0});
-		this.paint.shape(shape, {x: style.width, y: style.height + 1}, style.borderRadius + 1);
-		this.paint.end({'fill': true, 'fillColor': style.shadowColor, stroke: (style.strokeWidth && style.strokeColor), strokeWidth: style.strokeWidth, strokeColor: style.strokeColor});
-
-		this.paint.start({x: 0, y: 0});
-		this.paint.shape(shape, {x: style.width, y: style.height}, style.borderRadius + 1);
-		this.paint.end({'fill': true, 'fillColor': style.borderColor});
-
-		this.paint.start({x: 1, y: 1});
-		this.paint.shape(shape, {x: style.width - 2, y: style.height - 2}, style.borderRadius);
-		this.paint.end({'fill': true, 'fillColor': style.reflectionColor});
-
-		this.paint.start({x: 1, y: 2});
-		this.paint.shape(shape, {x: style.width - 2, y: style.height - 3}, style.borderRadius);
-		this.paint.end({'fill': true, 'fillColor': style.backgroundColor});
-
-		if (style.glyph){
-			this.paint.start({x: style.glyphLeft, y: style.glyphTop});
-			this.paint.shape(style.glyph, {x: style.glyphWidth, y: style.glyphHeight});
-			this.paint.end({'stroke': true, 'strokeWidth': style.glyphStroke, 'strokeColor': style.glyphColor});
-		}
-
-		this.paint.start({x: style.padding[3] + 1, y: style.padding[0] + 1});
-		this.paint.text(font, style.fontSize, this.options.label);
-		this.paint.end({'fill': true, 'fillColor': style.fontColor});
+		//background
+		this.layers.background.draw(style.width - 2, style.height - 3, radM1);
+		this.layers.background.fill.apply(this.layers.background, $splat(style.backgroundColor));
+		this.layers.background.translate(1, 2);
 
 		return this;
+	},
+
+	makeText: function(text, size){
+		if (!this.layers.text) return;
+		this.layers.text.draw(text, size);
+		this.fontBounds = this.textLayer.measure();
 	}
 
 });
