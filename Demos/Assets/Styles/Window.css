@@ -4,18 +4,33 @@ canvas {
 v\:* {
   background: transparent; }
 
-.art.window .header .buttons {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 5; }
-.art.window .header .title {
-  z-index: 4;
-  text-align: center; }
-  .art.window .header .title .container {
-    font-size: 12px;
+.art.window {
+  line-height: 24px; }
+  .art.window .header .buttons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5; }
+  .art.window .title {
+    z-index: 4;
+    text-align: center; }
+    .art.window .title .container {
+      font-size: 12px; }
+  .art.window .footer .handle {
+    z-index: 10; }
+  .art.window.fancy .title .container {
     text-shadow: 0 1px 0 #e5e5ee;
     filter: dropshadow(color=#e5e5ee,offX=0,offY=1px);
     color: #555; }
-.art.window canvas ~ *, .art.window canvas .container {
-  position: relative; }
+  .art.window.hud .title .container {
+    font-size: 1em;
+    text-shadow: 0 -1px 0 #374683;
+    filter: dropshadow(color=#374683,offX=0,offY=-1px);
+    color: #ddd; }
+  .art.window.hud .content .container {
+    padding: 1em;
+    font-size: 1.2em;
+    color: #ccc;
+    text-align: center; }
+  .art.window canvas ~ *, .art.window canvas .container {
+    position: relative; }

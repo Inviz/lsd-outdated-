@@ -27,6 +27,7 @@ v\:*
  
 .art 
   &.window
+    :line-height 24px
   
     .header
       .buttons
@@ -34,14 +35,35 @@ v\:*
         :top 0
         :left 0
         :z-index 5
-      .title  
-        :z-index 4
-        :text-align center
+    .title  
+      :z-index 4
+      :text-align center
+      .container
+        :font-size 12px
+        
+    .footer
+      .handle
+        :z-index 10
+    
+    &.fancy
+      .title
         .container
-          :font-size 12px
           +dark-emboss
           :color #555
-      
+          
+    &.hud
+      .title
+        .container
+          :font-size 1em
+          +light-emboss
+          :color #ddd
+          
+      .content
+        .container
+          :padding 1em
+          :font-size 1.2em
+          :color #ccc
+          :text-align center
     //.header, .content
     //  :border-bottom 1px solid #777
     //

@@ -88,14 +88,15 @@ ART.Adapter.Canvas = new Class({
 				case 'strokeWidth': ctx.lineWidth = Number(current); break;
 				case 'strokeCap': ctx.lineCap = current; break;
 				case 'strokeJoin': ctx.lineJoin = current; break;
-				case 'shadowColor': console.log('shadowColor', this.getColor(current)); ctx.shadowColor = this.getColor(current); break;
-				case 'shadowBlur': console.log('shadowBlur', Number(current)); ctx.shadowBlur = Number(current); break;
-				case 'shadowOffsetX': console.log('shadowOffsetX', Number(current)); ctx.shadowOffsetX = Number(current); break;
-				case 'shadowOffsetY': console.log('shadowOffsetY', Number(current)); ctx.shadowOffsetY = Number(current); break;
+				case 'shadowColor': ctx.shadowColor = this.getColor(current); break;
+				case 'shadowBlur': ctx.shadowBlur = Number(current); break;
+				case 'shadowOffsetX': ctx.shadowOffsetX = Number(current); break;
+				case 'shadowOffsetY': ctx.shadowOffsetY = Number(current); break;
 			}
 		}
 		if (style.fill) this.getContext().fill();
 		if (style.stroke) this.getContext().stroke();
+		if (style.clip) this.getContext().clip();
 		return this;
 	},
 	

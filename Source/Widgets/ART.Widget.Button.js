@@ -81,7 +81,7 @@ ART.Widget.Button = new Class({
 
 		this.paint.start({x: 0, y: 0});
 		this.paint.shape(shape, {x: style.width, y: style.height + 1}, style.borderRadius + 1);
-		this.paint.end({'fill': true, 'fillColor': style.shadowColor});
+		this.paint.end({'fill': true, 'fillColor': style.shadowColor, stroke: (style.strokeWidth && style.strokeColor), strokeWidth: style.strokeWidth, strokeColor: style.strokeColor});
 
 		this.paint.start({x: 0, y: 0});
 		this.paint.shape(shape, {x: style.width, y: style.height}, style.borderRadius + 1);

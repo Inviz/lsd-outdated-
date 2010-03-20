@@ -39,9 +39,9 @@ ART.Widget = new Class({
 		given: {},      //styles that were manually assigned
 		
 		calculated: {}, //styles that are calculated in runtime
-				
-		element: {},    //styles that currently assigned to element
-		paint: {},      //styles that currently used to paint
+		
+		element: {},    //styles that are currently assigned to element
+		paint: {},      //styles that are currently used to paint
 	},
 	
 	size: {},
@@ -115,16 +115,16 @@ ART.Widget = new Class({
 		
 		var found = this.lookupStyles();
 		if (found) {
-			for (var property in found) if (this.styles.given[property]) delete found[property];
+			for (var property in found) if (property in this.styles.given) delete found[property];
 			this.setStyles(found, true);
 			this.styles.found = found;
 		}
 		
-		$mixin(this.styles.given, style);
+		$extend(this.styles.given, style);
 		this.setStyles(this.styles.given)
 		
 		for (var property in this.styles.element)	{
-			if (!this.styles.given[property] && !this.styles.found[property]) {
+			if (!(property in this.styles.given) && !(property in this.styles.found) && !(property in this.styles.calculated)) {
 				delete this.styles.current[property];
 				this.resetElementStyle(property);
 			}
@@ -232,12 +232,19 @@ ART.Widget = new Class({
 		}, this);
   },
 	
-	setStyle: function(property, value, temp) {
+	setStyle: function(property, value, type) {
 		if ($equals(this.styles.current[property], value)) return;
 		this.styles.current[property] = value;
 		
-		//console.log('setStyle', property, value)
-		if (!temp) this.styles.given[property] = value;
+		switch (type) {
+			case undefined:
+				this.styles.given[property] = value;
+				break;
+			case "calculated": 
+			case "given": 
+				this.styles[type][property] = value;
+				break;
+		} 
 		
 	  return true;
 	},
@@ -260,6 +267,7 @@ ART.Widget = new Class({
 	
 	resetElementStyle: function(property) {
 		this.element.setStyle(property, '');
+		delete this.styles.element[property]
 		return true;
 	},
 
@@ -393,9 +401,40 @@ Class.refactor(ART.Widget, {
 	
 	initialize: function() {
 		this.previous.apply(this, arguments);
-		if (this.layout) {
-			this.tree = new ART.Layout(this, this.layout);
-			this.fireEvent('layout', [this.tree, this.layout])
-		}
+		if (this.layout) this.setLayout(this.layout);
+	},
+	
+	setLayout: function(layout) {
+	  this.layout = layout;
+		this.tree = new ART.Layout(this, this.layout);
+		this.fireEvent('layout', [this.tree, this.layout])
+	}
+});
+
+Class.refactor(ART.Widget, {
+	expression: false,
+	
+	initialize: function() {
+		this.previous.apply(this, arguments);
+		if (this.expression) this.applyExpression(this.expression);
+	},
+	
+	applyExpression: function(expression) {
+	  var parsed = SubtleSlickParse(expression)[0][0];
+	  if (parsed.classes) {
+	    this.classes = this.classes.concat(parsed.classes);
+	    parsed.classes.each(function(cls) {
+	      this.addClass(cls)
+	    }, this)
+	  }
+	  
+	  if (parsed.attributes) {
+	    var options = {id: parsed.id};
+  		if (parsed.attributes) parsed.attributes.each(function(attribute) {
+  			options[attribute.name] = attribute.value || true;
+  		});
+  		$extend(this.options, options);
+	  }
+	  this.fireEvent('expression', [parsed, expression]);
 	}
 });

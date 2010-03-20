@@ -57,6 +57,15 @@
   			if (e.toArgs) console.warn.apply(console, e.toArgs())
   			else throw e
   		}
+  		
+  		
+	    $z = new Moo.Application.Toolbared()	
+			$z.header.title.setContent('Hello')
+			
+  		$y = new Moo.Notification("Hello");
+  		$y.header.title.setContent('Warning');
+  		$y.content.setContent('Alerto!');
+  		
 	  });
 	</script>
 </head>

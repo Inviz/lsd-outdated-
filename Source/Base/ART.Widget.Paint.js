@@ -49,14 +49,14 @@ ART.Widget.Paint = new Class({
 		if (!this.parent.apply(this, arguments)) return;
 		if (!this.paint) return;
 		if (!this.outdated) return;
-				
+		
 		this.paint.clear();
 		this.outdated = false;
 		
 		var padding = this.getPadding();
-		for (var property in padding) this.setElementStyle(property, padding[property]);
-		
-		console.log('padding', this.getStyle('shadowBlur'), this.getSelector(), this.getPadding())
+		for (var property in padding) {
+		  this.element.setStyle(property, padding[property]);
+		}
 		ART.Widget.Paint.redraws++;
 		
 		return true;
@@ -69,6 +69,14 @@ ART.Widget.Paint = new Class({
 				this.outdated = true;
 		}
 		return (this.setPaintStyle(property, value) || this.setElementStyle(property, value));
+	},
+	
+	setElementStyle: function(property, value) {
+  	switch(property) {
+  		case "paddingLeft": case "paddingRight": case "paddingBottom": case "paddingTop":
+  		  this.outdated = true;
+  	}
+	  return this.parent.apply(this, arguments);
 	},
 	
 	getCanvasOffset: function() {
@@ -88,13 +96,12 @@ ART.Widget.Paint = new Class({
 	getPaintOffset: function() {
 		var offset = this.getCanvasOffset();
 		var stroke = (this.styles.current.strokeWidth || 0) / 2;
-		offset.left -= stroke;
-		offset.top -= stroke;
-		return offset;
+		for (var side in offset) if (offset[side] < stroke) offset[side] = stroke;
+    return offset;
 	},
 	
-	getPaintOffsetXY: function() {
-		var offset = this.getPaintOffset();
+	getPaintOffsetXY: function(offset) {
+		if (!offset) offset = this.getPaintOffset();
 		return {
 			x: offset.left,
 			y: offset.top
@@ -106,12 +113,12 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getPadding: function() {
-		var offset = this.getOffset();
+		var stroke = (this.styles.current.strokeWidth || 0) / 2;
 		return {
-			paddingTop: offset.top + (this.styles.current.paddingTop || 0) + (this.styles.current.strokeWidth || 0) / 2,
-			paddingLeft: offset.left + (this.styles.current.paddingLeft || 0) + (this.styles.current.strokeWidth || 0) / 2,
-			paddingBottom: offset.bottom + (this.styles.current.paddingBottom || 0),
-			paddingRight: offset.right + (this.styles.current.paddingRight || 0)
+			paddingTop: stroke + (this.styles.current.paddingTop || 0),
+			paddingLeft: stroke + (this.styles.current.paddingLeft || 0),
+			paddingBottom: stroke + (this.styles.current.paddingBottom || 0),
+			paddingRight: stroke + (this.styles.current.paddingRight || 0)
 		}
 	},
 	
