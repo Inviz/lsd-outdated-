@@ -165,7 +165,7 @@ ART.Sheet.define('window.fancy button', {
 	'background-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.4),
 	'border-color': hsb(0, 0, 45),
-	'glyph-color': hsb(0, 0, 0, 0.4),
+	'glyph-color': hsb(0, 0, 30),
 	
 	'float': 'left',
 	'margin-left': 5
