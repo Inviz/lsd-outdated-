@@ -12,7 +12,7 @@ ART.Widget = new Class({
 	  'hidden': ['hide', 'show'],
 	  'active': ['activate', 'deactivate'],
 	  'focused': ['focus', 'blur'],
-	  'disabled': ['enable', 'disable'],
+	  'disabled': ['disable', 'enable'],
 	  'orphaned': ['dispose', 'inject'],
 	  'dirty': ['update', 'render'],
 	  'built': ['build', 'destroy'],
@@ -35,6 +35,7 @@ ART.Widget = new Class({
 	
 	styles: {
 		current: {},    //styles that widget currently has
+		last: {},       //styles that were rendered last frame
 		found: {},      //styles that were found in stylesheets
 		given: {},      //styles that were manually assigned
 		
@@ -49,15 +50,15 @@ ART.Widget = new Class({
 	events: {},
 	bound: {},
 	
-	attach: function() {
+	attach: function(element) {
 		if (!this.parent.apply(this, arguments)) return;
-		this.element.addEvents(this.bound);
+		(element || this.element).addEvents(this.bound);
 		return true;
 	},
 	
-	detach: function() {
+	detach: function(element) {
 		if (!this.parent.apply(this, arguments)) return;
-		this.element.removeEvents(this.bound);
+		(element || this.element).removeEvents(this.bound);
 		return true;
 	},
 	
@@ -80,7 +81,7 @@ ART.Widget = new Class({
 		var attrs = $merge(this.options.element);
 		var tag = attrs.tag;
 		delete attrs.tag;
-		this.element = new Element(tag, attrs);
+		this.element = new Element(tag, attrs).store('widget', this);
 		this.element.addClass(this.ns);
 		this.element.addClass(this.name);
 		
@@ -132,9 +133,6 @@ ART.Widget = new Class({
 		this.getChildren().each(function(child){
 			child.render();
 		});
-		
-	 //this.setHeight(this.getStyle('height'));
-	 //this.setWidth(this.getStyle('width'));
 		
 		return true;
 	},
@@ -256,6 +254,22 @@ ART.Widget = new Class({
 		return value;
 	},
 	
+	getStyles: function(properties) {
+	  var result = {};
+	  Array.each(arguments, function(property) {
+	    result[property] = this.getStyle(property);
+	  }.bind(this));
+	  return result;
+	},
+
+  getChangedStyles: function(property) {
+    var styles = this.getStyles.apply(this, arguments);
+    var last = this.styles.last;
+    if (Hash.every(styles, function(value, key) { return $equals(last[key], value) }.bind(this))) return false;
+    $extend(this.styles.last, styles);
+    return styles;
+  },
+	
 	setElementStyle: function(property, value) {
 		if (Element.Styles[property] || Element.Styles.More[property]) {
 			if (this.styles.element[property] !== value) this.element.setStyle(property, value);
@@ -375,25 +389,68 @@ ART.Widget.create = function(klass, a, b, c, d) {
 ART.Widget.Touchable = new Class({
 	attach: function() {
 		if (!this.parent.apply(this, arguments)) return;
-		this.touch = new Touch(this.element);
-		
-		this.touch.addEvents({
-			start: this.activate.bind(this),
-			end: this.deactivate.bind(this),
-			cancel: this.deactivate.bind(this)//this.fireEvent('press', e);
-		});
-		
+		if (!this.disabled) this.getTouch();
 		return true;
+	},
+	
+	getTouch: function() {
+	  if (!this.touch) {
+	    this.touch = new Touch(this.element);
+		
+  		this.touch.addEvents({
+  			start: this.activate.bind(this),
+  			end: this.deactivate.bind(this),
+  			cancel: this.deactivate.bind(this)//this.fireEvent('press', e);
+  		});
+  	}
+  	return this.touch;
+	},
+	
+	disable: function() {
+		if (!this.parent.apply(this, arguments)) return;
+	  if (this.touch) this.touch.detach();
+	  return true;
+	},
+	
+	enable: function() {
+		if (!this.parent.apply(this, arguments)) return;
+	  this.getTouch().attach();
+	  return true;
 	},
 	
 	detach: function() {
 		if (!this.parent.apply(this, arguments)) return;
-		this.touch.detach();
+		if (this.touch) this.touch.detach();
 		return true;
 	}
 });
 
 
+Class.refactor(ART.Widget, {
+
+  layers: {},
+
+  build: function() {
+    if (this.layered) {
+      for (var name in this.layered) {
+        this.layers[name] = this.getLayer.apply(this, this.layered[name]);
+      }
+    }
+    if (!this.previous.apply(this, arguments)) return;
+    return true;
+  },
+
+  getLayer: function() {
+    var args = Array.link($splat(arguments), {name: String.type, options: Object.type, properties: Array.type, render: Function.type, klass: Class.type});
+    var instance = new (args.klass || ART[args.name.capitalize()]);
+    this.addEvent('redraw', function() {
+      var properties = (instance.properties || []).concat(args.properties)
+      var style = this.getChangedStyles.apply(this, properties);
+      if (style) (args.render || instance.paint).apply(instance, Hash.getValues(style));
+    });
+    return instance;  
+  }
+})
 
 
 Class.refactor(ART.Widget, {

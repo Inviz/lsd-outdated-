@@ -86,3 +86,19 @@ $equals = function(one, another) {
 	}
 	return false;
 }
+
+
+
+ART.implement({
+
+	setHeight: function(height) {
+	  this.element.setAttribute('height', height);
+	  return this;
+	},
+
+	setWidth: function(width) {
+	  this.element.setAttribute('width', width);
+	  return this;
+	}
+
+});

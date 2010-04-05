@@ -30,7 +30,6 @@ ART.Widget.Paint = new Class({
 	),
 	
 	properties: [],
-	layers: {},
   
 	build: function() {
 		if (!this.parent.apply(this, arguments)) return;
@@ -65,6 +64,7 @@ ART.Widget.Paint = new Class({
 		for (var property in padding) {
 		  this.element.setStyle(property, padding[property]);
 		}
+		this.fireEvent('redraw')
 		ART.Widget.Paint.redraws++;
 		
 		return true;
@@ -153,7 +153,7 @@ ART.Widget.Paint = new Class({
 		return (this.setPaintStyle(property, value) || this.setElementStyle(property, value));
 	},
 	
-	getPaintStyle: function(property, value) {
+	getStyle: function(property, value) {
 		var properties = ART.ComplexStyles[property];
 		if (properties) {
 			if (properties.set) properties = properties.get;
@@ -161,7 +161,7 @@ ART.Widget.Paint = new Class({
 				return this.getStyle(property) || 0;
 			}, this)
 		} else {
-			return this.getStyle.apply(this, arguments);
+			return this.parent.apply(this, arguments);
 		}
 	},
 	
@@ -190,5 +190,53 @@ ART.Widget.Paint = new Class({
 	
 });
 
+ART.Widget.Paint.Fx = new Class({
+
+	Extends: Fx.CSS,
+
+	initialize: function(widget, options){
+	  this.widget = widget;
+		this.element = this.subject = document.id(widget);
+		this.parent(options);
+	},
+
+	prepare: function(widget, property, values){
+		values = $splat(values);
+		var values1 = values[1];
+		if (!$chk(values1)){
+			values[1] = values[0];
+			values[0] = widget.getStyle(property);
+		}
+		var parsed = values.map(this.parse);
+		return {from: parsed[0], to: parsed[1]};
+	},
+	
+	set: function(property, now){
+		if (arguments.length == 1){
+			now = property;
+			property = this.property || this.options.property;
+		}
+		this.widget.setStyle(property, now[0].value);
+		this.widget.render();
+		return this;
+	},
+
+	start: function(property, from, to){
+		if (!this.check(property, from, to)) return this;
+		var args = Array.flatten(arguments);
+		this.property = this.options.property || args.shift();
+		var parsed = this.prepare(this.widget, this.property, args);
+		return this.parent(parsed.from, parsed.to);
+	}
+
+});
+
+ART.Widget.Paint.implement({
+  tween: function(property, from, to) {
+    if (!this.tweener) this.tweener = new ART.Widget.Paint.Fx(this);
+    this.tweener.start(property, from, to);
+    return this;
+  }
+})
 
 ART.Widget.Paint.redraws = 0;

@@ -4,12 +4,37 @@ svg {
 v\:* {
   background: transparent; }
 
+.art.section {
+  overflow: hidden; }
+.art.scrollbar {
+  position: absolute; }
+  .art.scrollbar.vertical {
+    top: 0;
+    left: 0; }
+  .art.scrollbar.horizontal {
+    bottom: 0;
+    left: 0; }
+.art.input input, .art.textarea textarea {
+  border: 0;
+  line-height: 20px;
+  font-size: 16px;
+  width: 200px;
+  padding-left: 4px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-family: Georgia;
+  background: none;
+  display: block; }
+.art.textarea textarea {
+  padding-top: 2px; }
 .art.window {
   line-height: 24px; }
   .art.window .header .buttons {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 5; }
+  .art.window .header .toggler {
     z-index: 5; }
   .art.window .title {
     z-index: 4;

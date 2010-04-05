@@ -19,8 +19,8 @@ ART.Sheet.define('window', {
 	'shadow-blur': 20,
 	'shadow-offset-y': 5,
 	'shadow-color': hsb(0, 0, 0, 1),
-	'stroke-width': 1,
-	'stroke-color': hsb(0, 0, 0, 1)
+	//'stroke-width': 1,
+	//'stroke-color': hsb(0, 0, 0, 1)
 });
 
 
@@ -86,6 +86,15 @@ ART.Sheet.define('window.fancy', {
 	'corner-radius': 5
 });
 
+ART.Sheet.define('input, textarea', {		
+	'corner-radius': 3,
+	'border-color': hsb(0, 0, 50),
+	'background-color': [hsb(0, 0, 90), hsb(0, 0, 95)],
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 70, 0)]
+});
+ART.Sheet.define('input:focused, textarea:focused', {		
+	'border-color': hsb(212, 58, 93)
+});
 
 ART.Sheet.define('window.fancy #header', {
 	'corner-radius-top-left': 'inherit',
@@ -99,13 +108,10 @@ ART.Sheet.define('window.fancy #header', {
 });
 
 ART.Sheet.define('window.fancy #header #toolbar', {
-	'height': 30,
+	'height': 40,
 	'clear': 'both',
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
-	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
-	'border-bottom-width': 1,
-	'border-bottom-style': 'solid',
-	'border-bottom-color': '#979797'
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)]
 });
 
 ART.Sheet.define('window.fancy #content', {
@@ -122,7 +128,7 @@ ART.Sheet.define('window.fancy #footer', {
 	'corner-radius-bottom-right': 'inherit',
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 70)],
 	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
-	'height': 16,
+	'height': 'auto',
 	'border-top-width': 1,
 	'border-top-style': 'solid',
 	'border-top-color': '#979797'
@@ -131,20 +137,35 @@ ART.Sheet.define('window.fancy #footer', {
 ART.Sheet.define('window #header #buttons', {
 	'float': 'left',
 	'height': 24,
-	'margin-left': 5,
 	'margin-top': 5
 });
+
+ART.Sheet.define('window #header #toggler', {
+	'float': 'right',
+	'margin-left': -20,
+	'margin-right': 5,
+	'margin-top': 5,
+	'height': 10,
+	'width': 20,
+	'corner-radius': 5,
+	'reflection-color': [hsb(0, 0, 90, 0.5), hsb(0, 0, 70, 0.5), hsb(0, 0, 100, 0.5)]
+});
+
+ART.Sheet.define('window #header #toggler:active', {
+  'background-color': [hsb(210, 61, 90), hsb(202, 95, 100)],
+	'reflection-color': [hsb(0, 0, 90, 0.7), hsb(0, 0, 70, 0.7), hsb(0, 0, 100, 0.7)]
+})
 
 ART.Sheet.define('window.fancy button', {
 	'pill': true,
 	'height': 14,
 	'width': 14,
 	'cursor': 'pointer',
-	'background-color': [hsb(0, 0, 75), hsb(0, 0, 55)],
-	'reflection-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
+	'reflection-color': [hsb(0, 0, 75), hsb(0, 0, 100, 0.3)],
+	'background-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.4),
 	'border-color': hsb(0, 0, 45),
-	'glyph-color': hsb(0, 0, 0, 0.6),
+	'glyph-color': hsb(0, 0, 0, 0.4),
 	
 	'float': 'left',
 	'margin-left': 5
@@ -158,12 +179,11 @@ ART.Sheet.define('window.fancy button:active', {
 
 ART.Sheet.define('window #buttons button', {
 	'glyph-height': 8,
-	'glyph-width': 8
-});
-
-ART.Sheet.define('window.fancy #buttons #close', {
-	'glyph-height': 6,
-	'glyph-width': 6
+	'glyph-width': 8,
+	'corner-radius': 6,
+	'reflection-color': ['radial', {0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}],
+	'fill-color': ['radial', {0.5: hsb(0, 0, 100, 0.496875), 0.9: hsb(0, 0, 100, 0)}, {cy: '5%', r: '20%', fy: '5%'}],
+	'background-color': ['radial', {0.3: hsb(0, 0, 75, 0.4), 0.5: hsb(0, 0, 100, 0.3)}],
 });
 
 ART.Sheet.define('window #close', {
@@ -182,7 +202,7 @@ ART.Sheet.define('window:collapsed #minimize', {
 	'display': 'none'
 });
 
-ART.Sheet.define('window:collapsed #content', {
+ART.Sheet.define('window.fancy:collapsed #content', {
 	'background-color': [hsb(0, 0, 80, 0.5), hsb(0, 0, 70, 0.7)],
 	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 0, 0)],
 });
@@ -219,6 +239,88 @@ ART.Sheet.define('window #handle:active', {
 	'shadow-color': hsb(0, 0, 0, 0.6)
 });
 
+
+ART.Sheet.define('window #toolbar button', {
+	'height': 36,
+	'width': 36
+});
+
+ART.Sheet.define('window:collapsed #toolbar button', {
+	'height': 16,
+	'width': 16
+});
+
+ART.Sheet.define('window.fancy:collapsed #header #toolbar', {
+	'height': 20 
+});
+
+ART.Sheet.define('window.fancy #header #toolbar button', {
+	'glyph-scale': 2,
+	'glyph-top': 5,
+	'glyph-left': 5,
+	'background-color': [hsb(0, 0, 99), hsb(0, 0, 74)],
+	'reflection-color': [hsb(0, 0, 30, 0), hsb(0, 0, 40, 0.3)]
+});
+
+ART.Sheet.define('window.fancy #header #toolbar button:disabled', {
+	'glyph-color': hsb(0, 0, 50),
+	'cursor': 'default'
+});
+
+ART.Sheet.define('window.fancy #header #toolbar button:active', {
+  'background-color': [hsb(0, 0, 40), hsb(0, 0, 74)],
+  'border-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
+});
+
+ART.Sheet.define('window.fancy #header #toolbar button#search', {
+	'glyph': ART.Glyphs.search
+});
+ART.Sheet.define('window.fancy #header #toolbar button#reload', {
+	'glyph': ART.Glyphs.refresh
+});
+ART.Sheet.define('window.fancy #header #toolbar button#wrench', {
+	'glyph': ART.Glyphs.wrench
+});
+ART.Sheet.define('window.fancy #header #toolbar button#back', {
+	'glyph': ART.Glyphs.triangleLeft,
+	'glyph-top': 11,
+	'glyph-left': 10,
+	'corner-radius': 18,
+	'glyph-scale': 1.5,
+	'z-index': 10
+});
+ART.Sheet.define('window.fancy #header #toolbar button#forward', {
+	'glyph': ART.Glyphs.triangleRight,
+	'height': 25,
+	'corner-radius': [0, 13, 13, 0],
+	'glyph-scale': 1.2,
+	'glyph-left': 15,
+	'glyph-top': 7,
+	'margin-top': 5,
+	'margin-left': -10,
+	'z-index': 5
+});
+
+ART.Sheet.define('window.fancy:collapsed #header #toolbar button', {
+	'glyph-scale': 1,
+	'glyph-top': 2,
+	'glyph-left': 2
+});
+
+ART.Sheet.define('window.fancy:collapsed #header #toolbar button#forward, window.fancy:collapsed #header #toolbar button#back', {
+	'corner-radius': 5,
+	'glyph-scale': 1,
+	'glyph-top': 4,
+	'glyph-left': 4
+});
+
+ART.Sheet.define('window.fancy:collapsed #header #toolbar button#forward', {
+  'margin-left': 5,
+	'margin-top': 0,
+	'height': 16
+});
+
+
 ART.Widget.Window = new Class({
 	
 	Extends: Class.inherit(
@@ -234,6 +336,18 @@ ART.Widget.Window = new Class({
 	
 	layout: {},
 	
+	layered: {
+	  fill:  ['rectangle', ['reflectionColor', 'strokeWidth', 'strokeColor'], function(width, height, cornerRadius, color, stroke, strokeColor) {
+	    this.draw(width + (stroke || 0), height + (stroke || 0), cornerRadius.map(function(r, i) { return r - (stroke || 0)}));
+  		if (stroke && strokeColor) this.stroke(strokeColor, stroke);
+  		if (color) this.fill(color);
+	  }],
+	  background: ['rectangle', ['strokeWidth'], function(width, height, cornerRadius, color, stroke) {
+  	  this.draw(width + (stroke || 0), height + (stroke || 0), cornerRadius);
+  		if (color) this.fill.apply(this, $splat(color));
+  	}],
+	},
+	
 	initialize: function() {
 		this.parent.apply(this, arguments);
 		this.inject(document.body);
@@ -247,43 +361,6 @@ ART.Widget.Window = new Class({
 	close: function() {
 		if (!this.parent.apply(this, arguments)) return;
 		this.hide();
-	},
-	
-	build: function() {
-    if (!this.parent.apply(this, arguments)) return;
-	  this.layers = {
-	    border: new ART.Rectangle,
-	    background: new ART.Rectangle,
-	    fill: new ART.Rectangle
-	  }
-	  return true;
-	},
-	
-	render: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		
-		var style = this.styles.current;
-		var width = this.getStyle('width')// + (this.styles.current.strokeWidth || 0);
-		var height = this.getStyle('height')// - (this.styles.current.strokeWidth || 0);
-		
-		var rad0 = [style.cornerRadiusTopLeft, style.cornerRadiusTopRight, style.cornerRadiusBottomRight, style.cornerRadiusBottomLeft];
-		var radM1 = [style.cornerRadiusTopLeft - 1, style.cornerRadiusTopRight - 1, style.cornerRadiusBottomRight - 1, style.cornerRadiusBottomLeft - 1];
-    
-		//make the border
-		this.layers.border.draw(width, height, rad0);
-		this.layers.border.fill.apply(this.layers.border, $splat(style.borderColor));
-
-		//reflection
-		this.layers.fill.draw(width - 2, height - 2, radM1);
-		this.layers.fill.fill.apply(this.layers.fill, $splat(style.reflectionColor));
-		this.layers.fill.translate(1, 1);
-		
-		//background
-		this.layers.background.draw(width - 2, height - 2, radM1);
-		this.layers.background.fill.apply(this.layers.background, $splat(style.backgroundColor));
-		this.layers.background.translate(1, 2);
-		
-		return true;
 	}
 	
 });

@@ -52,54 +52,33 @@ ART.Widget.Button = new Class({
 		}
 	},
 	
-	properties: ['borderColor', 'backgroundColor'],
+	layered: {
+    border: ['rectangle', ['borderColor']],
+	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
+	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
+  		if (color) this.fill.apply(this, $splat(color));
+  		this.translate(1, 2);
+	  }],
+	  reflection:  ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
+	    this.draw(width - 2, height - 2, cornerRadius.map(function(r) { return r - 1}));
+  		if (color) this.fill.apply(this, $splat(color));
+  		this.translate(1, 1);
+	  }],
+	  fill:  ['rectangle', ['fillColor'], function(width, height, cornerRadius, color) {
+	    this.draw(width - 2, height - 2, cornerRadius.map(function(r) { return r - 1}));
+  		if (color) this.fill.apply(this, $splat(color));
+  		this.translate(1, 1);
+	  }],
+    glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale'], function(glyph, color, left, top, scale) {
+	    this.draw(glyph);
+  		if (color) this.fill.apply(this, $splat(color));
+  		this.translate(left, top);
+  		if (scale) this.scale(scale, scale)
+	  }]
+	},
 	
 	click: function() {
 		this.fireEvent('click', arguments);
-	},
-	
-	build: function() {
-	  if (!this.parent.apply(this, arguments)) return;
-
-    this.layers = {
-      border: new ART.Rectangle,
-      fill: new ART.Rectangle,
-      background: new ART.Rectangle,
-      glyph: new ART.Shape
-    }
-		return true;
-	},
-	
-	render: function(){
-		this.parent.apply(this, arguments);
-		if (!this.paint) return this;
-		
-		var style = this.styles.current;
-		
-		
-		var rad0 = [style.cornerRadiusTopLeft, style.cornerRadiusTopRight, style.cornerRadiusBottomRight, style.cornerRadiusBottomLeft];
-		var radM1 = [style.cornerRadiusTopLeft - 1, style.cornerRadiusTopRight - 1, style.cornerRadiusBottomRight - 1, style.cornerRadiusBottomLeft - 1];
-    
-		this.layers.glyph.draw(style.glyph);
-		this.glyphBounds = this.layers.glyph.measure();
-		this.layers.glyph.fill.apply(this.layers.glyph, $splat(style.glyphColor));
-		this.layers.glyph.translate(style.glyphLeft, style.glyphTop);
-    
-		//make the border
-		this.layers.border.draw(style.width, style.height, rad0);
-		this.layers.border.fill.apply(this.layers.border, $splat(style.borderColor));
-
-		//reflection
-		this.layers.fill.draw(style.width - 2, style.height - 2, radM1);
-		this.layers.fill.fill.apply(this.layers.fill, $splat(style.reflectionColor));
-		this.layers.fill.translate(1, 1);
-		
-		//background
-		this.layers.background.draw(style.width - 2, style.height - 3, radM1);
-		this.layers.background.fill.apply(this.layers.background, $splat(style.backgroundColor));
-		this.layers.background.translate(1, 2);
-
-		return this;
 	},
 
 	makeText: function(text, size){

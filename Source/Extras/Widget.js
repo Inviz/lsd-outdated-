@@ -41,11 +41,23 @@ Widget.Stateful = function(states, reflect) {
       return this.setStatefulClassName.apply(this, arguments);
     }
   } : {};
+  
+  $extend(proto, {
+    options: {
+      states: {}
+    },
+    setStateTo: function(state, to) {
+      return this[this.options.states[state][to ? 0 : 1]]()
+    }
+  });
+  
 
   Hash.each(states, function(methods, state) {
     var enabler = methods[0];
     var disabler = methods[1];
     var toggler = methods[2];
+    
+    proto.options.states[state] = methods;
     
     proto[enabler] = function() {
       

@@ -27,6 +27,12 @@ ART.Layout = new Class({
 		});
 		var widget = ART.Widget.create(parsed.tag.camelCase().capitalize(), options);
     if (parent) widget.inject(parent);
+    if (parsed.classes) parsed.classes.each(widget.addClass.bind(widget));
+		if (parsed.pseudos) {
+		  parsed.pseudos.each(function(pseudo) {
+		    widget.setStateTo(pseudo.name, true)
+		  });
+		}
     var children = this.render(layout, widget);
   },
   

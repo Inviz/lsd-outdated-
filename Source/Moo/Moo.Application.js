@@ -13,12 +13,13 @@ Moo.Application = new Class({
 	    '#title[container]': {}
 	  },
 	  'section#content[container]': {
-	    'scrollbar#x[mode=vertical]': {},
-	    'scrollbar#y[mode=horizontal]': {}
+	    'input#whatever[name=whatever][type=text]': {},
+	    'textarea#soever[name=soever]': {},
+	    'scrollbar#vertical[mode=vertical]': {},
+	    'scrollbar#horizontal[mode=horizontal]': {}
 	  },
 	  'section#footer': {
-			'#status[container]': {},
-	    'glyph[name=drag-handle]#handle': {}
+			'#status[container]': {}
 	  }
 	}
 });
@@ -30,19 +31,27 @@ Moo.Application.Toolbared = new Class({
   
 	layout: {
 	  'section#header': {
+      'button#toggler': {},
 	    '#buttons': {
 	      'button#minimize': {},
         'button#maximize': {},
         'button#close': {}
 	    },
 	    '#title[container]': {},
-  	  '#toolbar': {}
+  	  '#toolbar': {
+  	    'button#back': {},
+  	    'button#forward:disabled': {},
+  	    'button#search': {},
+  	    'button#search': {},
+  	    'button#wrench': {},
+  	    'button#reload': {}
+  	  }
 	  },
-	  'section#content[container]': {
-	    'scrollbar#x[mode=vertical]': {},
-	    'scrollbar#y[mode=horizontal]': {}
+	  'section#content[container][scrollable]': {
+	    'scrollbar#vertical[mode=vertical]': {},
+	    'scrollbar#horizontal[mode=horizontal]': {}
 	  },
-	  'section#footer': {
+	  'section#footer.flexible': {
 			'#status[container]': {},
 	    'glyph[name=drag-handle]#handle': {}
 	  }

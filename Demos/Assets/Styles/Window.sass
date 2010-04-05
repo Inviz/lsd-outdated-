@@ -24,8 +24,36 @@ svg
   
 v\:*
   :background transparent
- 
+
 .art 
+
+  &.section
+    :overflow hidden
+    
+  &.scrollbar  
+    :position absolute
+    &.vertical
+      :top 0
+      :left 0
+    &.horizontal
+      :bottom 0
+      :left 0
+
+  &.input input, &.textarea textarea
+    :border 0
+    :line-height 20px
+    :font-size 16px
+    :width 200px
+    :padding-left 4px
+    :padding-top 3px
+    :padding-bottom 3px
+    :font-family Georgia
+    :background none
+    :display block
+    
+  &.textarea textarea
+    :padding-top 2px
+
   &.window
     :line-height 24px
   
@@ -35,6 +63,10 @@ v\:*
         :top 0
         :left 0
         :z-index 5
+        
+      .toggler
+        :z-index 5
+        
     .title  
       :z-index 4
       :text-align center

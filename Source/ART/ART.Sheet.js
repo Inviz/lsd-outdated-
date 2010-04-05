@@ -88,5 +88,5 @@ ART.Sheet = {};
 		
 		return result;
 	};
-
 })();
+
