@@ -59,13 +59,13 @@ ART.SVG.Element = new Class({
 		this.uid = (UID++).toString(16);
 		var element = this.element = createElement(tag);
 		element.setAttribute('id', 'e' + this.uid);
-		this.transform = {translate: [0, 0], scale: [1, 1], rotate: [0, 0, 0]};
+		this.transform = {translate: [0, 0], scale: [1, 1]};
 	},
 	
 	/* transforms */
 	
 	_writeTransform: function(){
-	  if ($equals(this.transform, {translate: [0, 0], scale: [1, 1], rotate: [0, 0, 0]})) return;
+	  if ($equals(this.transform, {translate: [0, 0], scale: [1, 1]})) return;
 		var transforms = [];
 		for (var transform in this.transform) transforms.push(transform + '(' + this.transform[transform].join(',') + ')');
 		this.element.setAttribute('transform', transforms.join(' '));

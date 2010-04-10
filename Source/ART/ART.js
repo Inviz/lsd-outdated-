@@ -71,7 +71,7 @@
 
 $equals = function(one, another) {
 	if (one == another) return true;
-	if (!one || !another) return false;
+	if ((!one) ^ (!another)) return false;
 	
 	switch ($type(one)) {
 		case "array":
@@ -82,7 +82,7 @@ $equals = function(one, another) {
 			return $equals(one.color, another.color) && (one.type == another.type) 
 		case "object":
 			if (one.equals) return one.equals(another)
-			for (var i in one) if ($equals(one[i], another[i])) return false;
+			for (var i in one) if (!$equals(one[i], another[i])) return false;
 			return true;
 	}
 	return false;

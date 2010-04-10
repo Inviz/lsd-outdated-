@@ -305,14 +305,14 @@ ART.Widget = new Class({
 	setHeight: function(value) {
 		if (this.size.height == value) return;
 		this.size.height = value;
-		this.element.setStyle('height', value);
+		this.setStyle('height', value);
 		return true;
 	},
 		
 	setWidth: function(value) {
 		if (this.size.width == value) return;
 		this.size.width = value;
-		this.element.setStyle('width', value);
+		this.setStyle('width', value);
 		return true;
 	},
 	

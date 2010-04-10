@@ -26,11 +26,8 @@ Class.prototype.inherit = function() {
 		
 		//hack to merge events the right way (just like options)
 		var events = $merge(baked.prototype.events)
-		console.log('had events', $merge(events), 'new events', $merge(mixin.events))
 		baked.implement(mixin);
 		baked.prototype.events = $merge(events, mixin.events)
-		
-		console.log('had events', $merge(events), 'new events', $merge(baked.events))
 		klass = baked;
 		
 	}, this);

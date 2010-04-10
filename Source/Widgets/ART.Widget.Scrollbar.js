@@ -108,7 +108,7 @@ ART.Widget.Scrollbar = new Class({
 	
 	events: {
 	  parent: {
-	    resize: 'adaptToSize',
+  	  redraw: 'adaptToSize'
 	  }
 	},
 	
@@ -118,20 +118,19 @@ ART.Widget.Scrollbar = new Class({
 	},
 	
 	adaptToSize: function(size){
+	  if (!size || $chk(size.height)) size = this.parentWidget.size;
 	  var prop = (this.options.mode == 'vertical') ? 'height' : 'width';
-    this.setStyle(prop, size[prop] - 14);
-    this.track.setStyle(prop, size[prop] - 14 * 3);
+	  var setter = 'set' + prop.capitalize();
+    this[setter](size[prop] - 14);
+    this.track[setter](size[prop] - 14 * 3);
+    this.getSlider.delay(10, this, true)
     this.update();
     this.render();
-    this.getSlider(true)
 	},
 	
 	inject: function(widget) {
 	  if (!this.parent.apply(this, arguments)) return;
-	  widget.addEvents(this.events.parent);
-	  (function() {
-  	  this.adaptToSize(widget.size);
-	  }).delay(500, this)
+	  if (widget.size.height) this.adaptToSize(widget.size);
 	  return true;
 	},
 	
