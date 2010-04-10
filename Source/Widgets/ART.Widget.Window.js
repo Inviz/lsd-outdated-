@@ -90,8 +90,16 @@ ART.Sheet.define('input, textarea', {
 	'corner-radius': 3,
 	'stroke-color': hsb(0, 0, 50),
 	'background-color': [hsb(0, 0, 90), hsb(0, 0, 95)],
-	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 70, 0)]
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 70, 0)],
+	'width': 200,
+	'height': 26
 });
+
+
+ART.Sheet.define('textarea', {		
+  'height': 88
+});
+
 ART.Sheet.define('input:focused, textarea:focused', {		
 	'stroke-color': hsb(212, 58, 93)
 });

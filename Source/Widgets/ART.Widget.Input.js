@@ -51,12 +51,9 @@ ART.Widget.Input = new Class({
   },
   
   render: function() {
-    this.setStyles({
-      width: this.input.offsetWidth,
-      height: this.input.offsetHeight
-    })
     if (!this.parent.apply(this, arguments)) return;
     
+    this.input.setStyle('height', this.getStyle('height'));
     
     return true;
   }
