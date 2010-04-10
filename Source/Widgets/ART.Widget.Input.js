@@ -54,6 +54,7 @@ ART.Widget.Input = new Class({
     if (!this.parent.apply(this, arguments)) return;
     
     this.input.setStyle('height', this.getStyle('height'));
+    this.input.setStyle('width', this.getStyle('width') - 4);
     
     return true;
   }
