@@ -15,8 +15,7 @@ Moo.Application = new Class({
 	  'section#content[container]': {
 	    'input#whatever[name=whatever][type=text]': {},
 	    'textarea#soever[name=soever]': {},
-	    'scrollbar#vertical[mode=vertical]': {},
-	    'scrollbar#horizontal[mode=horizontal]': {}
+	    'slider#count': {}
 	  },
 	  'section#footer': {
 			'#status[container]': {}
@@ -47,10 +46,7 @@ Moo.Application.Toolbared = new Class({
   	    'button#reload': {}
   	  }
 	  },
-	  'section#content[container][scrollable]': {
-	    'scrollbar#vertical[mode=vertical]': {},
-	    'scrollbar#horizontal[mode=horizontal]': {}
-	  },
+	  'section#content[container][scrollable]': {},
 	  'section#footer.flexible': {
 			'#status[container]': {},
 	    'glyph[name=drag-handle]#handle': {}

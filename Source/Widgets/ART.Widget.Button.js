@@ -37,7 +37,7 @@ ART.Widget.Button = new Class({
 
 	Extends: Class.inherit(
 		ART.Widget.Paint,
-		ART.Widget.Touchable
+		ART.Widget.Traits.Touchable
 	),
 
 	name: 'button',
@@ -47,13 +47,13 @@ ART.Widget.Button = new Class({
 	},
 	
 	events: {
-		'click': function() {
-			this.click.apply(this, arguments);
-		}
+	  element: {
+	    click: 'onClick'
+	  }
 	},
 	
 	layered: {
-    border: ['rectangle', ['borderColor']],
+    stroke: ['rectangle', ['strokeColor']],
 	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
 	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
   		if (color) this.fill.apply(this, $splat(color));
@@ -77,7 +77,7 @@ ART.Widget.Button = new Class({
 	  }]
 	},
 	
-	click: function() {
+	onClick: function() {
 		this.fireEvent('click', arguments);
 	},
 

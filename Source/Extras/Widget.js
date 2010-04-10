@@ -60,12 +60,10 @@ Widget.Stateful = function(states, reflect) {
     proto.options.states[state] = methods;
     
     proto[enabler] = function() {
-      
       if (this[state]) return false;
       this[state] = true; 
       
     	if (Class.hasParent(arguments)) this.parent.apply(this, arguments);
-  	  
       this.fireEvent(enabler, arguments);
       if (this.onStateChange) this.onStateChange(state, true, arguments);
       return true;

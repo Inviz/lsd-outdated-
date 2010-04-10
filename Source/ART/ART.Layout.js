@@ -25,8 +25,9 @@ ART.Layout = new Class({
 		if (parsed.attributes) parsed.attributes.each(function(attribute) {
 			options[attribute.name] = attribute.value || true;
 		});
-		var widget = ART.Widget.create(parsed.tag.camelCase().capitalize(), options);
-    if (parent) widget.inject(parent);
+		var widget = ART.Widget.create(parsed.tag, options);
+    $(widget);
+    if (parent) widget.inject(parent)
     if (parsed.classes) parsed.classes.each(widget.addClass.bind(widget));
 		if (parsed.pseudos) {
 		  parsed.pseudos.each(function(pseudo) {

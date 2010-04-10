@@ -19,6 +19,8 @@ ART.Widget = new Class({
 		'attached': ['attach', 'detach']
 	}),
 	
+	orphaned: true,
+	
 	insensitive: ['dirty', 'built', 'attached'],
 	
 	Implements: [Options, Events, Logger],
@@ -47,29 +49,12 @@ ART.Widget = new Class({
 	
 	size: {},
 	
-	events: {},
-	bound: {},
-	
-	attach: function(element) {
-		if (!this.parent.apply(this, arguments)) return;
-		(element || this.element).addEvents(this.bound);
-		return true;
-	},
-	
-	detach: function(element) {
-		if (!this.parent.apply(this, arguments)) return;
-		(element || this.element).removeEvents(this.bound);
-		return true;
-	},
-	
 	initialize: function(options){
 		if (options) this.setOptions(options);
 
 		this.classes = this.options.classes;
 		this.pseudos = [];
 		this.children = [];
-		
-		for (var event in this.events) this.bound[event] = this.events[event].bind(this);
 		this.update();
 		
 		this.log('Init', this)
@@ -114,6 +99,7 @@ ART.Widget = new Class({
 		var s = this.parent.apply(this, arguments)
 		if (!s) return; //only renders if dirty == true
 	  
+  	var size = this.size;
 		var found = this.lookupStyles();
 		if (found) {
 			for (var property in found) if (property in this.styles.given) delete found[property];
@@ -123,7 +109,6 @@ ART.Widget = new Class({
 		
 		$extend(this.styles.given, style);
 		this.setStyles(this.styles.given)
-		
 		for (var property in this.styles.element)	{
 			if (!(property in this.styles.given) && !(property in this.styles.found) && !(property in this.styles.calculated)) {
 				delete this.styles.current[property];
@@ -134,6 +119,14 @@ ART.Widget = new Class({
 			child.render();
 		});
 		
+		var newSize = {height: this.getStyle('height'), width: this.getStyle('width')};
+		this.size = newSize
+		if (!$equals(newSize, size)) {
+      if (size.height != newSize.height) this.setHeight(newSize.height);
+      if (size.width != newSize.width) this.setWidth(newSize.width);
+		  this.fireEvent('resize', [newSize, size])
+		}
+    
 		return true;
 	},
 	
@@ -289,7 +282,7 @@ ART.Widget = new Class({
 		var node = this;
 		var style = node.styles.current[property];
 		while ((style == 'inherit' || !style) && node.parentWidget) {
-			node = this.parentWidget;
+			node = node.parentWidget;
 			style = node.styles.current[property];
 		}
 		return style;
@@ -353,9 +346,10 @@ ART.Widget = new Class({
 	},
 	
 	inject: function(widget) {
-	  this.parent.apply(this, arguments);
+	  if (!this.parent.apply(this, arguments)) return;
 		widget.adopt(this);
 		if ($type(widget) == 'element') this.render();
+		return true;
 	},
 
 	setParent: function(widget){
@@ -369,7 +363,12 @@ ART.Widget = new Class({
 	update: function() {
 		if (!this.parent.apply(this, arguments)) return;
 		this.styles.calculated = {};
+		this.styles.last = {};
 		return true;
+	},
+	
+	getWrapper: function() {
+	  return this.wrapper || this.element;
 	}
 	
 });
@@ -382,116 +381,16 @@ Element.Styles.More = {
 
 //Basic widget initialization
 ART.Widget.create = function(klass, a, b, c, d) {
-	if (!ART.Widget[klass]) throw new Exception.Misconfiguration(this, "ClassName ART.Widget." + klass + " was not found");
-	return new ART.Widget[klass](a, b, c, d)
+  var base = ART.Widget;
+  if (klass.indexOf('-') > -1) {
+    var bits = klass.split('-');
+    base = base[bits.shift().camelCase().capitalize()];
+    klass = bits.join('-');
+  }
+  klass = klass.camelCase().capitalize()
+	if (!base[klass]) throw new Exception.Misconfiguration(this, "ClassName ART.Widget." + klass + " was not found");
+	return new base[klass](a, b, c, d)
 }
 
-ART.Widget.Touchable = new Class({
-	attach: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		if (!this.disabled) this.getTouch();
-		return true;
-	},
-	
-	getTouch: function() {
-	  if (!this.touch) {
-	    this.touch = new Touch(this.element);
-		
-  		this.touch.addEvents({
-  			start: this.activate.bind(this),
-  			end: this.deactivate.bind(this),
-  			cancel: this.deactivate.bind(this)//this.fireEvent('press', e);
-  		});
-  	}
-  	return this.touch;
-	},
-	
-	disable: function() {
-		if (!this.parent.apply(this, arguments)) return;
-	  if (this.touch) this.touch.detach();
-	  return true;
-	},
-	
-	enable: function() {
-		if (!this.parent.apply(this, arguments)) return;
-	  this.getTouch().attach();
-	  return true;
-	},
-	
-	detach: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		if (this.touch) this.touch.detach();
-		return true;
-	}
-});
 
-
-Class.refactor(ART.Widget, {
-
-  layers: {},
-
-  build: function() {
-    if (this.layered) {
-      for (var name in this.layered) {
-        this.layers[name] = this.getLayer.apply(this, this.layered[name]);
-      }
-    }
-    if (!this.previous.apply(this, arguments)) return;
-    return true;
-  },
-
-  getLayer: function() {
-    var args = Array.link($splat(arguments), {name: String.type, options: Object.type, properties: Array.type, render: Function.type, klass: Class.type});
-    var instance = new (args.klass || ART[args.name.capitalize()]);
-    this.addEvent('redraw', function() {
-      var properties = (instance.properties || []).concat(args.properties)
-      var style = this.getChangedStyles.apply(this, properties);
-      if (style) (args.render || instance.paint).apply(instance, Hash.getValues(style));
-    });
-    return instance;  
-  }
-})
-
-
-Class.refactor(ART.Widget, {
-	layout: false,
-	
-	initialize: function() {
-		this.previous.apply(this, arguments);
-		if (this.layout) this.setLayout(this.layout);
-	},
-	
-	setLayout: function(layout) {
-	  this.layout = layout;
-		this.tree = new ART.Layout(this, this.layout);
-		this.fireEvent('layout', [this.tree, this.layout])
-	}
-});
-
-Class.refactor(ART.Widget, {
-	expression: false,
-	
-	initialize: function() {
-		this.previous.apply(this, arguments);
-		if (this.expression) this.applyExpression(this.expression);
-	},
-	
-	applyExpression: function(expression) {
-	  var parsed = SubtleSlickParse(expression)[0][0];
-	  if (parsed.classes) {
-	    this.classes = this.classes.concat(parsed.classes);
-	    parsed.classes.each(function(cls) {
-	      this.addClass(cls)
-	    }, this)
-	  }
-	  
-	  if (parsed.attributes) {
-	    var options = {id: parsed.id};
-  		if (parsed.attributes) parsed.attributes.each(function(attribute) {
-  			options[attribute.name] = attribute.value || true;
-  		});
-  		$extend(this.options, options);
-	  }
-	  this.fireEvent('expression', [parsed, expression]);
-	}
-});
+ART.Widget.Base = Class.inherit(ART.Widget);

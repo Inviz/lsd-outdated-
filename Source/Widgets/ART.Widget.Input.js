@@ -4,7 +4,7 @@ ART.Widget.Input = new Class({
   name: 'input',
   
   layered: {
-    border: ['rectangle', ['borderColor']],
+    stroke: ['rectangle', ['strokeColor']],
 	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
 	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
   		if (color) this.fill.apply(this, $splat(color));
@@ -46,7 +46,7 @@ ART.Widget.Input = new Class({
   
   setWidth: function() {
     if (!this.parent.apply(this, arguments)) return;
-    this.input.setStyle('width', this.size.width);
+    this.input.setStyle('width', this.size.width - this.input.getStyle('padding-left').toInt() - this.input.getStyle('padding-right').toInt());
     return true;
   },
   

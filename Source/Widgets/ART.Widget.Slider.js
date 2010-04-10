@@ -24,11 +24,15 @@ ART.Sheet.define('window.fancy scrollbar track', {
 });
 
 ART.Sheet.define('scrollbar:horizontal track', {
+  'margin-left': 14,
+  'margin-right': 14,
   'height': 14,
   'margin-top': 1
 });
 
 ART.Sheet.define('scrollbar:vertical track', {
+  'margin-top': 14,
+  'margin-bottom': 14,
   'width': 14,
   'margin-left': 1
 });
@@ -74,23 +78,13 @@ ART.Sheet.define('window.fancy scrollbar:horizontal button#decrement', {
 });
 
 	
-ART.Widget.Scrollbar = new Class({
+ART.Widget.Slider = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
     ART.Widget.Traits.HasSlider
   ),
   
-  name: 'scrollbar',
-  
-  position: 'absolute',
-	
-	layout: {
-    'scrollbar-track#track': {
-      'scrollbar-thumb#thumb': {},
-    },
-	  'scrollbar-button#decrement': {},
-	  'scrollbar-button#increment': {}
-	},
+  name: 'slider',
 	
 	layered: {
     border: ['rectangle', ['borderColor']],
@@ -106,99 +100,22 @@ ART.Widget.Scrollbar = new Class({
 	  }]
 	},
 	
-	events: {
-	  parent: {
-	    resize: 'adaptToSize',
-	  }
-	},
-	
 	initialize: function() {
 	  this.parent.apply(this, arguments);
 	  this.addPseudo(this.options.mode);
+	  this.getSlider();
 	},
 	
-	adaptToSize: function(size){
-	  var prop = (this.options.mode == 'vertical') ? 'height' : 'width';
-    this.setStyle(prop, size[prop] - 14);
-    this.track.setStyle(prop, size[prop] - 14 * 3);
-    this.update();
-    this.render();
-    this.getSlider(true)
-	},
-	
-	inject: function(widget) {
-	  if (!this.parent.apply(this, arguments)) return;
-	  widget.addEvents(this.events.parent);
-	  (function() {
-  	  this.adaptToSize(widget.size);
-	  }).delay(500, this)
-	  return true;
-	},
-	
-	dispose: function() {
-	  var parent = this.parentWidget;
-	  if (!this.parent.apply(this, arguments)) return;
-	  parent.removeEvents(this.events.parent);
-	  return true;
-	},
-	
-	getTrack: function() {
-	  return $(this.track)
-	},
-	
-	getTrackThumb: function() {
-	  return $(this.track.thumb);
+	layout: {
+    'scrollbar-thumb#thumb': {}
 	}
 })
 
-ART.Widget.Scrollbar.Track = new Class({
-  Extends: ART.Widget.Section,
-  
-  name: 'track',
-  
-  position: 'absolute'
-});
-
-ART.Widget.Absolute = new Class({
-  build: function() {
-    if (!this.wrapper) this.wrapper = new Element('div', {'class': 'wrapper'}).setStyle('position', 'relative')
-    if (!this.parent.apply(this, arguments)) return;
-    this.wrapper.inject(this.element);
-    return true;
-  },
-  
-  getWrapper: function() {
-    return this.wrapper || this.element;
-  }
-})
-
-ART.Widget.Scrollbar.Thumb = new Class({
-  Extends: ART.Widget.Button,
+ART.Widget.Slider.Thumb = new Class({
+  Extends: Class.inherit(
+    ART.Widget.Button,
+    ART.Widget.Absolute
+  ),
   
   name: 'thumb'
-});
-
-ART.Widget.Scrollbar.Button = new Class({
-  Extends: ART.Widget.Button,
-  
-  position: 'absolute'
-});
-
-
-Class.refactor(ART.Widget, {
-  
-  initialize: function() {
-    this.previous.apply(this, arguments);
-    if (this.options.scrollable) this.getScrollbars();
-  },
-  
-  getScrollbars: function() {
-    if (!this.vertical) {
-      this.applyLayout({
-  	    'scrollbar#vertical[mode=vertical]': {},
-  	    'scrollbar#horizontal[mode=horizontal]': {}
-  	  }); 
-    }
-  }
-  
 });

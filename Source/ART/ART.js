@@ -53,6 +53,7 @@
 		initialize: function(object, message) {
 			this.object = object;
 			this.message = message;
+			console.error(this.object, this.message)
 		},
 		
 		toArgs: function() {

@@ -23,7 +23,7 @@
 
 ART.Widget.Paint = new Class({
   Extends: Class.inherit(
-		ART.Widget,
+		ART.Widget.Base,
 		Widget.Stateful({
 			'outdated': ['outdate', 'actualize']
 		})
@@ -34,14 +34,12 @@ ART.Widget.Paint = new Class({
 	build: function() {
 		if (!this.parent.apply(this, arguments)) return;
 		this.paint = new ART();
-		$(this.paint).inject(this.element);
-		
-		this.element.setStyle('position', 'relative');
+		this.element.setStyle('position', this.position || 'relative');
 		$(this.paint).setStyles({
 			'position': 'absolute',
 			'top': 0,
 			'left': 0
-		});
+		}).inject(this.getWrapper());
 		for (var i in this.layers) this.paint.push(this.layers[i])
 		return true;
 	},
@@ -57,7 +55,6 @@ ART.Widget.Paint = new Class({
 	    this.paint.push.apply(this.paint, Hash.getValues(this.layers))
 	  }
 	  
-		//this.paint.clear();
 		this.outdated = false;
 		
 		var padding = this.getPadding();
@@ -68,15 +65,6 @@ ART.Widget.Paint = new Class({
 		ART.Widget.Paint.redraws++;
 		
 		return true;
-	},
-	
-	setStyle: function(property, value) {
-		if (!this.parent.apply(this, arguments)) return;
-		switch(property) {
-			case "height": case "width":
-				this.outdated = true;
-		}
-		return (this.setPaintStyle(property, value) || this.setElementStyle(property, value));
 	},
 	
 	setElementStyle: function(property, value) {

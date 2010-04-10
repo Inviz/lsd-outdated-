@@ -60,7 +60,7 @@ ART.Sheet.define('window.hud button', {
 	'background-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
 	'reflection-color': [hsb(0, 0, 0, 0.3), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.2),
-	'border-color': hsb(82, 0, 100, 0.5),
+	'stroke-color': hsb(82, 0, 100, 0.5),
 	'glyph-color': hsb(82, 0, 100, 0.5),
 	'corner-radius': 7,
 	'float': 'left',
@@ -88,12 +88,12 @@ ART.Sheet.define('window.fancy', {
 
 ART.Sheet.define('input, textarea', {		
 	'corner-radius': 3,
-	'border-color': hsb(0, 0, 50),
+	'stroke-color': hsb(0, 0, 50),
 	'background-color': [hsb(0, 0, 90), hsb(0, 0, 95)],
 	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 70, 0)]
 });
 ART.Sheet.define('input:focused, textarea:focused', {		
-	'border-color': hsb(212, 58, 93)
+	'stroke-color': hsb(212, 58, 93)
 });
 
 ART.Sheet.define('window.fancy #header', {
@@ -164,7 +164,7 @@ ART.Sheet.define('window.fancy button', {
 	'reflection-color': [hsb(0, 0, 75), hsb(0, 0, 100, 0.3)],
 	'background-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.4),
-	'border-color': hsb(0, 0, 45),
+	'stroke-color': hsb(0, 0, 45),
 	'glyph-color': hsb(0, 0, 30),
 	
 	'float': 'left',
@@ -173,7 +173,7 @@ ART.Sheet.define('window.fancy button', {
 
 ART.Sheet.define('window.fancy button:active', {
 	'reflection-color': [hsb(205, 25, 60), hsb(0, 0, 0, 0)],
-	'border-color': hsb(200, 35, 45),
+	'stroke-color': hsb(200, 35, 45),
 	'glyph-color': hsb(0, 0, 100)
 });
 
@@ -269,7 +269,7 @@ ART.Sheet.define('window.fancy #header #toolbar button:disabled', {
 
 ART.Sheet.define('window.fancy #header #toolbar button:active', {
   'background-color': [hsb(0, 0, 40), hsb(0, 0, 74)],
-  'border-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
+  'stroke-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
 });
 
 ART.Sheet.define('window.fancy #header #toolbar button#search', {

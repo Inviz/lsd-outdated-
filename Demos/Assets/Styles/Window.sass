@@ -1,4 +1,5 @@
 //sass Window.sass > Window.css
+//sass /Users/invizko/Sites/art.dev/Demos/Assets/Styles/Window.sass /Users/invizko/Sites/art.dev/Demos/Assets/Styles/Window.css
 
 =text-shadow(!color, !x, !y, !blur = 0)
   :text-shadow #{!blur} #{!y} #{!x} #{!color}
@@ -30,11 +31,12 @@ v\:*
   &.section
     :overflow hidden
     
-  &.scrollbar  
-    :position absolute
+  &.scrollbar
+    &.vertical, &.horizontal
+      :position absolute
     &.vertical
       :top 0
-      :left 0
+      :right 0
     &.horizontal
       :bottom 0
       :left 0

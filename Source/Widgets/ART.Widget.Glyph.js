@@ -1,7 +1,7 @@
 ART.Widget.Glyph = new Class({
   Extends: Class.inherit(
 		ART.Widget.Paint,
-  	ART.Widget.Touchable
+  	ART.Widget.Traits.Touchable
 	),
 	
   name: 'glyph',
