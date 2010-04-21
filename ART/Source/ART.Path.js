@@ -63,18 +63,26 @@ var calculateArc = function(rx, ry, rotation, large, clockwise, x, y, tX, tY){
 	};
 };
 
-var measureAndTransform = function(parts, precision){
+var extrapolate = function(parts, precision){
 	
 	var boundsX = [], boundsY = [];
 	
-	var ux = function(x){
-		boundsX.push(x);
-		return (precision) ? Math.round(x * precision) : x;
-	}, uy = function(y){
-		boundsY.push(y);
-		return (precision) ? Math.round(y * precision) : y;
-	}, np = function(v){
-		return (precision) ? Math.round(v * precision) : v;
+	var ux = (precision != null) ? function(x){
+		boundsX.push(x); return Math.round(x * precision);
+	} : function(){
+		boundsX.push(x); return x;
+	};
+	
+	var uy = (precision != null) ? function(x){
+		boundsY.push(x); return Math.round(x * precision);
+	} : function(y){
+		boundsY.push(y); return y;
+	};
+	
+	var np = (precision != null) ? function(v){
+		Math.round(v * precision);
+	} : function(v){
+		return v;
 	};
 
 	var reflect = function(sx, sy, ex, ey){
@@ -83,12 +91,16 @@ var measureAndTransform = function(parts, precision){
 	
 	var X = 0, Y = 0, px = 0, py = 0, r;
 	
-	var path = '';
+	var path = '', inX, inY;
 	
 	for (i = 0; i < parts.length; i++){
 		var v = Array.slice(parts[i]), f = v.shift(), l = f.toLowerCase();
 		var refX = l == f ? X : 0, refY = l == f ? Y : 0;
 		
+		if (l != 'm' && inX == null){
+			inX = X; inY = Y;
+		}
+
 		switch (l){
 			
 			case 'm':
@@ -148,6 +160,10 @@ var measureAndTransform = function(parts, precision){
 			
 			case 'z':
 				path += 'x';
+				if (inX != null){
+					path += 'm' + ux(X = inX) + ',' + uy(Y = inY);
+					inX = null;
+				}
 			break;
 			
 		}
@@ -169,15 +185,34 @@ var measureAndTransform = function(parts, precision){
 ART.Path = new Class({
 	
 	initialize: function(path){
-		this.boundingBox = null;
-		if (path == null) this.path = [];  //no path
-		else if (path.path) this.path = Array.slice(path.path); //already a path
-		else this.path = parse(path); //string path
+		if (path instanceof ART.Path){ //already a path, copying
+			this.path = Array.slice(path.path);
+			this.box = path.box;
+			this.vml = path.vml;
+			this.svg = path.svg;
+		} else {
+			this.path = (path == null) ? [] : parse(path);
+			this.box = null;
+			this.vml = null;
+			this.svg = null;
+		}
+
+		return this;
 	},
 	
-	push: function(){
-		this.boundingBox = null;
+	push: function(){ //modifying the current path resets the memoized values.
+		this.box = null;
+		this.vml = null;
+		this.svg = null;
 		this.path.push(Array.slice(arguments));
+		return this;
+	},
+	
+	reset: function(){
+		this.box = null;
+		this.vml = null;
+		this.svg = null;
+		this.path = [];
 		return this;
 	},
 	
@@ -210,21 +245,39 @@ ART.Path = new Class({
 	/* transformation, measurement */
 	
 	toSVG: function(){
-		var path = '';
-		for (var i = 0, l = this.path.length; i < l; i++) path += this.path[i].join(' ');
-		return path;
+		if (this.svg == null){
+			var path = '';
+			for (var i = 0, l = this.path.length; i < l; i++) path += this.path[i].join(' ');
+			this.svg = path;
+		}
+		return this.svg;
 	},
 	
-	toVML: function(precision){;
-		var data = measureAndTransform(this.path, precision);
-		this.boundingBox = data[1];
-		return data[0];
+	toVML: function(precision){
+		if (this.vml == null){
+			var data = extrapolate(this.path, precision);
+			this.box = data[1];
+			this.vml = data[0];
+		}
+		return this.vml;
 	},
 	
-	measure: function(){
-		if (this.boundingBox) return this.boundingBox;
-		if (this.path.length) return this.boundingBox = measureAndTransform(this.path)[1];
-		else return {left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0};
+	measure: function(precision){
+		if (this.box == null){
+					
+			if (this.path.length){
+				var data = extrapolate(this.path, precision);
+				this.box = data[1];
+				this.vml = data[2];
+			} else {
+				this.box = {left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0};
+				this.vml = '';
+				this.svg = '';
+			}
+		
+		}
+		
+		return this.box;
 	}
 	
 });

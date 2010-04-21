@@ -1,16 +1,9 @@
 /*
 ---
-
 name: ART.SVG
-
 description: SVG implementation for ART
-
-authors: [Valerio Proietti](http://mad4milk.net)
-
-provides: [ART.SVG, ART.SVG.Group, ART.SVG.Shape]
-
+provides: [ART.SVG, ART.SVG.Group, ART.SVG.Shape, ART.SVG.Image]
 requires: [ART, ART.Element, ART.Container, ART.Path]
-
 ...
 */
 
@@ -56,32 +49,32 @@ ART.SVG.Element = new Class({
 	Extends: ART.Element,
 
 	initialize: function(tag){
-		this.uid = (UID++).toString(16);
+		this.uid = ART.uniqueID();
 		var element = this.element = createElement(tag);
 		element.setAttribute('id', 'e' + this.uid);
-		this.transform = {translate: [0, 0], scale: [1, 1]};
+		this.transform = {translate: [0, 0], rotate: [0, 0, 0], scale: [1, 1]};
 	},
 	
 	/* transforms */
 	
 	_writeTransform: function(){
-	  if ($equals(this.transform, {translate: [0, 0], scale: [1, 1]})) return;
 		var transforms = [];
 		for (var transform in this.transform) transforms.push(transform + '(' + this.transform[transform].join(',') + ')');
 		this.element.setAttribute('transform', transforms.join(' '));
 	},
 	
-	// rotate: function(deg, x, y){
-	// 	if (x == null || y == null){
-	// 		var box = this.measure();
-	// 		x = box.x + box.width / 2; y = box.y + box.height / 2;
-	// 	}
-	// 	this.transform.rotate = [deg, x, y];
-	// 	this._writeTransform();
-	// 	return this;
-	// },
+	rotate: function(deg, x, y){
+		if (x == null || y == null){
+			var box = this.measure();
+			x = box.left + box.width / 2; y = box.top + box.height / 2;
+		}
+		this.transform.rotate = [deg, x, y];
+		this._writeTransform();
+		return this;
+	},
 
 	scale: function(x, y){
+		if (y == null) y = x;
 		this.transform.scale = [x, y];
 		this._writeTransform();
 		return this;
@@ -90,6 +83,11 @@ ART.SVG.Element = new Class({
 	translate: function(x, y){
 		this.transform.translate = [x, y];
 		this._writeTransform();
+		return this;
+	},
+	
+	setOpacity: function(opacity){
+		this.element.setAttribute('opacity', opacity);
 		return this;
 	},
 	
@@ -118,6 +116,13 @@ ART.SVG.Group = new Class({
 		this.parent('g');
 		this.defs = createElement('defs');
 		this.element.appendChild(this.defs);
+		this.children = [];
+	},
+	
+	measure: function(){
+		return ART.Path.measure(this.children.map(function(child){
+			return child.currentPath;
+		}));
 	}
 	
 });
@@ -130,6 +135,7 @@ ART.SVG.Base = new Class({
 
 	initialize: function(tag){
 		this.parent(tag);
+		this.element.setAttribute('fill-rule', 'evenodd');
 		this.fill();
 		this.stroke();
 	},
@@ -138,6 +144,7 @@ ART.SVG.Base = new Class({
 	
 	inject: function(container){
 		this.eject();
+		if (container instanceof ART.SVG.Group) container.children.push(this);
 		this.container = container;
 		this._injectGradient('fill');
 		this._injectGradient('stroke');
@@ -147,6 +154,7 @@ ART.SVG.Base = new Class({
 	
 	eject: function(){
 		if (this.container){
+			if (this.container instanceof ART.SVG.Group) this.container.children.erase(this);
 			this.parent();
 			this._ejectGradient('fill');
 			this._ejectGradient('stroke');
@@ -169,61 +177,102 @@ ART.SVG.Base = new Class({
 	
 	/* styles */
 	
-	_createGradient: function(type, colors){
-	  var gradient = Gradient.of(colors);
-		
-		var id = type + '-gradient-e' + this.uid;
-		
-		$(gradient).setAttribute('id', id);
+	_createGradient: function(type, style, stops){
+		this._ejectGradient(type);
 
-		this[type + 'Gradient'] = $(gradient);
-		var colors = Hash.each(gradient.getStops(), function(color, position) {
-			var stop = createElement('stop'), color = Color.detach(color);
-			stop.setAttribute('offset', position);
+		var gradient = createElement(style + 'Gradient');
+
+		this[type + 'Gradient'] = gradient;
+
+		var addColor = function(offset, color){
+			color = Color.detach(color);
+			var stop = createElement('stop');
+			stop.setAttribute('offset', offset);
 			stop.setAttribute('stop-color', color[0]);
 			stop.setAttribute('stop-opacity', color[1]);
-			$(gradient).appendChild(stop);
-		});
-		
-		var coords = gradient.getAttributes();
-		for (var c in coords) $(gradient).setAttribute(c, coords[c]);
-		
+			gradient.appendChild(stop);
+		};
+
+		// Enumerate stops, assumes offsets are enumerated in order
+		// TODO: Sort. Chrome doesn't always enumerate in expected order but requires stops to be specified in order.
+		if ('length' in stops) for (var i = 0, l = stops.length - 1; i <= l; i++) addColor(i / l, stops[i]);
+		else for (var offset in stops) addColor(offset, stops[offset]);
+
+		var id = 'g' + ART.uniqueID();
+		gradient.setAttribute('id', id);
+
 		this._injectGradient(type);
-		return 'url(#' + id + ')';
+
+		this.element.removeAttribute('fill-opacity');
+		this.element.setAttribute(type, 'url(#' + id + ')');
+		
+		return gradient;
 	},
 	
 	_setColor: function(type, color){
+		this._ejectGradient(type);
+		this[type + 'Gradient'] = null;
 		var element = this.element;
-		if (color.length > 1){
-			color = this._createGradient(type, color);
+		if (color == null){
+			element.setAttribute(type, 'none');
+			element.removeAttribute(type + '-opacity');
 		} else {
-			color = Color.detach(color[0]);
+			color = Color.detach(color);
+			element.setAttribute(type, color[0]);
 			element.setAttribute(type + '-opacity', color[1]);
-			color = color[0];
 		}
-		
-		element.setAttribute(type, color);
 	},
 
-	fill: function(flag){
-		this._ejectGradient('fill');
-		this.fillGradient = null;
-		if (flag == null) this.element.setAttribute('fill', 'none');
-		else this._setColor('fill', Array.slice(arguments));
+	fill: function(color){
+		if (arguments.length > 1) this.fillLinear(arguments);
+		else this._setColor('fill', color);
 		return this;
 	},
 
-	stroke: function(flag, width, cap, join){
-		this._ejectGradient('stroke');
-		var element = this.element;
-		this.strokeGradient = null;
+	fillRadial: function(stops, focusX, focusY, radius, centerX, centerY){
+		var gradient = this._createGradient('fill', 'radial', stops);
+
+		if (focusX != null) gradient.setAttribute('fx', focusX);
+		if (focusY != null) gradient.setAttribute('fy', focusY);
+
+		if (radius) gradient.setAttribute('r', radius);
+
+		if (centerX == null) centerX = focusX;
+		if (centerY == null) centerY = focusY;
+
+		if (centerX != null) gradient.setAttribute('cx', centerX);
+		if (centerY != null) gradient.setAttribute('cy', centerY);
+
+		gradient.setAttribute('spreadMethod', 'reflect'); // Closer to the VML gradient
 		
+		return this;
+	},
+
+	fillLinear: function(stops, angle){
+		var gradient = this._createGradient('fill', 'linear', stops);
+
+		angle = ((angle == null) ? 270 : angle) * Math.PI / 180;
+
+		var x = Math.cos(angle), y = -Math.sin(angle),
+			l = (Math.abs(x) + Math.abs(y)) / 2;
+
+		x *= l; y *= l;
+
+		gradient.setAttribute('x1', 0.5 - x);
+		gradient.setAttribute('x2', 0.5 + x);
+		gradient.setAttribute('y1', 0.5 - y);
+		gradient.setAttribute('y2', 0.5 + y);
+
+		return this;
+	},
+
+	stroke: function(color, width, cap, join){
+		var element = this.element;
 		element.setAttribute('stroke-width', (width != null) ? width : 1);
 		element.setAttribute('stroke-linecap', (cap != null) ? cap : 'round');
 		element.setAttribute('stroke-linejoin', (join != null) ? join : 'round');
-		
-		if (flag == null) element.setAttribute('stroke', 'none');
-		else this._setColor('stroke', [flag]);
+
+		this._setColor('stroke', color);
 		return this;
 	}
 	
@@ -240,28 +289,39 @@ ART.SVG.Shape = new Class({
 		if (path != null) this.draw(path);
 	},
 	
+	getPath: function(){
+		return this.currentPath || new ART.Path;
+	},
+	
 	draw: function(path){
-		this.currentPath = path.toString();
-		this.element.setAttribute('d', this.currentPath);
+		this.currentPath = (path instanceof ART.Path) ? path : new ART.Path(path);
+		this.element.setAttribute('d', this.currentPath.toSVG());
 		return this;
 	},
 	
 	measure: function(){
-		return new ART.Path(this.currentPath).measure();
+		return this.getPath().measure();
 	}
 
 });
 
-})();
+ART.SVG.Image = new Class({
+	
+	Extends: ART.SVG.Base,
+	
+	initialize: function(src, width, height){
+		this.parent('image');
+		if (arguments.length == 3) this.draw.apply(this, arguments);
+	},
+	
+	draw: function(src, width, height){
+		var element = this.element;
+		element.setAttributeNS(XLINK, 'href', src);
+		element.setAttribute('width', width);
+		element.setAttribute('height', height);
+		return this;
+	}
+	
+});
 
-ART.SVG.Base.implement({
-  dash: function(dash) {
-    if (dash) {
-      this.dashed = true;
-      this.element.setAttribute('stroke-dasharray', dash);
-    } else if (this.dashed) {
-      this.dashed = false;
-      this.element.removeAttribute('stroke-dasharray')
-    }
-  }
-})
+})();
