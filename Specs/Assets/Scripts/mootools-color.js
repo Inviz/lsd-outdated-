@@ -22,7 +22,6 @@ this.Color = function(color, type){
 			case 'object': type = type || 'rgb'; color = color.toString(); break;
 			case 'number': type = 'hex'; color = color.toString(16); break;
 		}
-
 		color = Color['parse' + type.toUpperCase()](color);
 		this.red = color[0];
 		this.green = color[1];

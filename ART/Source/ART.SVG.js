@@ -243,7 +243,7 @@ ART.SVG.Base = new Class({
 		if (centerX != null) gradient.setAttribute('cx', centerX);
 		if (centerY != null) gradient.setAttribute('cy', centerY);
 
-		gradient.setAttribute('spreadMethod', 'reflect'); // Closer to the VML gradient
+		//gradient.setAttribute('spreadMethod', 'reflect'); // Closer to the VML gradient
 		
 		return this;
 	},
@@ -325,3 +325,28 @@ ART.SVG.Image = new Class({
 });
 
 })();
+
+
+ART.SVG.Base.implement({
+  dash: function(dash) {
+    if (dash) {
+      this.dashed = true;
+      this.element.setAttribute('stroke-dasharray', dash);
+    } else if (this.dashed) {
+      this.dashed = false;
+      this.element.removeAttribute('stroke-dasharray')
+    }
+  },
+  
+
+	fill: function(color){
+	  var args = arguments;
+		if (args.length > 1) {
+	    if (color == 'radial') {
+	      var opts = args.length == 3 ? args[2] : {}
+	      this.fillRadial(args[1], opts.fx, opts.fy, opts.r, opts.cx, opts.cy)
+	    } else this.fillLinear(arguments);
+		} else this._setColor('fill', color);
+		return this;
+	},
+})

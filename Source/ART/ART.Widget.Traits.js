@@ -81,7 +81,7 @@ ART.Widget.Traits.Layered = new Class({
       if (style) {
         (args.render || instance.paint).apply(instance, Hash.getValues(style));
         if (!injected) {
-          this.paint.push(instance);
+          this.paint.grab(instance);
           injected = true;
         }
       }

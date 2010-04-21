@@ -17,10 +17,10 @@ ART.Sheet.define('window', {
 	'display': 'inline-block',
 	'vertical-align': 'top',
 	'width': 'auto',
-	'height': 'auto'
-	//'shadow-blur': 20,
-	//'shadow-offset-y': 5,
-	//'shadow-color': hsb(0, 0, 0, 1),
+	'height': 'auto',
+	'shadow-blur': 20,
+	'shadow-offset-y': 5,
+	'shadow-color': hsb(0, 0, 0, 1)
 });
 
 ART.Sheet.define('window.hud', {		
@@ -164,11 +164,11 @@ ART.Sheet.define('window #header #toggler', {
 	'float': 'right',
 	'margin-left': -20,
 	'margin-top': 5,
-	'height': 10,
-	'width': 20,
-	'corner-radius': 5,
-	'reflection-color': [hsb(0, 0, 70, 0.5), hsb(0, 0, 40, 0.5), hsb(0, 0, 100, 0.5)],
-	'background-color': [hsb(0, 0, 90, 0.3), hsb(0, 0, 100, 0.9)]
+	'height': 8,
+	'width': 18,
+	'corner-radius': 4,
+	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 40, 0.5), hsb(0, 0, 100, 0.5)],
+	'background-color': [hsb(0, 0, 90, 0.3), hsb(0, 0, 100, 0.9), ]
 });
 
 ART.Sheet.define('window #header #toggler:active', {
@@ -200,9 +200,9 @@ ART.Sheet.define('window #buttons button', {
 	'glyph-height': 8,
 	'glyph-width': 8,
 	'corner-radius': 6,
-	'reflection-color': ['radial', {0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}],
-	'fill-color': ['radial', {0.5: hsb(0, 0, 100, 0.496875), 0.9: hsb(0, 0, 100, 0)}, {cy: '5%', r: '20%', fy: '5%'}],
-	'background-color': ['radial', {0.3: hsb(0, 0, 75, 0.4), 0.5: hsb(0, 0, 100, 0.3)}],
+  'reflection-color': ['radial', {0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}],
+  'fill-color': ['radial', {0.5: hsb(0, 0, 100, 0.496875), 0.9: hsb(0, 0, 100, 0)}, {cy: '5%', r: '20%', fy: '5%'}],
+  'background-color': ['radial', {0.3: hsb(0, 0, 75, 0.4), 0.5: hsb(0, 0, 100, 0.3)}],
 });
 
 ART.Sheet.define('window #close', {

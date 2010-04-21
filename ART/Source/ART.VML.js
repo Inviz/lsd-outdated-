@@ -483,3 +483,16 @@ ART.VML.Shape = new Class({
 });
 	
 })();
+
+
+ART.VML.Base.implement({
+  dash: function(dash) {
+    if (dash) {
+      this.dashed = true;
+      this.element.setAttribute('stroke-dasharray', dash);
+    } else if (this.dashed) {
+      this.dashed = false;
+      this.element.removeAttribute('stroke-dasharray')
+    }
+  }
+})

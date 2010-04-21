@@ -56,7 +56,7 @@ ART.Widget.Paint = new Class({
 		
 	  if (!this.layered) {
 	    this.layered = true;
-	    this.paint.push.apply(this.paint, Hash.getValues(this.layers))
+	    this.paint.grab.apply(this.paint, Hash.getValues(this.layers))
 	  }
 	  
 		this.outdated = false;
