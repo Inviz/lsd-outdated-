@@ -54,6 +54,28 @@ ART.Sheet = {};
 			});
 		});
 	};
+	
+	ART.Sheet.match = (function() {
+	  var parsed = {};
+	  var parse = function(selector) {
+	    return parsed[selector] = (parsed[selector] || parseSelector(SubtleSlickParse(selector)[0]));
+	  };
+    var cache = {};
+  	return function(selector, needle) {
+  		if (cache[selector]) return cache[selector];
+  	  var first = parse(selector);
+  	  var second = parse(needle);
+  	  var i = second.length - 1, j = first.length - 1;
+			if (!containsAll(first[j], second[i])) return;
+			while (i-- > 0){
+				while (true){
+					if (j-- <= 0) return;
+					if (containsAll(first[j], second[i])) break;
+				}
+			}
+			return true;
+  	};
+	})();
 
 	var containsAll = function(self, other){
 		return other.every(function(x){

@@ -41,3 +41,29 @@ Class.hasParent = function(args) {
   var caller = fn.caller;
   return !!(caller._owner.parent && caller._owner.parent.prototype[caller._name]);
 }
+Macro = {};
+Macro.onion = function(callback) {
+  return function() {
+    if (!this.parent.apply(this, arguments)) return;
+    callback.apply(this, arguments);
+    return true;
+  } 
+}
+
+Macro.setter = function(name, callback) {
+  return function() {
+    if (!this[name]) this[name] = callback.apply(this, arguments);
+    return this[name];
+  } 
+}
+
+Macro.defaults = function(callback) {
+  return function() {
+    if (Class.hasParent(arguments)) {
+      return this.parent.apply(this, arguments);
+    } else {
+      return callback.apply(this, arguments);
+    }
+  }
+}
+

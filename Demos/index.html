@@ -11,8 +11,6 @@
 	<script src="../Specs/Assets/Scripts/slickparser.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Specs/Assets/Scripts/touch.js" type="text/javascript" charset="utf-8"></script>
 	
-	<script src="../Specs/Assets/art/touch.js" type="text/javascript" charset="utf-8"></script>
-	
 	<script type="text/javascript" src="../Source/Extras/Class.Extras.Ext.js"></script>
 	<script type="text/javascript" src="../Source/Extras/Class.Refactor.js"></script>
 	<script type="text/javascript" src="../Source/Extras/Element.Ext.js"></script>
@@ -36,9 +34,6 @@
 	<script src="../Source/ART/ART.Glyphs.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/ART/ART.Widget.Element.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/ART/ART.Widget.Paint.js" type="text/javascript" charset="utf-8"></script>
-	
-	<script src="../Source/Fonts/MgOpen.Moderna.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../Source/Fonts/MgOpen.Moderna.Bold.js" type="text/javascript" charset="utf-8"></script>
 		
 	<script src="../Source/Widgets/ART.Widget.Button.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widgets/ART.Widget.Window.js" type="text/javascript" charset="utf-8"></script>
@@ -49,11 +44,25 @@
 	<script src="../Source/Widgets/ART.Widget.Slider.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widgets/ART.Widget.Input.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widgets/ART.Widget.Textarea.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Label.js" type="text/javascript" charset="utf-8"></script>
 	
 	
 	<script src="../Source/Moo/Moo.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Moo/Moo.Application.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Moo/Moo.Container.js" type="text/javascript" charset="utf-8"></script>
+	
+	<div style="width: 100px; float:left; margin-right: 20px; height: 50px; background: orange; -moz-box-shadow: 5px 5px 5px #000">
+	</div>
+	  
+	<div style="width: 100px; float: left; height: 50px;position: relative; ">
+	  <div style="width: 100px; float:left;  height: 50px; background: orange; position: absolute; z-index: 10;"></div>
+	  <div style="z-index: 5; -moz-border-radius: 5px; margin-left: 5px; position: absolute; top: 5px; height: 50px; width:100px; background: #000; opacity: 0.25 "></div>
+	  <div style="z-index: 5; -moz-border-radius: 5px; margin-left: 5px; position: absolute; top: 4px; height: 50px; width:100px; background: #000; opacity: 0.25 "></div>
+	  <div style="z-index: 5; -moz-border-radius: 5px; margin-left: 5px; position: absolute; top: 3px; height: 50px; width:100px; background: #000; opacity: 0.25 "></div>
+	  <div style="z-index: 5; -moz-border-radius: 5px; margin-left: 5px; position: absolute; top: 2px; height: 50px; width:100px; background: #000; opacity: 0.25 "></div>
+	  <div style="z-index: 5; -moz-border-radius: 5px; margin-left: 5px; position: absolute; top: 1px; height: 50px; width:100px; background: #000; opacity: 0.25 "></div>
+	</div>
+	
 	
 	<script>
 	  window.addEvent('domready', function() {
@@ -69,7 +78,10 @@
   		
   		
 	    $z = new Moo.Application.Toolbared()	
+	    $z.setStyles({top: 50, left: 50, zIndex: 400})
 			$z.header.title.setContent('Hello')
+			$z.content.setContent(new Element('div', {'html': 'H e l l o', 'styles': {'background': 'orange', width: 250, height: 100}}))
+			$z.fit();
 			
   		$y = new Moo.Notification("Hello");
   		$y.header.title.setContent('Warning');

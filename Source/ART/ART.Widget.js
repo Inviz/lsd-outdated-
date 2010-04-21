@@ -79,7 +79,7 @@ ART.Widget = new Class({
 		  this.addClass(cls);
 		}, this);
 		
-		this.attach();
+		this.attach(this.events);
 		
 		return true;
 	},
@@ -96,8 +96,7 @@ ART.Widget = new Class({
 	
 	render: function(style){
 		if (this.selector && this.selector != this.getSelector()) this.update();
-		var s = this.parent.apply(this, arguments)
-		if (!s) return; //only renders if dirty == true
+		if (!this.parent.apply(this, arguments)) return; //only renders if dirty == true
 	  
   	var size = this.size;
 		var found = this.lookupStyles();
@@ -121,14 +120,15 @@ ART.Widget = new Class({
 		
 		var newSize = {height: this.getStyle('height'), width: this.getStyle('width')};
 		this.size = newSize
-		if (!$equals(newSize, size)) {
-      if (size.height != newSize.height) this.setHeight(newSize.height);
-      if (size.width != newSize.width) this.setWidth(newSize.width);
+		if (true) {
+      if (size.height != newSize.height) this.setHeight(newSize.height, true);
+      if (size.width != newSize.width) this.setWidth(newSize.width, true);
 		  this.fireEvent('resize', [newSize, size])
 		}
     
 		return true;
 	},
+	
 	
 	update: function(recursive) {
 		if (recursive) {
@@ -136,12 +136,15 @@ ART.Widget = new Class({
 				widget.update(recursive);
 			});
 		}
-		return this.parent.apply(this, arguments);
+		if (!this.parent.apply(this, arguments)) return;
+		this.styles.calculated = {};
+		this.styles.last = {};
+		return true;
 	},
 	
 	refresh: function(recursive) {
 		this.update(recursive);
-		this.render.apply(this, arguments);
+		return this.render();
 	},
 	
 	toElement: function(){
@@ -226,7 +229,6 @@ ART.Widget = new Class({
 	setStyle: function(property, value, type) {
 		if ($equals(this.styles.current[property], value)) return;
 		this.styles.current[property] = value;
-		
 		switch (type) {
 			case undefined:
 				this.styles.given[property] = value;
@@ -293,45 +295,77 @@ ART.Widget = new Class({
 		var value;
 		switch (property) {
 			case "height":
-				value = this.getOffsetHeight();
+				value = this.getClientHeight();
 				break;
 			case "width":
 				value = this.inheritStyle(property);
+				var el = this.element;
+				//while (el = el.getParent()) console.log(el)
+				if (value == "auto") value = this.getClientWidth();
+				//if scrollWidth value is zero, then the widget is not in DOM yet
+				//so we wait until the root widget is injected, and then try to repeat
+				if (value == 0) {
+				  var redraw = function() {
+				    this.removeEvent('redraw', redraw)
+				    this.update(true);
+				  }.bind(this);
+				  this.onDOMInject(redraw);
+				}
 		}
 		this.styles.calculated[property] = value;
 		return value;
 	},
 	
-	setHeight: function(value) {
+	setHeight: function(value, light) {
+	  value = Math.max(this.styles.current.minHeight || 0, value);
 		if (this.size.height == value) return;
 		this.size.height = value;
-		this.setStyle('height', value);
+		if (!light) this.setStyle('height', value);
 		return true;
 	},
 		
-	setWidth: function(value) {
+	setWidth: function(value, light) {
 		if (this.size.width == value) return;
 		this.size.width = value;
-		this.setStyle('width', value);
+		if (!light) this.setStyle('width', value);
 		return true;
 	},
 	
-	getOffsetHeight: function() {
-		var height = this.styles.current.height;
-		if (height == "auto") {
+	getClientHeight: function() {
+	  var height = this.styles.current.height;
+  	if (!height || height == "auto") {
 			height = 0;
-
+      var heights = [height]
 			this.getChildren().each(function(widget) {
-				height += widget.getOffsetHeight() || 0;
-			});	
+			  var value = widget.getOffsetHeight();
+			  var styles = widget.getStyles('float', 'clear');
+			  if (!value) return;
+			  if (styles.clear && (styles.clear != 'none')) heights = [Math.max.apply(Math, heights)]
+			  if (styles.float && (styles.float != 'auto')) {
+			    heights.push(value)
+			  } else {
+			    heights[0] += value;
+			  }
+			});  
+			height = Math.max.apply(Math, heights)
 		}
-		
-		if (this.styles.current.paddingTop) height += this.styles.current.paddingTop
-		if (this.styles.current.paddingBottom) height += this.styles.current.paddingBottom
-		if (this.styles.current.borderTopWidth) height += this.styles.current.borderTopWidth
-		if (this.styles.current.borderBottomWidth) height += this.styles.current.borderBottomWidth
-		if (this.styles.current.strokeWidth) height += this.styles.current.strokeWidth * 2
-		
+    		height += this.styles.current.paddingTop || 0;
+    		height += this.styles.current.paddingBottom || 0;
+		return height;
+	},
+	
+	getClientWidth: function() {
+	  var width = this.element.scrollWidth;
+	  if (width > 0) width -= (this.styles.current.strokeWidth || 0) * 2
+		return width;
+	},
+	
+	getOffsetHeight: function() {
+		var height = this.getClientHeight();
+		height += (this.styles.current.strokeWidth || 0) * 2
+		height += this.styles.current.borderBottomWidth || 0;
+		height += this.styles.current.borderTopWidth || 0;
+		height += this.styles.current.marginBottom || 0;
 		return height;
 	},
 	
@@ -343,12 +377,17 @@ ART.Widget = new Class({
 		this.children.push(widget);
 	  widget.setParent(this);
 	  $(this).adopt(widget);
+		this.fireEvent('adopt', [widget, widget.options.id])
+		
+	  var parent = widget;
+	  while (parent = parent.parentWidget) parent.fireEvent('hello', widget)
 	},
 	
 	inject: function(widget) {
 	  if (!this.parent.apply(this, arguments)) return;
 		widget.adopt(this);
-		if ($type(widget) == 'element') this.render();
+		this.fireEvent('inject', widget)
+		if (widget instanceof Element) this.render();
 		return true;
 	},
 
@@ -360,15 +399,46 @@ ART.Widget = new Class({
 	  return this.children;
 	},
 	
-	update: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		this.styles.calculated = {};
-		this.styles.last = {};
-		return true;
-	},
-	
 	getWrapper: function() {
 	  return this.wrapper || this.element;
+	},
+	
+	onWidgetReady: function(callback) {
+	  var onReady = function() {
+	    callback.call(this);
+	  }.bind(this)
+	  if (!this.orphaned) {
+	    onReady();
+	  } else {
+	    var event = function() {
+	      var redraw = function() {
+  	      this.removeEvent('redraw', redraw);
+  	      onReady();
+	      }.bind(this)
+	      this.addEvent('redraw', redraw)
+	      this.removeEvent('inject', event);
+	    }.bind(this);
+	    this.addEvent('inject', event);
+	  }
+	},
+	
+	onDOMInject: function(callback) {
+	  var parent = this;
+	  while (parent.parentWidget) parent = parent.parentWidget;
+	  parent.addEvent('inject', callback);
+	},
+	
+	addAction: function(options) {
+	  this.addEvents({
+	    enable:  options.enable.bind(this),
+	    attach:  options.enable.bind(this),
+	    disable: options.disable.bind(this),
+	    detach:  options.disable.bind(this)
+	  });
+	  this.onWidgetReady(function() {
+	    if (!this.disabled) options.enable.call(this);
+	  });
+	  return true;
 	}
 	
 });
@@ -376,7 +446,8 @@ ART.Widget = new Class({
 Element.Styles.More = {
 	'float': true,
 	'display': true,
-	'cursor': true
+	'cursor': true,
+	'verticalAlign': true
 }
 
 //Basic widget initialization
@@ -391,6 +462,7 @@ ART.Widget.create = function(klass, a, b, c, d) {
 	if (!base[klass]) throw new Exception.Misconfiguration(this, "ClassName ART.Widget." + klass + " was not found");
 	return new base[klass](a, b, c, d)
 }
+
 
 
 ART.Widget.Base = Class.inherit(ART.Widget);

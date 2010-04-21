@@ -3,8 +3,7 @@ ART.Sheet.define('scrollbar', {
 	'width': 16,
 	'cursor': 'pointer',
 	'stroke-color': hsb(0, 0, 0, 0.3),
-	'reflection-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
-	'background-color': [hsb(0, 0, 100, 0.3), hsb(0, 0, 50, 0)],
+	'stroke-width': 0,
 	'cornerRadius': 3,
 	'glyph-color': hsb(82, 0, 100, 0.5)
 });
@@ -15,62 +14,62 @@ ART.Sheet.define('window.fancy scrollbar button', {
 	'margin-left': 0,
 	'glyph-scale': 0.8,
 	'glyph-top': 3,
-	'glyph-left': 3
+	'glyph-left': 3,
+	'stroke-width': 1
 });
 
 ART.Sheet.define('window.fancy scrollbar track', {
-  'background-color': [hsb(0, 0, 30, 0.4), hsb(0, 0, 50, 0.5)],
-  'reflection-color': [hsb(31, 0, 100, 0.3), hsb(45, 0, 50, 0)]
+  'fill-color': [hsb(0, 0, 30, 0.4), hsb(0, 0, 50, 0.5)],
+  'reflection-color': [hsb(31, 0, 100, 0.3), hsb(45, 0, 50, 0)],
+  'stroke-width': 1,
+	'stroke-color': hsb(0, 0, 0, 0.3),
 });
 
 ART.Sheet.define('scrollbar:horizontal track', {
   'height': 14,
-  'margin-top': 1
+  'margin-left': 16
 });
 
 ART.Sheet.define('scrollbar:vertical track', {
   'width': 14,
-  'margin-left': 1
+  'margin-top': 16
 });
 
 
 ART.Sheet.define('scrollbar track thumb', {
-  'width': 14,
-  'height': 14,
+  'width': 12,
+  'height': 12,
+  'stroke-width': 1,
+  'stroke-color': hsb(0, 0, 100, 0.7),
   'corner-radius': 5,
-  'reflection-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
-  'background-color': [hsb(44, 0, 100, 0.3), hsb(31, 0, 50, 0)]
+  'background-color': [hsb(0, 0, 0, 0.2), hsb(0, 0, 0, 0.24)],
+  'fill-color': [hsb(44, 0, 100, 0.15), hsb(31, 0, 50, 0)]
 });
 
 ART.Sheet.define('scrollbar track thumb:active', {
   'reflection-color': [hsb(44, 0, 100, 0.3), hsb(31, 0, 50, 0)],
   'background-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)]
 });
-
-ART.Sheet.define('window.fancy scrollbar:vertical button', {
-	'margin-left': 1
-});
-
-ART.Sheet.define('window.fancy scrollbar:horizontal button', {
-  'margin-top': 1
-});
-
 ART.Sheet.define('window.fancy scrollbar:vertical button#decrement', {
 	'bottom': '0',
-	'glyph': ART.Glyphs.triangleDown
+	'glyph': ART.Glyphs.triangleDown,
+	'corner-radius': [0, 3, 0, 3]
 });
 
 ART.Sheet.define('window.fancy scrollbar:vertical button#increment', {
-	'glyph': ART.Glyphs.triangleUp
+	'glyph': ART.Glyphs.triangleUp,
+	'corner-radius': [3, 0, 3, 0]
 });
 
 ART.Sheet.define('window.fancy scrollbar:horizontal button#increment', {
 	'right': '0',
+	'corner-radius': [0, 3, 3, 0],
 	'glyph': ART.Glyphs.triangleRight
 });
 
 ART.Sheet.define('window.fancy scrollbar:horizontal button#decrement', {
-	'glyph': ART.Glyphs.triangleLeft
+	'glyph': ART.Glyphs.triangleLeft,
+	'corner-radius': [3, 0, 0, 3]
 });
 
 	
@@ -93,7 +92,7 @@ ART.Widget.Scrollbar = new Class({
 	},
 	
 	layered: {
-    border: ['rectangle', ['borderColor']],
+    stroke: ['rectangle-stroke'],
 	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
 	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
   		if (color) this.fill.apply(this, $splat(color));
@@ -106,9 +105,15 @@ ART.Widget.Scrollbar = new Class({
 	  }]
 	},
 	
+	options: {
+	  slider: {
+	    wheel: true
+	  }
+	},
+	
 	events: {
 	  parent: {
-  	  redraw: 'adaptToSize'
+  	  resize: 'adaptToSize'
 	  }
 	},
 	
@@ -119,19 +124,45 @@ ART.Widget.Scrollbar = new Class({
 	
 	adaptToSize: function(size){
 	  if (!size || $chk(size.height)) size = this.parentWidget.size;
+	  var other = (this.options.mode == 'vertical') ? 'horizontal' : 'vertical';
 	  var prop = (this.options.mode == 'vertical') ? 'height' : 'width';
 	  var setter = 'set' + prop.capitalize();
-    this[setter](size[prop] - 14);
-    this.track[setter](size[prop] - 14 * 3);
-    this.getSlider.delay(10, this, true)
-    this.update();
-    this.render();
+	  var value = size[prop];
+	  if (isNaN(value) || !value) return;
+	  var invert = this.parentWidget[other];
+	  var scrolled = this.getScrolled();
+	  $(scrolled).setStyle(prop, size[prop])
+	  var ratio = size[prop] / $(scrolled).scrollWidth
+	  var delta = (!invert || invert.hidden ? 0 : invert.getStyle(prop));
+    this[setter](size[prop] - delta);
+    var trackWidth = size[prop] - 16 * 2 - delta;
+	  //console.info(size[prop], ($(scrolled).offsetWidth), $(scrolled).scrollWidth, ratio, trackWidth)
+    this.track[setter](trackWidth);
+    this.track.thumb[setter](Math.ceil(trackWidth * ratio))
+    this.getSlider()
+    this.refresh();
 	},
 	
 	inject: function(widget) {
 	  if (!this.parent.apply(this, arguments)) return;
-	  if (widget.size.height) this.adaptToSize(widget.size);
+	  this.adaptToSize(widget.size);
 	  return true;
+	},
+	
+	onSet: function(value) {
+    var prop = (this.options.mode == 'vertical') ? 'height' : 'width';
+    var direction = (this.options.mode == 'vertical') ? 'top' : 'left';
+    var result = value * this.parentWidget.element['scroll' + prop.capitalize()];
+    $(this.getScrolled())['scroll' + direction.capitalize()] = result
+	},
+	
+	getScrolled: function() {
+	  if (!this.scrolled) {
+	    var parent = this;
+      while ((parent = parent.parentWidget) && !parent.getScrolled);
+      this.scrolled = parent.getScrolled ? parent.getScrolled() : this.parentWidget.element;
+	  }
+	  return this.scrolled;
 	},
 	
 	dispose: function() {
@@ -147,6 +178,18 @@ ART.Widget.Scrollbar = new Class({
 	
 	getTrackThumb: function() {
 	  return $(this.track.thumb);
+	},
+	
+	hide: function() {
+	  if (!this.parent.apply(this, arguments)) return;
+	  this.element.setStyle('display', 'none');
+	  return true;
+	},
+	
+	show: function() {
+	  if (!this.parent.apply(this, arguments)) return;
+	  this.element.setStyle('display', 'block');
+	  return true;
 	}
 })
 
@@ -157,19 +200,6 @@ ART.Widget.Scrollbar.Track = new Class({
   
   position: 'absolute'
 });
-
-ART.Widget.Absolute = new Class({
-  build: function() {
-    if (!this.wrapper) this.wrapper = new Element('div', {'class': 'wrapper'}).setStyle('position', 'relative')
-    if (!this.parent.apply(this, arguments)) return;
-    this.wrapper.inject(this.element);
-    return true;
-  },
-  
-  getWrapper: function() {
-    return this.wrapper || this.element;
-  }
-})
 
 ART.Widget.Scrollbar.Thumb = new Class({
   Extends: ART.Widget.Button,
@@ -186,18 +216,45 @@ ART.Widget.Scrollbar.Button = new Class({
 
 Class.refactor(ART.Widget, {
   
-  initialize: function() {
-    this.previous.apply(this, arguments);
-    if (this.options.scrollable) this.getScrollbars();
+  build: function() {
+    if (!this.previous.apply(this, arguments)) return;
+    if (this.options.scrollable) {
+      if (!this.wrapper) this.wrapper = new Element('div', {'class': 'wrapper'}).setStyle('position', 'relative').setStyle('overflow', 'hidden')
+      this.wrapper.inject(this.element);
+    }
+    return true;
   },
   
-  getScrollbars: function() {
+  initialize: function() {
+    this.previous.apply(this, arguments);
+    if (this.options.scrollable) this.addEvent('resize', function(size) {
+      var scrolled = this.getScrolled ? $(this.getScrolled()) : this.element.getFirst();
+      if (size.width < scrolled.scrollWidth) this.getHorizontalScrollbar().show();
+      else if (this.horizontal) this.horizontal.hide();
+      
+      if (size.height < scrolled.scrollHeight) this.getVerticalScrollbar().show();
+      else if (this.vertical) this.vertical.hide();
+    }.bind(this))
+  },
+  
+
+  
+  getVerticalScrollbar: function() {
     if (!this.vertical) {
       this.applyLayout({
-  	    'scrollbar#vertical[mode=vertical]': {},
-  	    'scrollbar#horizontal[mode=horizontal]': {}
+  	    'scrollbar#vertical[mode=vertical]': {}
   	  }); 
     }
+    return this.vertical;
+  },
+  
+  getHorizontalScrollbar: function() {
+    if (!this.horizontal) {
+      this.applyLayout({
+  	    'scrollbar#horizontal[mode=horizontal]': {}
+  	  });
+  	}
+  	return this.horizontal;
   }
   
 });

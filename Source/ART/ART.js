@@ -42,7 +42,7 @@
 	Logger = new Class({
 		log: function() {
 			var name = (this.getName ? this.getName() : this.name) + " ::"
-			console.log.apply(console, toArgs([name].concat($A(arguments))));
+			if (console.log && console.log.apply) console.log.apply(console, toArgs([name].concat($A(arguments))));
 			return this;	
 		}
 	});

@@ -253,3 +253,15 @@ ART.SVG.Shape = new Class({
 });
 
 })();
+
+ART.SVG.Base.implement({
+  dash: function(dash) {
+    if (dash) {
+      this.dashed = true;
+      this.element.setAttribute('stroke-dasharray', dash);
+    } else if (this.dashed) {
+      this.dashed = false;
+      this.element.removeAttribute('stroke-dasharray')
+    }
+  }
+})

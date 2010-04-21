@@ -2,8 +2,8 @@
 	var properties = [
 		'glyphColor', 'glyphShadow', 'glyphSize', 'glyphStroke', 'glyph', 'glyphColor', 'glyphColor', 'glyphHeight', 'glyphWidth', 'glyphTop', 'glyphLeft', 		
 		'cornerRadius', 'cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight',		
-		'reflectionColor',  'backgroundColor', 		
-		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'		
+		'reflectionColor',  'backgroundColor', 'strokeColor',
+		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'
 	];
 	//properties = properties.concat(Hash.getKeys(ART.Adapter.prototype.style).map(function(e) { return e.camelCase() }));
 	
@@ -30,6 +30,11 @@ ART.Widget.Paint = new Class({
 	),
 	
 	properties: [],
+	redraws: 0,
+  
+  offset: {
+    paint: {}
+  },
   
 	build: function() {
 		if (!this.parent.apply(this, arguments)) return;
@@ -40,7 +45,6 @@ ART.Widget.Paint = new Class({
 			'top': 0,
 			'left': 0
 		}).inject(this.getWrapper());
-		for (var i in this.layers) this.paint.push(this.layers[i])
 		return true;
 	},
 	
@@ -58,21 +62,16 @@ ART.Widget.Paint = new Class({
 		this.outdated = false;
 		
 		var padding = this.getPadding();
-		for (var property in padding) {
-		  this.element.setStyle(property, padding[property]);
+		for (var property in padding) if (true) {
+		  this.element.setStyle('padding-' + property, padding[property]);
 		}
-		this.fireEvent('redraw')
+		this.offset.padding = padding;
+		
+		this.fireEvent('redraw');
+		this.redraws++;
 		ART.Widget.Paint.redraws++;
 		
 		return true;
-	},
-	
-	setElementStyle: function(property, value) {
-  	switch(property) {
-  		case "paddingLeft": case "paddingRight": case "paddingBottom": case "paddingTop":
-  		  this.outdated = true;
-  	}
-	  return this.parent.apply(this, arguments);
 	},
 	
 	getCanvasOffset: function() {
@@ -91,7 +90,7 @@ ART.Widget.Paint = new Class({
 	
 	getPaintOffset: function() {
 		var offset = this.getCanvasOffset();
-		var stroke = (this.styles.current.strokeWidth || 0) / 2;
+		var stroke = (this.styles.current.strokeWidth || 0) ;
 		for (var side in offset) if (offset[side] < stroke) offset[side] = stroke;
     return offset;
 	},
@@ -109,12 +108,12 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getPadding: function() {
-		var stroke = (this.styles.current.strokeWidth || 0) / 2;
+		var stroke = (this.styles.current.strokeWidth || 0);
 		return {
-			paddingTop: stroke + (this.styles.current.paddingTop || 0),
-			paddingLeft: stroke + (this.styles.current.paddingLeft || 0),
-			paddingBottom: stroke + (this.styles.current.paddingBottom || 0),
-			paddingRight: stroke + (this.styles.current.paddingRight || 0)
+			top: stroke + (this.styles.current.paddingTop || 0),
+			left: stroke + (this.styles.current.paddingLeft || 0),
+			bottom: stroke + (this.styles.current.paddingBottom || 0),
+			right: stroke + (this.styles.current.paddingRight || 0)
 		}
 	},
 	
@@ -130,6 +129,22 @@ ART.Widget.Paint = new Class({
 		var offset = this.getCanvasOffset();
 		if (this.paint) this.paint.setWidth(value + offset.left + offset.right);
 		return true;
+	},
+	
+	inheritStyle: function(property) {
+		switch (property) {
+			case "height": case "width":
+				this.outdated = true;
+		}
+		return this.parent.apply(this, arguments);
+	},
+	
+	calculateStyle: function(property) {
+		switch (property) {
+			case "height": case "width":
+				this.outdated = true;
+		}
+    return this.parent.apply(this, arguments);
 	},
 	
 	setStyle: function(property, value) {
@@ -159,7 +174,7 @@ ART.Widget.Paint = new Class({
 			var properties = ART.ComplexStyles[property];
 			if (properties) {
 				if (properties.set) properties = properties.set;
-				if ($type(value) != "array") {
+				if (!(value instanceof Array)) {
 					var array = [];
 					for (var i = 0, j = properties.length; i < j; i++) array.push(value); 
 					value = array;
@@ -221,10 +236,10 @@ ART.Widget.Paint.Fx = new Class({
 
 ART.Widget.Paint.implement({
   tween: function(property, from, to) {
-    if (!this.tweener) this.tweener = new ART.Widget.Paint.Fx(this);
+    if (!this.tweener) this.tweener = new ART.Widget.Paint.Fx(this, this.options.tween);
     this.tweener.start(property, from, to);
     return this;
   }
-})
+});
 
 ART.Widget.Paint.redraws = 0;

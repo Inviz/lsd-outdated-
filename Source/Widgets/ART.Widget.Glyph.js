@@ -9,6 +9,15 @@ ART.Widget.Glyph = new Class({
 	options: {
 		name: null
 	},
+
+	layered: {
+    glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale'], function(glyph, color, left, top, scale) {
+      if (glyph) this.draw(glyph);
+  		if (color) this.fill.apply(this, $splat(color));
+  		this.translate(left, top);
+  		if (scale) this.scale(scale, scale)
+	  }]
+	},
 	
 	initialize: function() {
 		this.parent.apply(this, arguments);
@@ -20,18 +29,6 @@ ART.Widget.Glyph = new Class({
 		this.layers = {
 		  glyph: new ART.Shape
 		}
-		return true;
-	},
-	
-	render: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		if (!this.styles.current.touchable && !this.properties.contains('active')) this.properties.push('active')
-		var style = this.styles.current;
-		this.layers.glyph.draw(this.styles.current.glyph);
-		this.glyphBounds = this.layers.glyph.measure();
-		this.layers.glyph.fill.apply(this.layers.glyph, $splat(style.glyphColor));
-		this.layers.glyph.translate(style.glyphLeft, style.glyphTop);
-		
 		return true;
 	}
 })

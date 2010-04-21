@@ -1,5 +1,8 @@
 Moo.Application = new Class({
-	Extends: ART.Widget.Window,
+	Extends: Class.inherit(
+	  ART.Widget.Window//,
+	  //ART.Widget.Traits.Draggable
+	),
 	
   expression: "window.fancy",
   
@@ -13,9 +16,10 @@ Moo.Application = new Class({
 	    '#title[container]': {}
 	  },
 	  'section#content[container]': {
+      'label#for-whatever[for=minimize]': 'Whatever:',
 	    'input#whatever[name=whatever][type=text]': {},
 	    'textarea#soever[name=soever]': {},
-	    'slider#count': {}
+	    'slider#count': {},
 	  },
 	  'section#footer': {
 			'#status[container]': {}
@@ -24,7 +28,16 @@ Moo.Application = new Class({
 });
 
 Moo.Application.Toolbared = new Class({
-	Extends: ART.Widget.Window,
+	Extends: Class.inherit(
+	  ART.Widget.Window,
+	  ART.Widget.Traits.Draggable,
+	  ART.Widget.Traits.Resizable,
+	  ART.Widget.Traits.ResizableContainer,
+	  ART.Widget.Traits.Fitting,
+	  Widget.Stateful({
+	    'minified': ['minify', 'enlarge', 'mutate']
+	  })
+	),
 	
   expression: "window.fancy",
   
@@ -51,13 +64,24 @@ Moo.Application.Toolbared = new Class({
 			'#status[container]': {},
 	    'glyph[name=drag-handle]#handle': {}
 	  }
+	},
+	
+	events: {
+	  header: {
+	    toggler: {
+	      element: {
+	        click: 'mutate'
+	      }
+	    }
+	  }
 	}
 });
 
 
 Moo.Notification = new Class({
-  Extends: ART.Widget.Window,
-  
+  Extends: Class.inherit(
+    ART.Widget.Window
+	),
   expression: "window.hud",
   
   layout: {

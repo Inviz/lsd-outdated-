@@ -24,6 +24,10 @@ Moo.Container = new Class({
 		return this
 	},
 	
+	toElement: function() {
+	  return this.element;
+	},
+	
 	set: function() {
 		var params = Array.link(arguments, {options: Object.type, content: String.type, fn: Function.type, element: Element.type});
 		if (!Hash.getLength(params)) return;
@@ -131,7 +135,7 @@ Moo.ART.Container = new Class({
 	initialize: function(widget, options) {
 		this.widget = widget;
 		//TODO: Remove the need for this container
-		this.container = new Element('div', {'class': 'container'}).inject(this.widget.element);
+		this.container = new Element('div', {'class': 'container'}).inject(this.widget.getWrapper());
 		this.parent(this.container, options);
 	},
 	

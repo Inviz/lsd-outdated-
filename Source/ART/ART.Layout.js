@@ -26,7 +26,8 @@ ART.Layout = new Class({
 			options[attribute.name] = attribute.value || true;
 		});
 		var widget = ART.Widget.create(parsed.tag, options);
-    $(widget);
+		widget.build();
+    
     if (parent) widget.inject(parent)
     if (parsed.classes) parsed.classes.each(widget.addClass.bind(widget));
 		if (parsed.pseudos) {
@@ -34,10 +35,11 @@ ART.Layout = new Class({
 		    widget.setStateTo(pseudo.name, true)
 		  });
 		}
-    var children = this.render(layout, widget);
+		if ($type(layout) == 'string') widget.setContent(layout);
+    else this.render(layout, widget);
   },
   
-  render: function(layout, parent) { 
+  render: function(layout, parent) {
     var widgets = [];
     for (var selector in layout) widgets.push(this.materialize(selector, layout[selector], parent));
     return widgets;

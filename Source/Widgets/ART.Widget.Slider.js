@@ -1,83 +1,28 @@
-ART.Sheet.define('scrollbar', {
-	'height': 16,
-	'width': 16,
+ART.Sheet.define('slider', {
+	'height': 3,
+	'margin-top': 6,
+	'margin-bottom': 6,
+	'width': 100,
+	'fillColor': hsb(0, 0, 0, 0.3),
 	'cursor': 'pointer',
 	'stroke-color': hsb(0, 0, 0, 0.3),
-	'reflection-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
-	'background-color': [hsb(0, 0, 100, 0.3), hsb(0, 0, 50, 0)],
-	'cornerRadius': 3,
-	'glyph-color': hsb(82, 0, 100, 0.5)
+	'stroke-width': 1,
+	'cornerRadius': 1
 });
 
-ART.Sheet.define('window.fancy scrollbar button', {
+ART.Sheet.define('slider thumb', {
 	'height': 14,
 	'width': 14,
-	'margin-left': 0,
-	'glyph-scale': 0.8,
-	'glyph-top': 3,
-	'glyph-left': 3
-});
-
-ART.Sheet.define('window.fancy scrollbar track', {
-  'background-color': [hsb(0, 0, 30, 0.4), hsb(0, 0, 50, 0.5)],
-  'reflection-color': [hsb(31, 0, 100, 0.3), hsb(45, 0, 50, 0)]
-});
-
-ART.Sheet.define('scrollbar:horizontal track', {
-  'margin-left': 14,
-  'margin-right': 14,
-  'height': 14,
-  'margin-top': 1
-});
-
-ART.Sheet.define('scrollbar:vertical track', {
-  'margin-top': 14,
-  'margin-bottom': 14,
-  'width': 14,
-  'margin-left': 1
+	'margin-top': -6,
+	'corner-radius': 7,
+	'reflection-color': ['radial', {0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}],
+	'fill-color': ['radial', {0.5: hsb(0, 0, 100, 0.496875), 0.9: hsb(0, 0, 100, 0)}, {cy: '5%', r: '20%', fy: '5%'}],
+	'background-color': ['radial', {0.3: hsb(0, 0, 35, 0.6), 0.5: hsb(0, 0, 60, 0.5)}],
+	'strokeColor': hsb(0, 0, 30, 0.7),
+	'strokeWidth': 1
 });
 
 
-ART.Sheet.define('scrollbar track thumb', {
-  'width': 14,
-  'height': 14,
-  'corner-radius': 5,
-  'reflection-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
-  'background-color': [hsb(44, 0, 100, 0.3), hsb(31, 0, 50, 0)]
-});
-
-ART.Sheet.define('scrollbar track thumb:active', {
-  'reflection-color': [hsb(44, 0, 100, 0.3), hsb(31, 0, 50, 0)],
-  'background-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)]
-});
-
-ART.Sheet.define('window.fancy scrollbar:vertical button', {
-	'margin-left': 1
-});
-
-ART.Sheet.define('window.fancy scrollbar:horizontal button', {
-  'margin-top': 1
-});
-
-ART.Sheet.define('window.fancy scrollbar:vertical button#decrement', {
-	'bottom': '0',
-	'glyph': ART.Glyphs.triangleDown
-});
-
-ART.Sheet.define('window.fancy scrollbar:vertical button#increment', {
-	'glyph': ART.Glyphs.triangleUp
-});
-
-ART.Sheet.define('window.fancy scrollbar:horizontal button#increment', {
-	'right': '0',
-	'glyph': ART.Glyphs.triangleRight
-});
-
-ART.Sheet.define('window.fancy scrollbar:horizontal button#decrement', {
-	'glyph': ART.Glyphs.triangleLeft
-});
-
-	
 ART.Widget.Slider = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
@@ -87,7 +32,7 @@ ART.Widget.Slider = new Class({
   name: 'slider',
 	
 	layered: {
-    border: ['rectangle', ['borderColor']],
+    border: ['rectangle-stroke'],
 	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
 	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
   		if (color) this.fill.apply(this, $splat(color));
@@ -107,14 +52,13 @@ ART.Widget.Slider = new Class({
 	},
 	
 	layout: {
-    'scrollbar-thumb#thumb': {}
+    'slider-thumb#thumb': {}
 	}
 })
 
 ART.Widget.Slider.Thumb = new Class({
   Extends: Class.inherit(
-    ART.Widget.Button,
-    ART.Widget.Absolute
+    ART.Widget.Button
   ),
   
   name: 'thumb'

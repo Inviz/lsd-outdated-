@@ -26,7 +26,6 @@ ART.Rectangle = new Class({
 	},
 	
 	draw: function(width, height, radius){
-
 		var path = new ART.Path;
 
 		if (!radius){
@@ -71,6 +70,22 @@ ART.Rectangle = new Class({
 	}
 
 });
+
+ART.RectangleStroke = new Class({
+  Extends: ART.Rectangle,
+  
+  properties: ['width', 'height', 'cornerRadius', 'strokeColor', 'strokeWidth', 'strokeCap', 'strokeDash', 'fillColor'],
+  
+  paint: function(width, height, cornerRadius, strokeColor, stroke, cap, dash, color) {
+    if (!stroke) stroke = 0;
+    this.draw(width + stroke, height + stroke, cornerRadius.map(function(r) { return r + stroke / 2}));
+  	if (stroke && strokeColor) this.stroke(strokeColor, stroke, cap);
+  	if (color) this.fill.apply(this, $splat(color));
+  	this.dash(dash);
+  	if (stroke) this.translate(stroke / 2, stroke / 2)
+  }
+})
+
 
 ART.Shape.implement({
   

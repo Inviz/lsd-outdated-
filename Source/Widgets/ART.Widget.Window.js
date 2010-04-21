@@ -14,15 +14,14 @@ ART.Sheet.define('section', {
 
 
 ART.Sheet.define('window', {		
-	'width': 300,
-	'height': 'auto',
-	'shadow-blur': 20,
-	'shadow-offset-y': 5,
-	'shadow-color': hsb(0, 0, 0, 1),
-	//'stroke-width': 1,
-	//'stroke-color': hsb(0, 0, 0, 1)
+	'display': 'inline-block',
+	'vertical-align': 'top',
+	'width': 'auto',
+	'height': 'auto'
+	//'shadow-blur': 20,
+	//'shadow-offset-y': 5,
+	//'shadow-color': hsb(0, 0, 0, 1),
 });
-
 
 ART.Sheet.define('window.hud', {		
 	'corner-radius': 15
@@ -30,8 +29,6 @@ ART.Sheet.define('window.hud', {
 
 
 ART.Sheet.define('window.hud #content', {
-	'stroke-cap': 'square',
-	'stroke-color-y': 0,
 	'height': 70,
 	'background-color': [hsb(0, 0, 0, 0.6), hsb(0, 0, 20, 0.5)],
 	'reflection-color': [hsb(0, 0, 100, 0.6), hsb(0, 0, 10, 0)]
@@ -60,7 +57,6 @@ ART.Sheet.define('window.hud button', {
 	'background-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
 	'reflection-color': [hsb(0, 0, 0, 0.3), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.2),
-	'stroke-color': hsb(82, 0, 100, 0.5),
 	'glyph-color': hsb(82, 0, 100, 0.5),
 	'corner-radius': 7,
 	'float': 'left',
@@ -69,7 +65,6 @@ ART.Sheet.define('window.hud button', {
 
 
 ART.Sheet.define('window.hud #buttons #close', {
-	'stroke-width': 1,
 	'stroke-color': hsb(82, 0, 100, 0.3),
 	'glyph-height': 8,
 	'glyph-width': 8,
@@ -77,14 +72,31 @@ ART.Sheet.define('window.hud #buttons #close', {
 	'glyph-left': 2
 });
 
-ART.Sheet.define('window #footer, window #content, window #header', {	
-	'stroke-width': 0,
-	'stroke-color': hsb(0, 0, 72, 100)
+ART.Sheet.define('window #footer, window #header', {	
+  'width': 'auto'
 });
 
+ART.Sheet.define('window #content', {
+  'width': 300,
+  'min-height': 50
+})
+
 ART.Sheet.define('window.fancy', {		
-	'corner-radius': 5
+	'corner-radius': 5,
+	'stroke-width': 5,
+	'stroke-cap': 'square',
+	'stroke-color': hsb(0, 0, 10, 0.5),
+  'stroke-dash': false
 });
+
+
+ART.Sheet.define('window.fancy:dragged', {		
+  'cursor': 'move',
+  'stroke-dash': '10, 2, 2',
+	'stroke-color': hsb(0, 0, 10, 0.2)
+});
+
+
 
 ART.Sheet.define('input, textarea', {		
 	'corner-radius': 3,
@@ -101,12 +113,13 @@ ART.Sheet.define('textarea', {
 });
 
 ART.Sheet.define('input:focused, textarea:focused', {		
-	'stroke-color': hsb(212, 58, 93)
+  'stroke-color': hsb(212, 58, 93)
 });
 
 ART.Sheet.define('window.fancy #header', {
 	'corner-radius-top-left': 'inherit',
 	'corner-radius-top-right': 'inherit',
+	'padding-right': 5,
 	'height': 'auto',
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
 	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
@@ -116,7 +129,6 @@ ART.Sheet.define('window.fancy #header', {
 });
 
 ART.Sheet.define('window.fancy #header #toolbar', {
-	'height': 40,
 	'clear': 'both',
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
 	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)]
@@ -151,12 +163,12 @@ ART.Sheet.define('window #header #buttons', {
 ART.Sheet.define('window #header #toggler', {
 	'float': 'right',
 	'margin-left': -20,
-	'margin-right': 5,
 	'margin-top': 5,
 	'height': 10,
 	'width': 20,
 	'corner-radius': 5,
-	'reflection-color': [hsb(0, 0, 90, 0.5), hsb(0, 0, 70, 0.5), hsb(0, 0, 100, 0.5)]
+	'reflection-color': [hsb(0, 0, 70, 0.5), hsb(0, 0, 40, 0.5), hsb(0, 0, 100, 0.5)],
+	'background-color': [hsb(0, 0, 90, 0.3), hsb(0, 0, 100, 0.9)]
 });
 
 ART.Sheet.define('window #header #toggler:active', {
@@ -169,7 +181,7 @@ ART.Sheet.define('window.fancy button', {
 	'height': 14,
 	'width': 14,
 	'cursor': 'pointer',
-	'reflection-color': [hsb(0, 0, 75), hsb(0, 0, 100, 0.3)],
+	'fill-color': [hsb(0, 0, 75), hsb(0, 0, 100, 0.3)],
 	'background-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
 	'shadow-color': hsb(0, 0, 100, 0.4),
 	'stroke-color': hsb(0, 0, 45),
@@ -180,8 +192,7 @@ ART.Sheet.define('window.fancy button', {
 });
 
 ART.Sheet.define('window.fancy button:active', {
-	'reflection-color': [hsb(205, 25, 60), hsb(0, 0, 0, 0)],
-	'stroke-color': hsb(200, 35, 45),
+	'fill-color': [hsb(205, 25, 60), hsb(0, 0, 0, 0)],
 	'glyph-color': hsb(0, 0, 100)
 });
 
@@ -206,16 +217,16 @@ ART.Sheet.define('window #maximize', {
 	'glyph': ART.Glyphs.smallPlus
 });
 
-ART.Sheet.define('window:collapsed #minimize', {
+ART.Sheet.define('window:minified #minimize', {
 	'display': 'none'
 });
 
-ART.Sheet.define('window.fancy:collapsed #content', {
+ART.Sheet.define('window.fancy:minified #content', {
 	'background-color': [hsb(0, 0, 80, 0.5), hsb(0, 0, 70, 0.7)],
 	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 0, 0)],
 });
 
-ART.Sheet.define('window:collapsed #maximize', {
+ART.Sheet.define('window:minified #maximize', {
 	'display': 'block'
 });
 
@@ -250,16 +261,14 @@ ART.Sheet.define('window #handle:active', {
 
 ART.Sheet.define('window #toolbar button', {
 	'height': 36,
-	'width': 36
+	'width': 36,
+	'stroke-offset-top': -2,
+	'margin-bottom': 5,
 });
 
-ART.Sheet.define('window:collapsed #toolbar button', {
+ART.Sheet.define('window:minified #toolbar button', {
 	'height': 16,
 	'width': 16
-});
-
-ART.Sheet.define('window.fancy:collapsed #header #toolbar', {
-	'height': 20 
 });
 
 ART.Sheet.define('window.fancy #header #toolbar button', {
@@ -276,8 +285,7 @@ ART.Sheet.define('window.fancy #header #toolbar button:disabled', {
 });
 
 ART.Sheet.define('window.fancy #header #toolbar button:active', {
-  'background-color': [hsb(0, 0, 40), hsb(0, 0, 74)],
-  'stroke-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
+  'background-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
 });
 
 ART.Sheet.define('window.fancy #header #toolbar button#search', {
@@ -309,20 +317,20 @@ ART.Sheet.define('window.fancy #header #toolbar button#forward', {
 	'z-index': 5
 });
 
-ART.Sheet.define('window.fancy:collapsed #header #toolbar button', {
+ART.Sheet.define('window.fancy:minified #header #toolbar button', {
 	'glyph-scale': 1,
 	'glyph-top': 2,
 	'glyph-left': 2
 });
 
-ART.Sheet.define('window.fancy:collapsed #header #toolbar button#forward, window.fancy:collapsed #header #toolbar button#back', {
+ART.Sheet.define('window.fancy:minified #header #toolbar button#forward, window.fancy:minified #header #toolbar button#back', {
 	'corner-radius': 5,
 	'glyph-scale': 1,
 	'glyph-top': 4,
 	'glyph-left': 4
 });
 
-ART.Sheet.define('window.fancy:collapsed #header #toolbar button#forward', {
+ART.Sheet.define('window.fancy:minified #header #toolbar button#forward', {
   'margin-left': 5,
 	'margin-top': 0,
 	'height': 16
@@ -333,6 +341,7 @@ ART.Widget.Window = new Class({
 	
 	Extends: Class.inherit(
 		ART.Widget.Paint,
+		ART.Widget.Traits.Aware,
 		Widget.Animated,
 		Widget.Stateful({
 			'closed': ['close', 'open'],
@@ -345,13 +354,13 @@ ART.Widget.Window = new Class({
 	layout: {},
 	
 	layered: {
-	  fill:  ['rectangle', ['reflectionColor', 'strokeWidth', 'strokeColor'], function(width, height, cornerRadius, color, stroke, strokeColor) {
-	    this.draw(width + (stroke || 0), height + (stroke || 0), cornerRadius.map(function(r, i) { return r - (stroke || 0)}));
-  		if (stroke && strokeColor) this.stroke(strokeColor, stroke);
-  		if (color) this.fill(color);
-	  }],
-	  background: ['rectangle', ['strokeWidth'], function(width, height, cornerRadius, color, stroke) {
-  	  this.draw(width + (stroke || 0), height + (stroke || 0), cornerRadius);
+	  stroke:  ['rectangle-stroke'],
+	  reflection: ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
+  	  this.draw(width, height, cornerRadius);
+  		if (color) this.fill.apply(this, $splat(color));
+  	}],
+  	background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
+  	  this.draw(width, height, cornerRadius);
   		if (color) this.fill.apply(this, $splat(color));
   	}],
 	},
@@ -363,12 +372,22 @@ ART.Widget.Window = new Class({
 		if (this.header.buttons.close) this.header.buttons.close.addEvent('click', this.close.bind(this));
 		if (this.header.buttons.minimize) this.header.buttons.minimize.addEvent('click', this.collapse.bind(this));
 		if (this.header.buttons.maximize) this.header.buttons.maximize.addEvent('click', this.expand.bind(this));
+		
+		
 		return true;
 	},
 	
 	close: function() {
 		if (!this.parent.apply(this, arguments)) return;
 		this.hide();
+	},
+	
+	getHandle: function() {
+	  return $(this.footer.handle)
+	},
+
+	getResized: function() {
+	  return this.content;
 	}
 	
 });
