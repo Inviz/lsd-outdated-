@@ -316,7 +316,7 @@ ART.Widget.Traits.Resizable = new Class({
     if (!this.resizer.container) this.resizer.container = this.element;
     var resized = this.getResized();
     if (!size) size = {width: $(resized).width}
-    var width = this.resizer.container.offsetWidth - this.offset.padding.left - this.offset.padding.right;
+    var width = this.resizer.container.offsetWidth - this.offset.total.left - this.offset.total.right;
     var self = arguments.callee;  
     if (size.width < width) {
       if (!$chk(self.limit)) self.limit = this.resizer.options.limit.x[0];
@@ -388,8 +388,8 @@ ART.Widget.Traits.Draggable = new Class({
     var element = $(dragged);
     this.onDOMInject(function() {
       var position = element.getPosition();
-      element.left = position.x;
-      element.top = position.y;
+      element.left = position.x - element.getStyle('margin-left').toInt();
+      element.top = position.y - element.getStyle('margin-top').toInt();
     }.create({delay: 50}));
     var dragger = new Drag(element, $merge({
       handle: $(this.getDragHandle())

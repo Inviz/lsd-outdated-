@@ -33,7 +33,9 @@ ART.Widget.Paint = new Class({
 	redraws: 0,
   
   offset: {
-    paint: {}
+    paint: {},
+    total: {},
+    padding: {}
   },
   
 	build: function() {
@@ -61,11 +63,13 @@ ART.Widget.Paint = new Class({
 	  
 		this.outdated = false;
 		
-		var padding = this.getPadding();
-		for (var property in padding) if (true) {
-		  this.element.setStyle('padding-' + property, padding[property]);
+		var padding = this.offset.padding = this.getPadding();
+		var offset = this.offset.paint = this.getCanvasOffset()
+		for (var property in padding) {
+		  this.offset.total[property] = padding[property] + offset[property];
+		  this.element.setStyle('padding-' + property, padding[property] + offset[property]);
+		  this.element.setStyle('margin-' + property, (this.styles.current['margin' + property.capitalize()] || 0) - offset[property]);
 		}
-		this.offset.padding = padding;
 		
 		this.fireEvent('redraw');
 		this.redraws++;
@@ -84,7 +88,7 @@ ART.Widget.Paint = new Class({
 			left: blur + offset.x,
 			top: blur - offset.y,
 			right: blur + offset.x,
-			bottom: blur - offset.y
+			bottom: blur + offset.y
 		}
 	},
 	

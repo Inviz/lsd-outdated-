@@ -31,8 +31,7 @@ ART.Sheet.define('button', {
 
 	'corner-radius': 3,
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
-	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
-	'shadow-color': hsb(0, 0, 100, 0.6)
+	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)]
 });
 
 ART.Widget.Button = new Class({
@@ -55,22 +54,23 @@ ART.Widget.Button = new Class({
 	},
 	
 	layered: {
+	  shadow:  ['shadow'],
     stroke: ['rectangle-stroke'],
-	  background:  ['rectangle', ['backgroundColor', 'strokeWidth'], function(width, height, cornerRadius, color, stroke) {
+	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(stroke, stroke)
+  		if (stroke || shadow) this.translate(stroke  + shadow - x, stroke + shadow - y)
 	  }],
-	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth'], function(width, height, cornerRadius, color, stroke) {
-	    this.draw(width - 1, height - 1, cornerRadius.map(function(r) { return r + stroke}));
+	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
+	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(stroke + 1, stroke + 1)
+  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow)
 	  }],
-    glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth'], function(glyph, color, left, top, scale, stroke) {
+    glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
 	    if (!glyph) return;
 	    this.draw(glyph);
   		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(left + stroke, top + stroke);
+  		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
   		if (scale) this.scale(scale, scale)
 	  }]
 	},

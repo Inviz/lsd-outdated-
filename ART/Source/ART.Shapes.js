@@ -1,10 +1,16 @@
 /*
 ---
+
 name: ART.Shapes
+
 description: Shapes for ART
-authors: ["[Valerio Proietti](http://mad4milk.net)", "[Sebastian Markbåge](http://calyptus.eu/)"]
-provides: [ART.Shapes, ART.Rectangle, ART.Pill, ART.Ellipse, ART.Wedge]
+
+authors: [Valerio Proietti](http://mad4milk.net)
+
+provides: [ART.Shapes, ART.Rectangle, ART.Pill, ART.Ellipse]
+
 requires: [ART.Path, ART.Shape]
+
 ...
 */
 
@@ -68,19 +74,30 @@ ART.Rectangle = new Class({
 ART.RectangleStroke = new Class({
   Extends: ART.Rectangle,
   
-  properties: ['width', 'height', 'cornerRadius', 'strokeColor', 'strokeWidth', 'strokeCap', 'strokeDash', 'fillColor', 'shadowBlur'],
+  properties: ['width', 'height', 'cornerRadius', 'strokeColor', 'strokeWidth', 'strokeCap', 'strokeDash', 'fillColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'],
   
-  paint: function(width, height, cornerRadius, strokeColor, stroke, cap, dash, color, shadow) {
-    if (!stroke) stroke = 0;
+  paint: function(width, height, cornerRadius, strokeColor, stroke, cap, dash, color, shadow, x, y) {
     this.draw(width + stroke, height + stroke, cornerRadius.map(function(r) { return r + stroke / 2}));
   	if (stroke && strokeColor) this.stroke(strokeColor, stroke, cap);
   	if (color) this.fill.apply(this, $splat(color));
   	this.dash(dash);
-  	if (blur) this.blur(blur);
-  	if (stroke) this.translate(stroke / 2, stroke / 2)
+  	if (stroke || shadow) this.translate(stroke / 2 + shadow - x, stroke / 2 + shadow - y)
   }
 })
 
+
+ART.Shadow = new Class({
+  Extends: ART.Rectangle,
+  
+  properties: ['width', 'height', 'cornerRadius', 'strokeWidth', 'shadowBlur', 'shadowColor', 'shadowOffsetX', 'shadowOffsetY'],
+  
+  paint: function(width, height, cornerRadius, stroke, shadow, color, x, y) {
+    this.draw(width + stroke * 2, height + stroke * 2, cornerRadius.map(function(r) { return r + stroke}));
+  	if (color) this.fill.apply(this, $splat(color));
+  	if (shadow) this.blur(shadow);
+  	this.translate(x + shadow, (shadow > 1 ? shadow : 0) + y)
+  }
+});
 
 ART.Shape.implement({
   

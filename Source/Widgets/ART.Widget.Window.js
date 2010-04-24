@@ -7,6 +7,18 @@ License:
 
 // Window Widget. Work in progress.
 
+ART.Sheet.define('*', {
+  'shadow-blur': 0,
+	'shadow-offset-x': 0,
+	'shadow-offset-y': 0,
+  'stroke-width': 0
+})
+
+ART.Sheet.define('glyph', {
+  'glyph-top': 0,
+  'glyph-left': 0
+})
+
 
 ART.Sheet.define('section', {
 	'width': 'inherit'
@@ -20,7 +32,7 @@ ART.Sheet.define('window', {
 	'height': 'auto',
 	'shadow-blur': 20,
 	'shadow-offset-y': 5,
-	'shadow-color': hsb(0, 0, 0, 1)
+	'shadow-color': hsb(0, 0, 0, 0.5)
 });
 
 ART.Sheet.define('window.hud', {		
@@ -56,7 +68,6 @@ ART.Sheet.define('window.hud button', {
 	'cursor': 'pointer',
 	'background-color': [hsb(0, 0, 0, 0.4), hsb(0, 0, 0, 0.5)],
 	'reflection-color': [hsb(0, 0, 0, 0.3), hsb(0, 0, 0, 0)],
-	'shadow-color': hsb(0, 0, 100, 0.2),
 	'glyph-color': hsb(82, 0, 100, 0.5),
 	'corner-radius': 7,
 	'float': 'left',
@@ -93,7 +104,9 @@ ART.Sheet.define('window.fancy', {
 ART.Sheet.define('window.fancy:dragged', {		
   'cursor': 'move',
   'stroke-dash': '10, 2, 2',
-	'stroke-color': hsb(0, 0, 10, 0.2)
+	'stroke-color': hsb(0, 0, 10, 0.2),
+	'shadow-blur': 25,
+	'shadow-offset-y': 12,
 });
 
 
@@ -262,19 +275,23 @@ ART.Sheet.define('window #handle:active', {
 ART.Sheet.define('window #toolbar button', {
 	'height': 36,
 	'width': 36,
-	'stroke-offset-top': -2,
 	'margin-bottom': 5,
+	'shadow-blur': 1,
+	'shadow-offset-y': 1,
+	'shadow-color': hsb(0, 0, 77)
 });
 
-ART.Sheet.define('window:minified #toolbar button', {
+ART.Sheet.define('window.fancy:minified #header #toolbar button', {
 	'height': 16,
-	'width': 16
+	'width': 16,
+	'glyph-top': 0,
+	'glyph-left': 4
 });
 
 ART.Sheet.define('window.fancy #header #toolbar button', {
 	'glyph-scale': 2,
-	'glyph-top': 5,
-	'glyph-left': 5,
+	'glyph-top': 6,
+	'glyph-left': 6,
 	'background-color': [hsb(0, 0, 99), hsb(0, 0, 74)],
 	'reflection-color': [hsb(0, 0, 30, 0), hsb(0, 0, 40, 0.3)]
 });
@@ -354,6 +371,7 @@ ART.Widget.Window = new Class({
 	layout: {},
 	
 	layered: {
+	  shadow:  ['shadow'],
 	  stroke:  ['rectangle-stroke'],
 	  reflection: ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
   	  this.draw(width, height, cornerRadius);

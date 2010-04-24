@@ -49,6 +49,8 @@ v\:* {
     text-shadow: 0 1px 0 #e5e5ee;
     filter: dropshadow(color=#e5e5ee,offX=0,offY=1px);
     color: #555; }
+  .art.window.dragged, .art.window.dragged * {
+    cursor: move; }
   .art.window.hud .title .container {
     font-size: 1em;
     text-shadow: 0 -1px 0 #374683;
