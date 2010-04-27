@@ -60,9 +60,7 @@ ART.Widget = new Class({
 		this.log('Init', this)
 	},
 	
-	build: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		
+	build: Macro.onion(function() {
 		var attrs = $merge(this.options.element);
 		var tag = attrs.tag;
 		delete attrs.tag;
@@ -79,20 +77,14 @@ ART.Widget = new Class({
 		  this.addClass(cls);
 		}, this);
 		
-		this.attach(this.events);
-		
-		return true;
-	},
+		this.attach()
+	}),
 	
-	destroy: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		
+	destroy: Macro.onion(function() {
 		this.detach();
 		this.element.destroy();
 		delete this.element;
-		
-		return true;
-	},
+	}),
 	
 	render: function(style){
 		if (this.selector && this.selector != this.getSelector()) this.update();
@@ -455,16 +447,27 @@ Element.Styles.More = {
 }
 
 //Basic widget initialization
-ART.Widget.create = function(klass, a, b, c, d) {
+ART.Widget.create = function(klasses, a, b, c, d) {
+  klasses = $splat(klasses);
   var base = ART.Widget;
-  if (klass.indexOf('-') > -1) {
+  var klass = klasses.shift();
+  
+  if (klass.indexOf('-') > -1) { 
     var bits = klass.split('-');
     base = base[bits.shift().camelCase().capitalize()];
     klass = bits.join('-');
   }
   klass = klass.camelCase().capitalize()
 	if (!base[klass]) throw new Exception.Misconfiguration(this, "ClassName ART.Widget." + klass + " was not found");
-	return new base[klass](a, b, c, d)
+	var widget = base[klass];
+	if (klasses.length) {
+  	klasses = klasses.map(function(name) {
+  	  return ART.Widget.Traits[name.camelCase().capitalize()]
+  	});
+  	widget = Class.inherit.apply(Class, [widget].concat(klasses));
+  }
+	
+	return new widget(a, b, c, d)
 }
 
 

@@ -74,11 +74,39 @@ ART.Sheet.define('window.hud button', {
 	'margin-left': 5
 });
 
+ART.Sheet.define('window.fancy #buttons:hover button', {
+  'glyph-color': hsb(0, 0, 20, 0.7)
+});
+
+ART.Sheet.define('window.fancy #buttons #close', {
+  'fill-color': ['radial', {0: hsb(0, 95, 80), 0.9: hsb(0, 97, 73), 1: hsb(359, 65, 22)}, {cy: '55%', r: '42%', fy: '55%'}],
+  'stroke-color': [hsb(359, 71, 60), hsb(359, 24, 75)]
+});
+
+ART.Sheet.define('window.fancy #buttons #close:active', {
+  'fill-color': ['radial', {0: hsb(0, 95, 70), 0.8: hsb(0, 97, 63), 1: hsb(359, 65, 32)}, {cy: '55%', r: '42%', fy: '55%'}]
+});
+
+ART.Sheet.define('window.fancy #buttons #minimize', {
+  'fill-color': ['radial', {0: hsb(58, 95, 80), 0.8: hsb(28, 66, 85), 1: hsb(2, 64, 58)}, {cy: '55%', r: '44%', fy: '55%'}],
+  'stroke-color': [hsb(55, 71, 40), hsb(45, 24, 75)]
+});
+
+ART.Sheet.define('window.fancy #buttons #minimize:active', {
+  'fill-color': ['radial', {0: hsb(58, 95, 70), 0.8: hsb(28, 66, 75), 1: hsb(2, 64, 48)}, {cy: '55%', r: '44%', fy: '55%'}]
+});
+
+ART.Sheet.define('window.fancy #buttons #maximize', {
+  'fill-color': ['radial', {0: hsb(100, 76, 76), 0.8: hsb(95, 46, 73), 1: hsb(103, 53, 43)}, {cy: '55%', r: '44%', fy: '55%'}],
+  'stroke-color': [hsb(55, 71, 40), hsb(45, 24, 75)]
+});
+
+ART.Sheet.define('window.fancy #buttons #maximize:active', {
+  'fill-color': ['radial', {0: hsb(100, 76, 66), 0.8: hsb(95, 46, 63), 1: hsb(103, 53, 33)}, {cy: '55%', r: '44%', fy: '55%'}]
+});
 
 ART.Sheet.define('window.hud #buttons #close', {
 	'stroke-color': hsb(82, 0, 100, 0.3),
-	'glyph-height': 8,
-	'glyph-width': 8,
 	'glyph-top': 2,
 	'glyph-left': 2
 });
@@ -148,8 +176,6 @@ ART.Sheet.define('window.fancy #header #toolbar', {
 });
 
 ART.Sheet.define('window.fancy #content', {
-	'stroke-cap': 'square',
-	'stroke-color-y': 0,
 	'height': 150,
 	'background-color': [hsb(0, 0, 80, 0.3), hsb(0, 0, 70, 0.4)],
 	'reflection-color': [hsb(0, 0, 100, 0.3), hsb(0, 0, 0, 0)]
@@ -181,18 +207,26 @@ ART.Sheet.define('window #header #toggler', {
 	'width': 18,
 	'corner-radius': 4,
 	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 40, 0.5), hsb(0, 0, 100, 0.5)],
-	'background-color': [hsb(0, 0, 90, 0.3), hsb(0, 0, 100, 0.9), ]
+	'background-color': [hsb(0, 0, 90, 0.3), hsb(0, 0, 100, 0.9)]
 });
 
 ART.Sheet.define('window #header #toggler:active', {
-  'background-color': [hsb(210, 61, 90), hsb(202, 95, 100)],
-	'reflection-color': [hsb(0, 0, 90, 0.7), hsb(0, 0, 70, 0.7), hsb(0, 0, 100, 0.7)]
+  'fill-color': [hsb(210, 61, 90), hsb(202, 95, 100)]
 })
 
+
+ART.Sheet.define('window #header #buttons button, window #header #toggler, window #header #toolbar button', {
+  'shadow-blur': 1,
+	'shadow-offset-y': 1,
+	'shadow-color': hsb(0, 0, 77)
+});
+
+ART.Sheet.define('window #header #buttons button, window #header #toggler', {
+	'shadow-color': hsb(0, 0, 85)
+})
 ART.Sheet.define('window.fancy button', {
-	'pill': true,
-	'height': 14,
-	'width': 14,
+	'height': 13,
+	'width': 13,
 	'cursor': 'pointer',
 	'fill-color': [hsb(0, 0, 75), hsb(0, 0, 100, 0.3)],
 	'background-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
@@ -210,12 +244,15 @@ ART.Sheet.define('window.fancy button:active', {
 });
 
 ART.Sheet.define('window #buttons button', {
-	'glyph-height': 8,
-	'glyph-width': 8,
+	'glyph-left': 0.5,
+	'glyph-top': 0,
+  'glyph-color': hsb(0, 0, 0, 0),
+	'width': 13,
+	'height': 13,
 	'corner-radius': 6,
-  'reflection-color': ['radial', {0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}],
-  'fill-color': ['radial', {0.5: hsb(0, 0, 100, 0.496875), 0.9: hsb(0, 0, 100, 0)}, {cy: '5%', r: '20%', fy: '5%'}],
-  'background-color': ['radial', {0.3: hsb(0, 0, 75, 0.4), 0.5: hsb(0, 0, 100, 0.3)}],
+  'reflection-color': ['radial', {0.4: hsb(0, 0, 100, 0.6), 0.9: hsb(0, 0, 100, 0)}, {cy: '10%', r: '17%', fy: '50%'}],//['radial', {0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}],
+  'fill-color': hsb(0,0,0,0),
+  'background-color': ['radial', {0: hsb(0, 0, 100, 0.7), 0.35: hsb(0, 0, 100, 0.6), 1: hsb(0,0,100,0.2)}, {cy: '90%', r: '60%', fy: '80%'}],
 });
 
 ART.Sheet.define('window #close', {
@@ -230,28 +267,14 @@ ART.Sheet.define('window #maximize', {
 	'glyph': ART.Glyphs.smallPlus
 });
 
-ART.Sheet.define('window:minified #minimize', {
-	'display': 'none'
-});
-
 ART.Sheet.define('window.fancy:minified #content', {
 	'background-color': [hsb(0, 0, 80, 0.5), hsb(0, 0, 70, 0.7)],
 	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 0, 0)],
 });
 
-ART.Sheet.define('window:minified #maximize', {
-	'display': 'block'
-});
-
-ART.Sheet.define('window #maximize', {
-	'display': 'none'
-});
-
 ART.Sheet.define('window #handle', {
 	'glyph': ART.Glyphs.resize,
 	'glyph-color': hsb(0, 0, 50, 0.5),
-	'glyph-width': 15,
-	'glyph-height': 15,
 	'glyph-top': 2,
   'glyph-left': 0,
   
@@ -275,10 +298,7 @@ ART.Sheet.define('window #handle:active', {
 ART.Sheet.define('window #toolbar button', {
 	'height': 36,
 	'width': 36,
-	'margin-bottom': 5,
-	'shadow-blur': 1,
-	'shadow-offset-y': 1,
-	'shadow-color': hsb(0, 0, 77)
+	'margin-bottom': 5
 });
 
 ART.Sheet.define('window.fancy:minified #header #toolbar button', {

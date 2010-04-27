@@ -7,5 +7,9 @@ ART.Widget.Element = new Class({
 		if (!this.parent.apply(this, arguments)) return;
 		if (!this.element) return true;
 		return !this.setElementStyle(property, value);
-  }
+  },
+  
+  render: Macro.onion(function() {
+    this.fireEvent('redraw');
+  })
 })

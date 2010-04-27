@@ -213,48 +213,31 @@ ART.Widget.Scrollbar.Button = new Class({
   position: 'absolute'
 });
 
-
-Class.refactor(ART.Widget, {
-  
-  build: function() {
-    if (!this.previous.apply(this, arguments)) return;
-    if (this.options.scrollable) {
-      if (!this.wrapper) this.wrapper = new Element('div', {'class': 'wrapper'}).setStyle('position', 'relative').setStyle('overflow', 'hidden')
-      this.wrapper.inject(this.element);
-    }
-    return true;
-  },
-  
-  initialize: function() {
-    this.previous.apply(this, arguments);
+ART.Widget.Traits.Scrollable = new Class({
+  build: Macro.onion(function() {
+    if (!this.wrapper) this.wrapper = new Element('div', {'class': 'wrapper'}).setStyle('position', 'relative').setStyle('overflow', 'hidden')
+    this.wrapper.inject(this.element);
+    
+    
     if (this.options.scrollable) this.addEvent('resize', function(size) {
       var scrolled = this.getScrolled ? $(this.getScrolled()) : this.element.getFirst();
       if (size.width < scrolled.scrollWidth) this.getHorizontalScrollbar().show();
       else if (this.horizontal) this.horizontal.hide();
-      
+
       if (size.height < scrolled.scrollHeight) this.getVerticalScrollbar().show();
       else if (this.vertical) this.vertical.hide();
     }.bind(this))
-  },
+  }),
   
-
+  getVerticalScrollbar: Macro.setter('vertical', function() {
+    this.applyLayout({
+	    'scrollbar#vertical[mode=vertical]': {}
+	  });
+  }),
   
-  getVerticalScrollbar: function() {
-    if (!this.vertical) {
-      this.applyLayout({
-  	    'scrollbar#vertical[mode=vertical]': {}
-  	  }); 
-    }
-    return this.vertical;
-  },
-  
-  getHorizontalScrollbar: function() {
-    if (!this.horizontal) {
-      this.applyLayout({
-  	    'scrollbar#horizontal[mode=horizontal]': {}
-  	  });
-  	}
-  	return this.horizontal;
-  }
-  
+  getHorizontalScrollbar: Macro.setter('horizontal', function() {
+    this.applyLayout({
+	    'scrollbar#horizontal[mode=horizontal]': {}
+	  });
+  })
 });

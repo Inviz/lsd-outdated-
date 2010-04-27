@@ -22,10 +22,12 @@ ART.Layout = new Class({
     if (!parsed.tag) parsed.tag = 'container';
 		if (!parsed.id) throw new Exception.Misconfiguration(this, "You need to specify id for layout item for " + selector);
 		var options = {id: parsed.id};
+		var mixins = [parsed.tag];
 		if (parsed.attributes) parsed.attributes.each(function(attribute) {
 			options[attribute.name] = attribute.value || true;
+			if (ART.Widget.Traits[attribute.name.capitalize()]) mixins.push(attribute.name);
 		});
-		var widget = ART.Widget.create(parsed.tag, options);
+		var widget = ART.Widget.create(mixins, options);
 		widget.build();
     
     if (parent) widget.inject(parent)

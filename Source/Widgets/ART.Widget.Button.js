@@ -24,7 +24,7 @@ ART.Sheet.define('button', {
 	'glyph-top': 1,
 	'glyph-left': 1,
   
-	'stroke-color': hsb(0, 0, 0, 0.7),
+	'stroke-color': hsb(0, 0, 25, 0.7),
 	'stroke-width': 1,
 	
 	'pill': false,
@@ -64,7 +64,7 @@ ART.Widget.Button = new Class({
 	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow)
+  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow - y)
 	  }],
     glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
 	    if (!glyph) return;

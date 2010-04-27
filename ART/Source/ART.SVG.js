@@ -380,6 +380,24 @@ ART.SVG.Base.implement({
   },
   
 
+	strokeLinear: function(stops, angle){
+		var gradient = this._createGradient('stroke', 'linear', stops);
+
+		angle = ((angle == null) ? 270 : angle) * Math.PI / 180;
+
+		var x = Math.cos(angle), y = -Math.sin(angle),
+			l = (Math.abs(x) + Math.abs(y)) / 2;
+
+		x *= l; y *= l;
+
+		gradient.setAttribute('x1', 0.5 - x);
+		gradient.setAttribute('x2', 0.5 + x);
+		gradient.setAttribute('y1', 0.5 - y);
+		gradient.setAttribute('y2', 0.5 + y);
+
+		return this;
+	},
+
 	fill: function(color){
 	  var args = arguments;
 		if (args.length > 1) {
@@ -390,4 +408,15 @@ ART.SVG.Base.implement({
 		} else this._setColor('fill', color);
 		return this;
 	},
+	
+	stroke: function(color, width, cap, join){
+		var element = this.element;
+		element.setAttribute('stroke-width', (width != null) ? width : 1);
+		element.setAttribute('stroke-linecap', (cap != null) ? cap : 'round');
+		element.setAttribute('stroke-linejoin', (join != null) ? join : 'round');
+		if (color && color.length > 1) this.strokeLinear(color);
+		else this._setColor('stroke', color);
+		
+		return this;
+	}
 })

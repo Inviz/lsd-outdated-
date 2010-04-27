@@ -6,6 +6,12 @@ Class.inherit = function(kls) {
 	return Class.prototype.inherit.apply(kls, args);
 };
 
+Class.Mergers = {
+  events: function(mixin) {
+    this.events = $mixin(this.events || {}, mixin.events);
+  }
+}
+
 Class.prototype.inherit = function() {
 	var klass = this;
 	Array.each(arguments, function(mixin) {		
@@ -24,11 +30,15 @@ Class.prototype.inherit = function() {
 		
 		var mixin = Class.instantiate(mixin);
 		
-		//hack to merge events the right way (just like options)
-		var events = $merge(baked.prototype.events)
+		for (var property in Class.Mergers) {
+		  if (mixin[property]) {
+		    Class.Mergers[property].call(baked.prototype, mixin);
+		    delete mixin[property]
+		  }
+		}
 		baked.implement(mixin);
-		baked.prototype.events = $merge(events, mixin.events)
 		klass = baked;
+		
 		
 	}, this);
 	

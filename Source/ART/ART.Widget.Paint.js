@@ -2,7 +2,7 @@
 	var properties = [
 		'glyphColor', 'glyphShadow', 'glyphSize', 'glyphStroke', 'glyph', 'glyphColor', 'glyphColor', 'glyphHeight', 'glyphWidth', 'glyphTop', 'glyphLeft', 		
 		'cornerRadius', 'cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight',		
-		'reflectionColor',  'backgroundColor', 'strokeColor',
+		'reflectionColor',  'backgroundColor', 'strokeColor', 'fillColor',
 		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'
 	];
 	//properties = properties.concat(Hash.getKeys(ART.Adapter.prototype.style).map(function(e) { return e.camelCase() }));
@@ -67,6 +67,7 @@ ART.Widget.Paint = new Class({
 		var offset = this.offset.paint = this.getCanvasOffset()
 		for (var property in padding) {
 		  this.offset.total[property] = padding[property] + offset[property];
+
 		  this.element.setStyle('padding-' + property, padding[property] + offset[property]);
 		  this.element.setStyle('margin-' + property, (this.styles.current['margin' + property.capitalize()] || 0) - offset[property]);
 		}

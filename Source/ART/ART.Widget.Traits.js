@@ -45,14 +45,12 @@ ART.Widget.Traits.Aware = new Class({
     }, this)
   },
   
-  attach: function() {
-    if (!this.parent.apply(this, arguments)) return;
+  attach: Macro.onion(function() {
     this.descendants = [];
     this.addEvent('hello', function(widget) {
       this.descendants.push(widget)
     }.bind(this));
-    return true;
-  }
+  })
   
 });
 
@@ -61,15 +59,13 @@ ART.Widget.Traits.Layered = new Class({
 
   layers: {},
 
-  build: function() {
-    if (!this.parent.apply(this, arguments)) return;
+  build: Macro.onion(function() {
     if (this.layered) {
       for (var name in this.layered) {
         this.layers[name] = this.getLayer.apply(this, this.layered[name]);
       }
     }
-    return true;
-  },
+  }),
 
   getLayer: function() {
     var args = Array.link($splat(arguments), {name: String.type, options: Object.type, properties: Array.type, render: Function.type, klass: Class.type});
@@ -106,59 +102,82 @@ ART.Widget.Traits.Layout = new Class({
 });
 
 
-ART.Widget.Traits.Events = new Class({
+(function(addEvents, removeEvents) {
 
-  events: {
-    element: {},
-    self: {
-      'inject': function(widget) {
-        if (widget instanceof ART.Widget) widget.addEvents(this.events.parent);
-      },    
-      'dispose': function(widget) {
-        if (widget instanceof ART.Widget) widget.removeEvents(this.events.parent);
-      }
+  ART.Widget.Traits.Events = new Class({
+
+    events: {
+      element: {},
+      self: {
+        'inject': function(widget) {
+          if (widget instanceof ART.Widget) widget.addEvents(this.events.parent);
+        },    
+        'dispose': function(widget) {
+          if (widget instanceof ART.Widget) widget.removeEvents(this.events.parent);
+        }
+      },
+      parent: {}
     },
-    parent: {}
-  },
-  
+  	
+  	addEvents: function(events) {
+  	  if (events) {
+  	    for (var i in events) { 
+  	      if (events[i].call) { //stick to old behaviour when key: function object is passed
+  	        addEvents.call(this, events);
+  	      } else {
+        	  events = this.bindEvents($merge(events));
+            addEvents.call(this, events.self);
+        		this.element.addEvents(events.element);
+  	      };  
+  	      break;
+  	    }
+  	  }
+  		return events;
+  	},
 	
-	attach: function(events) {
-	  var walk = function(tree) {
-	    if (!tree || tree.call) return tree;
-	    if (tree.indexOf) return this[tree].bind(this);
-	    for (var i in tree) tree[i] = walk(tree[i]);
-	    return tree;
-	  }.bind(this);
-	  events = walk(events);
-	  
-		this.parent.apply(this, arguments);
-    this.addEvents(events.self);
-		this.element.addEvents(events.element);
-		return true;
-	},
-	
-	detach: function(element) {
-		if (!this.parent.apply(this, arguments)) return;
-    this.removeEvents(events.self);
-		this.element.removeEvents(events.element);
-		return true;
-	},
-	
-  build: function() {
-    if (!this.built) this.addEvents(this.events.self)
-    return this.parent.apply(this, arguments);
-  }
-})
+  	removeEvents: function(events) {
+  	  if (events) {
+    	  events = this.bindEvents($merge(events));
+        removeEvents.call(this, events.self);
+    		this.element.removeEvents(events.element);
+  	  }
+  		return events;
+  	},
+  	
+  	bindEvents: function(tree) {
+      if (!tree || tree.call) return tree;
+      if (!this.$bound) this.$bound = {}
+      if (tree.indexOf) {
+        if (!this.$bound[tree]) {
+          if (!this[tree]) throw new Exception.Misconfiguration(this, "Cant find a method to bind " + tree + " on " + this.getSelector());
+          this.$bound[tree] = this[tree].bind(this);
+        }
+        return this.$bound[tree];
+      }
+      for (var i in tree) tree[i] = this.bindEvents(tree[i]);
+      return tree;
+  	},
+
+  	attach: Macro.onion(function() {
+  		this.addEvents(this.events);
+  	}),
+
+  	detach: Macro.onion(function() {
+  	  this.removeEvents(this.events);
+  	})
+  });
+
+})(Events.prototype.addEvents, Events.prototype.removeEvents);
 
 ART.Widget.Traits.LayoutEvents = new Class({
   
-  attach: Macro.onion(function(events) {
-    this.attachLayoutEvents(events);
+  addEvents: Macro.onion(function(events) {
+    this.attachLayoutEvents(this.parent.apply(this, arguments));
   }),
   
   attachLayoutEvents: function(events) {
 		var callbacks = {};
-		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer'];
+		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover'];
 		var walk = function(tree, prefix) {
 		  if (!prefix) prefix = '';
   		for (var type in tree) {
@@ -172,12 +191,10 @@ ART.Widget.Traits.LayoutEvents = new Class({
 		    }
 		  }
 		}.bind(this);
-		walk(events);
+		walk(this.bindEvents(events));
 	  Hash.each(callbacks, function(events, selector) {
-	    console.log('got it', selector)
   	  this.use(selector, function(widget) {
-  	    console.log('got it', events)
-  	    widget.attach(events);
+  	    widget.addEvents(events);
   	  })
 	  }, this);
   }
@@ -197,26 +214,44 @@ ART.Widget.Base = new Class({
     this.parent.apply(this, arguments);
 		if (this.expression) this.applyExpression(this.expression);
 		if (this.layout) this.setLayout(this.layout);
-		for (var type in this.events) {
-		  var events = this.events[type];
-		  for (var name in events) {
-		    if (String.type(events[name])) {
-		      var method = this[events[name]];
-		      if (!method) this.log('Cannot bind ' +  events);
-		      events[name] = method.bind(this)
-		    }
-		  }
-		}
   }
 });
 
 
-
+ART.Widget.Traits.Hoverable = new Class({
+  Extends: Widget.Stateful({
+    'hover': ['mouseenter', 'mouseleave']
+  }),
+  
+  events: {
+    hover: {
+      element: {
+        mouseenter: 'mouseenter',
+        mouseleave: 'mouseleave'
+      }
+    }
+  },
+  
+  
+	attach: Macro.onion(function(){
+		this.addAction({
+		  enable: function() {
+      	this.addEvents(this.events.hover);
+  	  },
+  	  
+  	  disable: function() {
+    	  this.removeEvents(this.events.hover);
+  		}
+  	})
+	}),
+});
 
 ART.Widget.Traits.Touchable = new Class({
+  options: {
+    touch: {}
+  },
   
-	attach: function() {
-		if (!this.parent.apply(this, arguments)) return;
+	attach: Macro.onion(function(){
 		this.addAction({
 		  enable: function() {
       	this.getTouch().attach();
@@ -226,21 +261,17 @@ ART.Widget.Traits.Touchable = new Class({
     	  if (this.touch) this.touch.detach();
   		}
   	})
-		return true;
-	},
+	}),
 	
-	getTouch: function() {
-	  if (!this.touch) {
-	    this.touch = new Touch(this.element);
-		
-  		this.touch.addEvents({
-  			start: this.activate.bind(this),
-  			end: this.deactivate.bind(this),
-  			cancel: this.deactivate.bind(this)//this.fireEvent('press', e);
-  		});
-  	}
-  	return this.touch;
-	}
+	getTouch: Macro.setter('touch', function() {
+	  var touch = new Touch(this.element, this.options.touch);
+	  touch.addEvents({
+			start: this.activate.bind(this),
+			end: this.deactivate.bind(this),
+			cancel: this.deactivate.bind(this)//this.fireEvent('press', e);
+		});
+		return touch;
+	})
 });
 
 ART.Widget.Traits.Resizable = new Class({
@@ -268,31 +299,28 @@ ART.Widget.Traits.Resizable = new Class({
     resizer: {}
   },
   
-  getResizer: function() {
-    if (!this.resizer) {
-      var resized = this.getResized();
-      var element = $(resized);
-      resized.addEvent('resize', function(size) {
-        $extend(element, size);
-      });
-      element.width  = resized.getStyle('width');
-      element.height = resized.getStyle('height');
-      this.resizer = new Drag(element, $merge({
-        handle: this.getHandle()
-      }, this.options.resizer));
-      this.resizer.addEvents(this.events.resizer);
-      this.resizer.addEvents({
-        'start': this.onResizeStart.bind(this),
-        'complete': this.onResizeComplete.bind(this),
-        'cancel': this.onResizeComplete.bind(this),
-        'drag': this.onResize.bind(this)
-      }, true);
-    }
-    return this.resizer;
-  },
+  getResizer: Macro.setter('resizer', function() {
+    var resized = this.getResized();
+    var element = $(resized);
+    resized.addEvent('resize', function(size) {
+      $extend(element, size);
+    });
+    element.width  = resized.getStyle('width');
+    element.height = resized.getStyle('height');
+    var resizer = new Drag(element, $merge({
+      handle: this.getHandle()
+    }, this.options.resizer));
+    resizer.addEvents(this.events.resizer);
+    resizer.addEvents({
+      'start': this.onResizeStart.bind(this),
+      'complete': this.onResizeComplete.bind(this),
+      'cancel': this.onResizeComplete.bind(this),
+      'drag': this.onResize.bind(this)
+    }, true);
+    return resizer;
+  }),
   
-	build: function() {
-		if (!this.parent.apply(this, arguments)) return;
+	build: Macro.onion(function() {
 		this.use('#handle', '#content', function() {
   		this.addAction({
   		  enable: function() {
@@ -308,8 +336,7 @@ ART.Widget.Traits.Resizable = new Class({
     	  this.content.addEvent('resize', this.checkOverflow.bind(this));
       }
 		})
-		return true;
-	},
+	}),
 	
 	checkOverflow: function(size) {
 	  if (!this.resizer) return;
@@ -516,12 +543,12 @@ ART.Widget.Traits.HasSlider = new Class({
 	  if (Class.hasParent(arguments)) return this.parent.apply(this, arguments);
 	},
 	
-	getTrack: function() {
+	getTrack: Macro.defaults(function() {
 	  return $(this)
-	},
+	}),
 	
-	getTrackThumb: function() {
+	getTrackThumb: Macro.defaults(function() {
 	  return $(this.thumb);
-	}
+	})
 	
 });

@@ -9,9 +9,9 @@ Moo.Application = new Class({
 	layout: {
 	  'section#header': {
 	    '#buttons': {
+        'button#close': {},
 	      'button#minimize': {},
-        'button#maximize': {},
-        'button#close': {}
+        'button#maximize': {}
 	    },
 	    '#title[container]': {}
 	  },
@@ -44,10 +44,10 @@ Moo.Application.Toolbared = new Class({
 	layout: {
 	  'section#header': {
       'button#toggler': {},
-	    '#buttons': {
+	    '#buttons[hoverable]': {
+        'button#close': {},
 	      'button#minimize': {},
-        'button#maximize': {},
-        'button#close': {}
+        'button#maximize': {}
 	    },
 	    '#title[container]': {},
   	  '#toolbar': {
