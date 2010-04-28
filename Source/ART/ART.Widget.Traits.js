@@ -110,10 +110,10 @@ ART.Widget.Traits.Layout = new Class({
       element: {},
       self: {
         'inject': function(widget) {
-          if (widget instanceof ART.Widget) widget.addEvents(this.events.parent);
+          if (widget instanceof ART.Widget) widget.addEvents(this.bindEvents(this.events.parent));
         },    
         'dispose': function(widget) {
-          if (widget instanceof ART.Widget) widget.removeEvents(this.events.parent);
+          if (widget instanceof ART.Widget) widget.removeEvents(this.bindEvents(this.events.parent));
         }
       },
       parent: {}
@@ -177,7 +177,7 @@ ART.Widget.Traits.LayoutEvents = new Class({
   
   attachLayoutEvents: function(events) {
 		var callbacks = {};
-		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover'];
+		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider'];
 		var walk = function(tree, prefix) {
 		  if (!prefix) prefix = '';
   		for (var type in tree) {
@@ -195,7 +195,7 @@ ART.Widget.Traits.LayoutEvents = new Class({
 	  Hash.each(callbacks, function(events, selector) {
   	  this.use(selector, function(widget) {
   	    widget.addEvents(events);
-  	  })
+  	  }.bind(this))
 	  }, this);
   }
 });
