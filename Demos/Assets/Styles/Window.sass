@@ -43,29 +43,28 @@ v\:*
 
   &.input input, &.textarea textarea
     :border 0
-    :line-height 20px
-    :font-size 16px
+    :line-height 14px
+    :font-size 12px
     :padding-left 4px
-    :padding-top 3px
-    :padding-bottom 3px
-    :font-family Georgia
+    :font-family Tahoma
     :background none
     :display block
+    
+  &.input.search input
+    :padding-left 0
     
   &.textarea textarea
     :padding-top 2px
     :margin 0
 
   &.window
-    :line-height 24px
+    :line-height 16px
   
     .header
       *
         :cursor default
       .buttons
-        :position absolute
-        :top 0
-        :left 0
+        :position relative
         :z-index 5
         
       .toggler

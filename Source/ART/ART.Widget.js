@@ -213,9 +213,7 @@ ART.Widget = new Class({
 	},
 	
   setStyles: function(style, temp) {
-		Hash.each(style, function(value, key) {
-			this.setStyle(key, style[key], temp)
-		}, this);
+		for (var key in style) this.setStyle(key, style[key], temp)
   },
 	
 	setStyle: function(property, value, type) {
@@ -243,9 +241,7 @@ ART.Widget = new Class({
 	
 	getStyles: function(properties) {
 	  var result = {};
-	  Array.each(arguments, function(property) {
-	    result[property] = this.getStyle(property);
-	  }.bind(this));
+	  for (var i = 0, property; property = arguments[i++];) result[property] = this.getStyle(property);
 	  return result;
 	},
 
@@ -341,8 +337,8 @@ ART.Widget = new Class({
 			});  
 			height = Math.max.apply(Math, heights)
 		}
-    		height += this.styles.current.paddingTop || 0;
-    		height += this.styles.current.paddingBottom || 0;
+		height += this.styles.current.paddingTop || 0;
+		height += this.styles.current.paddingBottom || 0;
 		return height;
 	},
 	
@@ -442,6 +438,7 @@ ART.Widget = new Class({
 Element.Styles.More = {
 	'float': true,
 	'display': true,
+	'clear': true,
 	'cursor': true,
 	'verticalAlign': true
 }

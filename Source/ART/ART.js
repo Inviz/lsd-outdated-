@@ -75,9 +75,9 @@ $equals = function(one, another) {
 	
 	switch ($type(one)) {
 		case "array":
-			return (one.length == another.length) && one.every(function(value, i) {
-				return $equals(value, another[i]);
-			});
+			if (one.length != another.length) return false;
+			for (var i = 0, j = one.length; i < j; i++) if (!$equals(one[i], another[i])) return false;
+			return true;
 		case "color": 
 			return $equals(one.color, another.color) && (one.type == another.type) 
 		case "object":

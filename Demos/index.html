@@ -66,15 +66,21 @@
   		}
   		
   		
-	    $z = new Moo.Application.Toolbared()	
+	    $z = new Moo.Application.Browser;	
 	    $z.setStyles({top: 50, left: 50, zIndex: 400})
 			$z.header.title.setContent('Hello')
-			$z.content.setContent(new Element('div', {'html': 'H e l l o', 'styles': {'background': 'orange', width: 250, height: 100}}))
+			$z.content.setContent(new Element('div', {'html': 'Orange box of truth (250x100)', 'styles': {'background': 'orange', width: 250, height: 100}}))
 			$z.fit();
 			
   		$y = new Moo.Notification("Hello");
   		$y.header.title.setContent('Warning');
   		$y.content.setContent('Alerto!');
+  		
+  		
+  		$p = new Moo.Application.Preferences;
+  		$p.header.title.setContent('Preferences');
+  		$p.content.setContent('Whatever');
+	    $p.setStyles({top: 50, left: 550, zIndex: 400})
   		
 	  });
 	</script>

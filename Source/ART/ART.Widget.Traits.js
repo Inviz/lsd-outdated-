@@ -6,19 +6,20 @@ ART.Widget.Traits.Expression = new Class({
 	applyExpression: function(expression) {
 	  var parsed = SubtleSlickParse(expression)[0][0];
 	  if (parsed.classes) {
-	    this.classes = this.classes.concat(parsed.classes);
+	    this.classes.push.apply(this.classes, parsed.classes);
 	    parsed.classes.each(function(cls) {
 	      this.addClass(cls)
 	    }, this)
 	  }
 	  
+	  var options = {};
+	  if (parsed.id) options.id = parsed.id;
 	  if (parsed.attributes) {
-	    var options = {id: parsed.id};
   		if (parsed.attributes) parsed.attributes.each(function(attribute) {
   			options[attribute.name] = attribute.value || true;
   		});
-  		$extend(this.options, options);
-	  }
+	  }  
+  	if (parsed.attributes || parsed.id) $extend(this.options, options);
 	  this.fireEvent('expression', [parsed, expression]);
 	}
 });
@@ -494,6 +495,16 @@ ART.Widget.Traits.Fitting = new Class({
     element.setStyle('display', display)
     this.refresh(true)
   }
+});
+
+//Widgets take no space
+ART.Widget.Traits.Shy = new Class({
+  attach: Macro.onion(function() {
+    this.addEvent(this.paint ? 'redraw' : 'render', function(size) {
+      this.element.setStyle('margin-' + (this.styles.current['float'] == 'right' ? 'left' : 'right'), - this.element.scrollWidth)
+      //this.element.setStyle('margin-top', - size.height)
+    }.bind(this))
+  })
 });
 
 ART.Widget.Traits.HasSlider = new Class({

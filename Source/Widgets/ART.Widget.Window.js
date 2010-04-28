@@ -51,7 +51,7 @@ ART.Sheet.define('window.hud #content', {
 ART.Sheet.define('window.hud #header', {
 	'corner-radius-top-left': 'inherit',
 	'corner-radius-top-right': 'inherit',
-	'height': 26,
+	'height': 23,
 	'background-color': [hsb(0, 0, 0, 0.55), hsb(0, 0, 0, 0.5)],
 	'reflection-color': [hsb(0, 0, 0, 0), hsb(0, 0, 0, 0)]
 });
@@ -129,38 +129,37 @@ ART.Sheet.define('window.fancy', {
 });
 
 
+ART.Sheet.define('window#preferences', {
+  'stroke-width': 1,
+  'stroke-color': hsb(0, 0, 40, 0.5),
+	'corner-radius-bottom-left': 0,
+	'corner-radius-bottom-right': 0
+});
+ART.Sheet.define('window#preferences #content', {		
+	'width': 400,
+	'height': 200
+});
+
+
 ART.Sheet.define('window.fancy:dragged', {		
   'cursor': 'move',
-  'stroke-dash': '10, 2, 2',
 	'stroke-color': hsb(0, 0, 10, 0.2),
 	'shadow-blur': 25,
 	'shadow-offset-y': 12,
 });
 
-
-
-ART.Sheet.define('input, textarea', {		
-	'corner-radius': 3,
-	'stroke-color': hsb(0, 0, 50),
-	'background-color': [hsb(0, 0, 90), hsb(0, 0, 95)],
-	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 70, 0)],
-	'width': 200,
-	'height': 26
+ART.Sheet.define('window#browser:dragged', {	
+  'stroke-dash': '10, 2, 2',
 });
 
-
-ART.Sheet.define('textarea', {		
-  'height': 88
-});
-
-ART.Sheet.define('input:focused, textarea:focused', {		
-  'stroke-color': hsb(212, 58, 93)
-});
 
 ART.Sheet.define('window.fancy #header', {
 	'corner-radius-top-left': 'inherit',
 	'corner-radius-top-right': 'inherit',
 	'padding-right': 5,
+	'padding-top': 5,
+	'padding-left': 5,
+	'padding-bottom': 5,
 	'height': 'auto',
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
 	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
@@ -169,8 +168,13 @@ ART.Sheet.define('window.fancy #header', {
 	'border-bottom-color': '#979797'
 });
 
+ART.Sheet.define('window#preferences #header input#search', {
+	'float': 'right'
+})
+
 ART.Sheet.define('window.fancy #header #toolbar', {
 	'clear': 'both',
+	'padding-top': 5,
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
 	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)]
 });
@@ -195,14 +199,12 @@ ART.Sheet.define('window.fancy #footer', {
 
 ART.Sheet.define('window #header #buttons', {
 	'float': 'left',
-	'height': 24,
-	'margin-top': 5
+	'height': 16
 });
 
 ART.Sheet.define('window #header #toggler', {
 	'float': 'right',
 	'margin-left': -20,
-	'margin-top': 5,
 	'height': 8,
 	'width': 18,
 	'corner-radius': 4,
@@ -215,7 +217,7 @@ ART.Sheet.define('window #header #toggler:active', {
 })
 
 
-ART.Sheet.define('window #header #buttons button, window #header #toggler, window #header #toolbar button', {
+ART.Sheet.define('window #header #buttons button, window #header #toggler, window #header #toolbar button, input', {
   'shadow-blur': 1,
 	'shadow-offset-y': 1,
 	'shadow-color': hsb(0, 0, 77)
@@ -235,7 +237,7 @@ ART.Sheet.define('window.fancy button', {
 	'glyph-color': hsb(0, 0, 30),
 	
 	'float': 'left',
-	'margin-left': 5
+	'margin-right': 5
 });
 
 ART.Sheet.define('window.fancy button:active', {
@@ -295,25 +297,48 @@ ART.Sheet.define('window #handle:active', {
 });
 
 
-ART.Sheet.define('window #toolbar button', {
-	'height': 36,
-	'width': 36,
-	'margin-bottom': 5
+ART.Sheet.define('window.fancy #toolbar button', {
+	'height': 20,
+	'width': 20,
+  'glyph-top': 5,
+  'glyph-left': 5,
 });
 
-ART.Sheet.define('window.fancy:minified #header #toolbar button', {
-	'height': 16,
-	'width': 16,
-	'glyph-top': 0,
-	'glyph-left': 4
+ART.Sheet.define('window.fancy #toolbar button.left', {
+	'corner-radius': [3, 0, 0, 3],
+	'width': 25,
+	'glyph-left': 8,
+	'glyph-top': 6,
+	'margin-right': 0,
+});
+
+ART.Sheet.define('window.fancy #toolbar button.right', {
+	'corner-radius': [0, 3, 3, 0],
+	'margin-left': -1,
+	'glyph-left': 8,
+	'glyph-top': 6,
+	'width': 25
 });
 
 ART.Sheet.define('window.fancy #header #toolbar button', {
-	'glyph-scale': 2,
-	'glyph-top': 6,
-	'glyph-left': 6,
 	'background-color': [hsb(0, 0, 99), hsb(0, 0, 74)],
 	'reflection-color': [hsb(0, 0, 30, 0), hsb(0, 0, 40, 0.3)]
+});
+
+ART.Sheet.define('window#browser #header #toolbar button', {
+  'glyph-scale': 2,
+  'glyph-top': 6,
+  'glyph-left': 6,
+	'height': 36,
+	'width': 36
+});
+
+ART.Sheet.define('window#browser:minified #header #toolbar button', {
+	'height': 16,
+	'width': 16,
+	'glyph-top': 2,
+	'glyph-left': 2,
+	'glyph-scale': 1
 });
 
 ART.Sheet.define('window.fancy #header #toolbar button:disabled', {
@@ -334,23 +359,32 @@ ART.Sheet.define('window.fancy #header #toolbar button#reload', {
 ART.Sheet.define('window.fancy #header #toolbar button#wrench', {
 	'glyph': ART.Glyphs.wrench
 });
+
+
 ART.Sheet.define('window.fancy #header #toolbar button#back', {
-	'glyph': ART.Glyphs.triangleLeft,
+	'glyph': ART.Glyphs.triangleLeft
+});
+
+ART.Sheet.define('window#browser #header #toolbar button#back', {
 	'glyph-top': 11,
 	'glyph-left': 10,
 	'corner-radius': 18,
 	'glyph-scale': 1.5,
 	'z-index': 10
 });
+
 ART.Sheet.define('window.fancy #header #toolbar button#forward', {
-	'glyph': ART.Glyphs.triangleRight,
+	'glyph': ART.Glyphs.triangleRight
+});
+
+ART.Sheet.define('window#browser #header #toolbar button#forward', {
 	'height': 25,
 	'corner-radius': [0, 13, 13, 0],
 	'glyph-scale': 1.2,
 	'glyph-left': 15,
 	'glyph-top': 7,
 	'margin-top': 5,
-	'margin-left': -10,
+	'margin-left': -15,
 	'z-index': 5
 });
 
@@ -360,15 +394,16 @@ ART.Sheet.define('window.fancy:minified #header #toolbar button', {
 	'glyph-left': 2
 });
 
-ART.Sheet.define('window.fancy:minified #header #toolbar button#forward, window.fancy:minified #header #toolbar button#back', {
+ART.Sheet.define('window#browser:minified #header #toolbar button#forward, window#browser:minified #header #toolbar button#back', {
 	'corner-radius': 5,
 	'glyph-scale': 1,
 	'glyph-top': 4,
 	'glyph-left': 4
 });
 
-ART.Sheet.define('window.fancy:minified #header #toolbar button#forward', {
-  'margin-left': 5,
+ART.Sheet.define('window#browser:minified #header #toolbar button#forward', {
+  'margin-right': 5,
+  'margin-left': 0,
 	'margin-top': 0,
 	'height': 16
 });

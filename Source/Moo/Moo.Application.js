@@ -8,7 +8,7 @@ Moo.Application = new Class({
   
 	layout: {
 	  'section#header': {
-	    '#buttons': {
+	    '#buttons[shy]': {
         'button#close': {},
 	      'button#minimize': {},
         'button#maximize': {}
@@ -27,7 +27,36 @@ Moo.Application = new Class({
 	}
 });
 
-Moo.Application.Toolbared = new Class({
+Moo.Application.Preferences = new Class({
+	Extends: Class.inherit(
+	  ART.Widget.Window,
+	  ART.Widget.Traits.Draggable,
+	  ART.Widget.Traits.Fitting
+	),
+  
+  expression: "window.fancy#preferences",
+  
+	layout: {
+	  'section#header': {
+      'button#toggler[shy]': {},
+	    '#buttons[hoverable][shy]': {
+        'button#close': {},
+	      'button#minimize': {},
+        'button#maximize:disabled': {}
+	    },
+	    '#title[container]': {},
+  	  '#toolbar': {
+        'input[type=search]#search': {},
+  	    'button#back.left': {},
+  	    'button#forward.right:disabled': {},
+  	    'button#index:disabled': 'Show All'
+  	  }
+	  },
+	  'section#content[container][scrollable]': {}
+	}
+})
+
+Moo.Application.Browser = new Class({
 	Extends: Class.inherit(
 	  ART.Widget.Window,
 	  ART.Widget.Traits.Draggable,
@@ -39,12 +68,12 @@ Moo.Application.Toolbared = new Class({
 	  })
 	),
 	
-  expression: "window.fancy",
+  expression: "window.fancy#browser",
   
 	layout: {
 	  'section#header': {
-      'button#toggler': {},
-	    '#buttons[hoverable]': {
+      'button#toggler[shy]': {},
+	    '#buttons[hoverable][shy]': {
         'button#close': {},
 	      'button#minimize': {},
         'button#maximize': {}
@@ -53,7 +82,6 @@ Moo.Application.Toolbared = new Class({
   	  '#toolbar': {
   	    'button#back': {},
   	    'button#forward:disabled': {},
-  	    'button#search': {},
   	    'button#search': {},
   	    'button#wrench': {},
   	    'button#reload': {}

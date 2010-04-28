@@ -31,7 +31,10 @@ ART.Layout = new Class({
 		widget.build();
     
     if (parent) widget.inject(parent)
-    if (parsed.classes) parsed.classes.each(widget.addClass.bind(widget));
+    if (parsed.classes) {
+      widget.classes.push.apply(widget.classes, parsed.classes);
+      parsed.classes.each(widget.addClass.bind(widget));
+    }
 		if (parsed.pseudos) {
 		  parsed.pseudos.each(function(pseudo) {
 		    widget.setStateTo(pseudo.name, true)
