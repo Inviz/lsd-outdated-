@@ -81,7 +81,7 @@ ART.RectangleStroke = new Class({
   	if (stroke && strokeColor) this.stroke(strokeColor, stroke, cap);
   	if (color) this.fill.apply(this, $splat(color));
   	this.dash(dash);
-  	if (stroke || shadow) this.translate(stroke / 2 + shadow - x, stroke / 2 + shadow - y)
+  	if (stroke || shadow) this.translate(stroke / 2 + (shadow > 1 ? shadow : 0) - x, stroke / 2 + shadow - y)
   }
 })
 
@@ -95,7 +95,7 @@ ART.Shadow = new Class({
     this.draw(width + stroke * 2, height + stroke * 2, cornerRadius.map(function(r) { return r + stroke}));
   	if (color) this.fill.apply(this, $splat(color));
   	if (shadow) this.blur(shadow);
-  	this.translate(x + shadow, (shadow > 1 ? shadow : 0) + y)
+  	this.translate(x + (shadow > 1 ? shadow : 0), (shadow > 1 ? shadow : 0) + y)
   }
 });
 

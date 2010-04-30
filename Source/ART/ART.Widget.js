@@ -346,7 +346,7 @@ ART.Widget = new Class({
 	  var width = this.element.scrollWidth;
 	  if (width > 0) {
 	    var parent = this.parentWidget;
-	    if (this.styles.current.width == "auto" && (!parent || parent.styles.current.width != "auto")) width -= ((this.offset.padding.left || 0) + (this.offset.padding.right || 0)) 
+	    if (this.styles.current.width == "auto" && this.styles.current.display != "block") width -= ((this.offset.padding.left || 0) + (this.offset.padding.right || 0)) 
 	    width -= ((this.offset.paint.left || 0) + (this.offset.paint.right || 0)) 
 	  }
 		return width;

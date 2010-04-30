@@ -49,7 +49,7 @@ Moo.Application.Preferences = new Class({
         'input[type=search]#search': {},
   	    'button#back.left': {},
   	    'button#forward.right:disabled': {},
-  	    'button#index:disabled': 'Show All'
+  	    'button#index': 'Show All'
   	  }
 	  },
 	  'section#content[container][scrollable]': {}

@@ -23,9 +23,18 @@ ART.Layout = new Class({
 		if (!parsed.id) throw new Exception.Misconfiguration(this, "You need to specify id for layout item for " + selector);
 		var options = {id: parsed.id};
 		var mixins = [parsed.tag];
+		var styles;
 		if (parsed.attributes) parsed.attributes.each(function(attribute) {
-			options[attribute.name] = attribute.value || true;
-			if (ART.Widget.Traits[attribute.name.capitalize()]) mixins.push(attribute.name);
+		  if (attribute.name == "style") {
+		    styles = {};
+		    attribute.value.split(';').each(function(definition) {
+		      var bits = definition.split(':');
+		      styles[bits[0]] = bits[1];
+		    })
+		  } else {
+  			options[attribute.name] = attribute.value || true;
+  			if (ART.Widget.Traits[attribute.name.capitalize()]) mixins.push(attribute.name);
+		  }
 		});
 		var widget = ART.Widget.create(mixins, options);
 		widget.build();
@@ -40,6 +49,7 @@ ART.Layout = new Class({
 		    widget.setStateTo(pseudo.name, true)
 		  });
 		}
+		if (styles) widget.setStyles(styles);
 		if ($type(layout) == 'string') widget.setContent(layout);
     else this.render(layout, widget);
   },

@@ -112,7 +112,8 @@ ART.Sheet.define('window.hud #buttons #close', {
 });
 
 ART.Sheet.define('window #footer, window #header', {	
-  'width': 'auto'
+  'width': 'auto',
+  'display': 'block'
 });
 
 ART.Sheet.define('window #content', {
@@ -205,6 +206,7 @@ ART.Sheet.define('window #header #buttons', {
 ART.Sheet.define('window #header #toggler', {
 	'float': 'right',
 	'margin-left': -20,
+	'margin-right': 0,
 	'height': 8,
 	'width': 18,
 	'corner-radius': 4,
@@ -226,9 +228,9 @@ ART.Sheet.define('window #header #buttons button, window #header #toggler, windo
 ART.Sheet.define('window #header #buttons button, window #header #toggler', {
 	'shadow-color': hsb(0, 0, 85)
 })
+
 ART.Sheet.define('window.fancy button', {
 	'height': 13,
-	'width': 13,
 	'cursor': 'pointer',
 	'fill-color': [hsb(0, 0, 75), hsb(0, 0, 100, 0.3)],
 	'background-color': [hsb(0, 0, 95), hsb(0, 0, 0, 0)],
@@ -302,6 +304,13 @@ ART.Sheet.define('window.fancy #toolbar button', {
 	'width': 20,
   'glyph-top': 5,
   'glyph-left': 5,
+});
+
+ART.Sheet.define('window.fancy #toolbar button:text', {
+  'width': 'auto',
+  'padding-left': 5,
+  'padding-right': 5,
+  'display': 'block'
 });
 
 ART.Sheet.define('window.fancy #toolbar button.left', {

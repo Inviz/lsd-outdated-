@@ -59,12 +59,12 @@ ART.Widget.Button = new Class({
 	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke  + shadow - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke  + (shadow > 1 ? shadow : 0) - x, stroke + shadow - y)
 	  }],
 	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke + (shadow > 1 ? shadow : 0) - x, stroke + shadow - y)
 	  }],
     glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
 	    if (!glyph) return;
@@ -78,6 +78,10 @@ ART.Widget.Button = new Class({
 	onClick: function() {
 		this.fireEvent('click', arguments);
 	},
+
+  setContent: Macro.onion(function(content) {
+    this.addPseudo('text')
+  }),
 
 	makeText: function(text, size){
 		if (!this.layers.text) return;
