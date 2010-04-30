@@ -122,7 +122,10 @@ ART.Sheet.define('window #content', {
 })
 
 ART.Sheet.define('window.fancy', {		
-	'corner-radius': 5,
+  'corner-radius-bottom-left': 5,
+  'corner-radius-bottom-right': 5,
+  'corner-radius-top-left': 5,
+  'corner-radius-top-right': 5,
 	'stroke-width': 5,
 	'stroke-cap': 'square',
 	'stroke-color': hsb(0, 0, 10, 0.5),
@@ -136,9 +139,12 @@ ART.Sheet.define('window#preferences', {
 	'corner-radius-bottom-left': 0,
 	'corner-radius-bottom-right': 0
 });
+
 ART.Sheet.define('window#preferences #content', {		
 	'width': 400,
-	'height': 200
+	'height': 'auto',
+	'background-color': hsb(0, 0, 93),
+	'border-top': '1px solid #666'
 });
 
 
@@ -229,6 +235,11 @@ ART.Sheet.define('window #header #buttons button, window #header #toggler', {
 	'shadow-color': hsb(0, 0, 85)
 })
 
+ART.Sheet.define('window #header #buttons button:active', {
+	'shadow-blur': 3,
+	'shadow-color': hsb(0, 0, 0)
+})
+
 ART.Sheet.define('window.fancy button', {
 	'height': 13,
 	'cursor': 'pointer',
@@ -274,6 +285,10 @@ ART.Sheet.define('window #maximize', {
 ART.Sheet.define('window.fancy:minified #content', {
 	'background-color': [hsb(0, 0, 80, 0.5), hsb(0, 0, 70, 0.7)],
 	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 0, 0)],
+});
+
+ART.Sheet.define('window#preferences:minified #header #toolbar', {
+	'display': 'none'
 });
 
 ART.Sheet.define('window #handle', {
@@ -438,10 +453,12 @@ ART.Widget.Window = new Class({
 	  shadow:  ['shadow'],
 	  stroke:  ['rectangle-stroke'],
 	  reflection: ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
+      if (!color) return false;
   	  this.draw(width, height, cornerRadius);
   		if (color) this.fill.apply(this, $splat(color));
   	}],
   	background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
+      if (!color) return false;
   	  this.draw(width, height, cornerRadius);
   		if (color) this.fill.apply(this, $splat(color));
   	}],

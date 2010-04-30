@@ -54,17 +54,11 @@ ART.Widget.Paint = new Class({
 		if (!this.parent.apply(this, arguments)) return;
 		if (!this.paint) return;
 		if (!this.outdated) return;
-		
-		
-	  if (!this.layered) {
-	    this.layered = true;
-	    this.paint.grab.apply(this.paint, Hash.getValues(this.layers))
-	  }
 	  
 		this.outdated = false;
 		
 		var padding = this.offset.padding = this.getPadding();
-		var offset = this.offset.paint = this.getCanvasOffset()
+		var offset = this.offset.paint = this.getCanvasOffset();
 		for (var property in padding) {
 		  this.offset.total[property] = padding[property] + offset[property];
 
@@ -100,14 +94,6 @@ ART.Widget.Paint = new Class({
     return offset;
 	},
 	
-	getPaintOffsetXY: function(offset) {
-		if (!offset) offset = this.getPaintOffset();
-		return {
-			x: offset.left,
-			y: offset.top
-		}
-	},
-	
 	getOffset: function() {
 		return this.getPaintOffset();
 	},
@@ -124,15 +110,15 @@ ART.Widget.Paint = new Class({
 	
 	setHeight: function(value) {
 		if (!this.parent.apply(this, arguments)) return;
-		var offset = this.getCanvasOffset();
-		if (this.paint) this.paint.setHeight(value + offset.top + offset.bottom);
+		var offset = this.offset.total;
+		//if (this.paint) this.paint.setHeight(value + offset.top + offset.bottom);
 		return true;
 	},
 		
 	setWidth: function(value) {
 		if (!this.parent.apply(this, arguments)) return;
 		var offset = this.getCanvasOffset();
-		if (this.paint) this.paint.setWidth(value + offset.left + offset.right);
+		//if (this.paint) this.paint.setWidth(value + offset.left + offset.right);
 		return true;
 	},
 	

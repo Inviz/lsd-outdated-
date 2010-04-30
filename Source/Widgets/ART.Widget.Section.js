@@ -1,3 +1,15 @@
+ART.Sheet.define('section.row', {
+  
+});
+
+ART.Sheet.define('section.row.odd', {
+  
+});
+
+ART.Sheet.define('section.row.even', {
+  
+});
+
 ART.Widget.Section = new Class({
   Extends: ART.Widget.Paint,
   
@@ -14,6 +26,6 @@ ART.Widget.Section = new Class({
 	layered: {
 	  fill:  ['rectangle-stroke'],
 	  reflection:  ['rectangle', ['reflectionColor']],
-	  background: ['rectangle', ['backgroundColor']],
+	  background: ['rectangle', ['backgroundColor']]
 	}
 })

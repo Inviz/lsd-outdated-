@@ -306,7 +306,7 @@ ART.Widget = new Class({
 	
 	setHeight: function(value, light) {
 	  value = Math.max(this.styles.current.minHeight || 0, value);
-		if (this.size.height == value) return;
+		if (!light && (this.size.height == value)) return;
 		this.size.height = value;
 		if (!light) this.setStyle('height', value);
 		return true;
@@ -321,24 +321,28 @@ ART.Widget = new Class({
 	
 	getClientHeight: function() {
 	  var height = this.styles.current.height;
-  	if (!height || height == "auto") {
-			height = 0;
-      var heights = [height]
-			this.getChildren().each(function(widget) {
-			  var value = widget.getOffsetHeight();
-			  var styles = widget.getStyles('float', 'clear');
-			  if (!value) return;
-			  if (styles.clear && (styles.clear != 'none')) heights = [Math.max.apply(Math, heights)]
-			  if (styles.float && (styles.float != 'auto')) {
-			    heights.push(value)
-			  } else {
-			    heights[0] += value;
-			  }
-			});  
-			height = Math.max.apply(Math, heights)
+	  var auto = height == "auto";
+  	if (!height || auto) {
+  	  height = this.element.offsetHeight;
+  	  if (height > 0) height -= ((this.offset.total.top || 0) + (this.offset.total.bottom || 0))
+			//height = 0;
+      //var heights = [height]
+      //this.getChildren().each(function(widget) {
+			//  var value = widget.getOffsetHeight();
+			//  var styles = widget.getStyles('float', 'clear');
+			//  if (!value) return;
+			//  if (styles.clear && (styles.clear != 'none')) heights = [heights[0] + (heights.length > 1 ? Math.max.apply(Math, heights.slice(1, heights.length)) : 0)]
+			//  if (styles.float && (styles.float != 'auto')) {
+			//    heights.push(value)
+			//  } else {
+			//    heights[0] += value;
+			//  }
+			//  console.info(widget.getSelector(), heights)
+			//});  
+			//height = heights[0] + (heights.length > 1 ? Math.max.apply(Math, heights.slice(1, heights.length)) : 0)
 		}
-		height += this.styles.current.paddingTop || 0;
-		height += this.styles.current.paddingBottom || 0;
+  		height += this.styles.current.paddingTop || 0;
+  		height += this.styles.current.paddingBottom || 0;
 		return height;
 	},
 	
@@ -357,7 +361,13 @@ ART.Widget = new Class({
 		height += (this.styles.current.strokeWidth || 0) * 2
 		height += this.styles.current.borderBottomWidth || 0;
 		height += this.styles.current.borderTopWidth || 0;
+		return height;
+	},
+	
+	getLayoutHeight: function() {
+		var height = this.getOffsetHeight();
 		height += this.styles.current.marginBottom || 0;
+		height += this.styles.current.marginTop || 0;
 		return height;
 	},
 	
@@ -440,7 +450,8 @@ Element.Styles.More = {
 	'display': true,
 	'clear': true,
 	'cursor': true,
-	'verticalAlign': true
+	'verticalAlign': true,
+	'textAlign': true
 }
 
 //Basic widget initialization

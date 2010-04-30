@@ -20,8 +20,8 @@ ART.Layout = new Class({
   materialize: function(selector, layout, parent) {
     var parsed = SubtleSlickParse(selector)[0][0]
     if (!parsed.tag) parsed.tag = 'container';
-		if (!parsed.id) throw new Exception.Misconfiguration(this, "You need to specify id for layout item for " + selector);
-		var options = {id: parsed.id};
+    var options = {};
+		if (parsed.id) options.id = parsed.id
 		var mixins = [parsed.tag];
 		var styles;
 		if (parsed.attributes) parsed.attributes.each(function(attribute) {
@@ -38,6 +38,12 @@ ART.Layout = new Class({
 		});
 		var widget = ART.Widget.create(mixins, options);
 		widget.build();
+		
+		if (!options.id) {
+		  var property = parsed.tag + 's';
+		  if (!parent[property]) parent[property] = [];
+		  parent[property].push(widget)
+		}
     
     if (parent) widget.inject(parent)
     if (parsed.classes) {
@@ -56,7 +62,21 @@ ART.Layout = new Class({
   
   render: function(layout, parent) {
     var widgets = [];
-    for (var selector in layout) widgets.push(this.materialize(selector, layout[selector], parent));
+    switch ($type(layout)) {
+      case "string": 
+        widgets.push(this.materialize(layout, {}, parent));
+        break;
+      case "array": 
+        layout.each(function(widget) {
+          widgets.push.apply(widgets, this.render(widget, parent))
+        }, this)
+        break;
+      case "object":
+        for (var selector in layout) {
+          widgets.push(this.materialize(selector, layout[selector], parent));
+        }
+        break;
+    }
     return widgets;
   },
 

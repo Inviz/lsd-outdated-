@@ -1,6 +1,6 @@
 ART.Sheet.define('slider', {
 	'height': 3,
-	'margin-top': 6,
+	'margin-top': 10,
 	'margin-bottom': 6,
 	'width': 100,
 	'fillColor': hsb(0, 0, 0, 0.3),

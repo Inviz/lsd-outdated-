@@ -6,6 +6,12 @@ v\:* {
 
 .art.section {
   overflow: hidden; }
+.art.section, .art.button {
+  font-family: Helvetica;
+  font-size: 12px; }
+.art.button {
+  text-shadow: 0 1px 0 #e5e5ee;
+  filter: dropshadow(color=#e5e5ee,offX=0,offY=1px); }
 .art.scrollbar.vertical, .art.scrollbar.horizontal {
   position: absolute; }
 .art.scrollbar.vertical {
@@ -17,9 +23,9 @@ v\:* {
 .art.input input, .art.textarea textarea {
   border: 0;
   line-height: 14px;
-  font-size: 12px;
+  font-size: 13px;
   padding-left: 4px;
-  font-family: Tahoma;
+  font-family: Helvetica;
   background: none;
   display: block; }
 .art.input.search input {
@@ -43,7 +49,7 @@ v\:* {
     z-index: 4;
     text-align: center; }
     .art.window .title .container {
-      font-size: 12px; }
+      font-size: 13px; }
   .art.window .footer .handle {
     z-index: 10; }
   .art.window.fancy .title .container {

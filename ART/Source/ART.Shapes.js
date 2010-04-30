@@ -65,6 +65,7 @@ ART.Rectangle = new Class({
 	},
 	
 	paint: function(width, height, cornerRadius, color) {
+    if (!color) return false;
 	  this.draw(width, height, cornerRadius);
 		if (color) this.fill.apply(this, $splat(color));
 	}
@@ -77,11 +78,12 @@ ART.RectangleStroke = new Class({
   properties: ['width', 'height', 'cornerRadius', 'strokeColor', 'strokeWidth', 'strokeCap', 'strokeDash', 'fillColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'],
   
   paint: function(width, height, cornerRadius, strokeColor, stroke, cap, dash, color, shadow, x, y) {
+    if (!(color || stroke)) return false;
     this.draw(width + stroke, height + stroke, cornerRadius.map(function(r) { return r + stroke / 2}));
   	if (stroke && strokeColor) this.stroke(strokeColor, stroke, cap);
   	if (color) this.fill.apply(this, $splat(color));
   	this.dash(dash);
-  	if (stroke || shadow) this.translate(stroke / 2 + (shadow > 1 ? shadow : 0) - x, stroke / 2 + shadow - y)
+  	if (stroke || shadow) this.translate(stroke / 2 + (shadow > 3 ? shadow : Math.max(0, shadow - 1)) - x, stroke / 2 + shadow - y)
   }
 })
 
@@ -92,10 +94,11 @@ ART.Shadow = new Class({
   properties: ['width', 'height', 'cornerRadius', 'strokeWidth', 'shadowBlur', 'shadowColor', 'shadowOffsetX', 'shadowOffsetY'],
   
   paint: function(width, height, cornerRadius, stroke, shadow, color, x, y) {
+    if (!(color || stroke)) return false;
     this.draw(width + stroke * 2, height + stroke * 2, cornerRadius.map(function(r) { return r + stroke}));
   	if (color) this.fill.apply(this, $splat(color));
   	if (shadow) this.blur(shadow);
-  	this.translate(x + (shadow > 1 ? shadow : 0), (shadow > 1 ? shadow : 0) + y)
+  	this.translate(x + Math.max(shadow - 1), (shadow > 1 ? shadow : 0) + y)
   }
 });
 
@@ -104,6 +107,7 @@ ART.Shape.implement({
 	properties: ['glyph', 'glyphColor'],
 	
   paint: function(glyph, color) {
+    if (!(color && glyph)) return false;
 	  this.draw(glyph);
 		if (color) this.fill.apply(this, $splat(color));
 	}

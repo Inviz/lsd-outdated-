@@ -9,7 +9,6 @@ License:
 
 ART.Sheet.define('button', {
 	'font': 'moderna',
-	'font-size': 11,
 	'font-color': hsb(0, 100, 10),
 	'padding': [0, 0, 0, 0],
 
@@ -57,20 +56,22 @@ ART.Widget.Button = new Class({
 	  shadow:  ['shadow'],
     stroke: ['rectangle-stroke'],
 	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
+      if (!color) return false;
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke  + (shadow > 1 ? shadow : 0) - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke  + Math.max(shadow - 1) - x, stroke + shadow - y)
 	  }],
 	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
+      if (!color) return false;
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + (shadow > 1 ? shadow : 0) - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke + Math.max(shadow - 1) - x, stroke + shadow - y)
 	  }],
     glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
-	    if (!glyph) return;
+      if (!(color && glyph)) return false;
 	    this.draw(glyph);
   		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
+  		this.translate(left + stroke + Math.max(shadow - 1) - x, top + stroke + shadow - y);
   		if (scale) this.scale(scale, scale)
 	  }]
 	},

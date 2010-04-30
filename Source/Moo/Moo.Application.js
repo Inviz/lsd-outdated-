@@ -31,7 +31,10 @@ Moo.Application.Preferences = new Class({
 	Extends: Class.inherit(
 	  ART.Widget.Window,
 	  ART.Widget.Traits.Draggable,
-	  ART.Widget.Traits.Fitting
+	  ART.Widget.Traits.Fitting,
+	  Widget.Stateful({
+	    'minified': ['minify', 'enlarge', 'mutate']
+	  })
 	),
   
   expression: "window.fancy#preferences",
@@ -52,7 +55,31 @@ Moo.Application.Preferences = new Class({
   	    'button#index': 'Show All'
   	  }
 	  },
-	  'section#content[container][scrollable]': {}
+	  'section#content[container][scrollable]': {
+	    'form.two-column#appearance': {
+  	    'section#first': [
+  	      {'label[for=appearance]': 'Text input:'},
+  	      'input#appearance',
+  	      {'label[for=appearance]': 'Slider:'},
+    	    'slider#count'
+  	    ],
+  	    'section#second': [
+  	      {'label[for=appearance]': 'Text input:'},
+  	      'input#appearance'
+  	    ],
+  	    'section#third': {}
+	    }
+	  }
+	},
+
+	events: {
+	  header: {
+	    toggler: {
+	      element: {
+	        click: 'mutate'
+	      }
+	    }
+	  }
 	}
 })
 
