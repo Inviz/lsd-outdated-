@@ -9,6 +9,9 @@ Class.inherit = function(kls) {
 Class.Mergers = {
   events: function(mixin) {
     this.events = $mixin(this.events || {}, mixin.events);
+  },
+  layered: function(mixin) {
+    this.layered = $mixin(this.layered || {}, mixin.layered)
   }
 }
 

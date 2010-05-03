@@ -41,7 +41,7 @@ ART.Widget.Paint = new Class({
 	build: function() {
 		if (!this.parent.apply(this, arguments)) return;
 		this.paint = new ART();
-		this.element.setStyle('position', this.position || 'relative');
+		this.element.setStyle('position', this.styles.current.position || this.position || 'relative');
 		$(this.paint).setStyles({
 			'position': 'absolute',
 			'top': 0,

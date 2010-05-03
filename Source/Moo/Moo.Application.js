@@ -49,7 +49,7 @@ Moo.Application.Preferences = new Class({
 	    },
 	    '#title[container]': {},
   	  '#toolbar': {
-        'input[type=search]#search': {},
+        'input-search[type=search]#search': {},
   	    'button#back.left': {},
   	    'button#forward.right:disabled': {},
   	    'button#index': 'Show All'
@@ -144,7 +144,7 @@ Moo.Notification = new Class({
   
   layout: {
 	  'section#header': {
-	    '#buttons': {
+	    '#buttons[shy]': {
         'button#close': {}
 	    },
 	    '#title[container]': {}

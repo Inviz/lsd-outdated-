@@ -34,9 +34,11 @@ v\:* {
   padding-left: 4px;
   font-family: Helvetica;
   background: none;
-  display: block; }
+  display: block;
+  outline: none; }
 .art.input.search input {
-  padding-left: 0; }
+  padding-left: 0;
+  float: left; }
 .art.textarea textarea {
   padding-top: 2px;
   margin: 0; }

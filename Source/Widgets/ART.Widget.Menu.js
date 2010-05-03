@@ -1,5 +1,5 @@
 ART.Sheet.define('menu', {
-  'background-color': hsb(0, 0, 95),
+  'background-color': hsb(0, 0, 100),
   'shadow-color': hsb(0, 0, 30, 0.6),
   'shadow-blur': 15,
   'shadow-offset-y': 3,

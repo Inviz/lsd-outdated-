@@ -77,9 +77,16 @@ ART.Widget.Traits.Layered = new Class({
       var style = this.getChangedStyles.apply(this, properties);
       if (style) {
         var value = (args.render || instance.paint).apply(instance, Hash.getValues(style));
-        if ((value !== false) && !injected) {
+        var stop = (value === false);
+        if (!stop) {
+          if (injected) return;
           this.paint.grab(instance);
           injected = true;
+        } else{
+          if (!injected) return;
+          console.error(value, args.name, instance.paint, instance.element)
+          instance.eject();
+          injected = false;
         }
       }
     });
@@ -178,7 +185,7 @@ ART.Widget.Traits.LayoutEvents = new Class({
   
   attachLayoutEvents: function(events) {
 		var callbacks = {};
-		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider', 'outer'];
+		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider', 'outer', 'menu'];
 		var walk = function(tree, prefix) {
 		  if (!prefix) prefix = '';
   		for (var type in tree) {
@@ -600,7 +607,10 @@ ART.Widget.Traits.HasInput = new Class({
       width -= glyph;
       this.input.setStyle('margin-left', glyph);
     }
+    if (this.canceller) width -= this.canceller.getLayoutWidth();
+    if (this.glyph) width -= this.glyph.getLayoutWidth();
     this.input.setStyle('width', width);
+    return true;
   }
 })
 
@@ -624,12 +634,38 @@ ART.Widget.Traits.OuterClick = new Class({
 ART.Widget.Traits.HasMenu = new Class({	
   Extends: ART.Widget.Traits.OuterClick,
   
+  options: {
+    menu: {
+      position: 'top'
+    }
+  },
+  
   events: {
     outer: {
       element: {
         outerClick: 'collapse'
       }
+    },
+    menu: {
+      self: {
+        redraw: 'repositionMenu'
+      }
     }
+  },
+  
+  attach: Macro.onion(function() {
+    this.addEvents(this.events.menu);
+  }),
+  
+  detach: Macro.onion(function() {
+    this.removeEvents(this.events.menu);
+  }),
+  
+  repositionMenu: function() {
+    if (!this.menu || this.collapsed) return;
+    if (this.options.menu.position == 'bottom') this.menu.setStyle('top', this.getLayoutHeight() + 1);
+    this.menu.setStyle('left', this.offset.paint.left);
+    this.menu.setStyle('width', this.getStyle('width'));
   },
   
   buildMenu: function() {
@@ -638,11 +674,8 @@ ART.Widget.Traits.HasMenu = new Class({
   },
   
   expand: Macro.onion(function() {
-    if (!arguments.callee.built) {
-      arguments.callee.built = true;
-      this.buildMenu();
-    }
-    this.menu.setStyle('width', this.getStyle('width'));
+    if (!this.menu) this.buildMenu();
+    this.repositionMenu();
     this.menu.refresh();
     this.menu.show();
     this.attachOuterClick();
@@ -658,5 +691,14 @@ ART.Widget.Traits.HasMenu = new Class({
 
 
 
-
+ART.Widget.Traits.Icon = new Class({
+  layered: {
+    triangle: ['shape', ['icon', 'iconLeft', 'iconTop', 'iconScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, icon, left, top, scale, stroke, shadow, x, y) {
+	    this.draw(icon)
+  		if (color) this.fill.apply(this, $splat(color));
+  		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
+  		if (scale) this.scale(scale, scale)
+	  }]
+  }
+})
 

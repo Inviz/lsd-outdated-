@@ -25,8 +25,6 @@ ART.Sheet.define('button', {
   
 	'stroke-color': hsb(0, 0, 25, 0.7),
 	'stroke-width': 1,
-	
-	'pill': false,
 
 	'corner-radius': 3,
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],

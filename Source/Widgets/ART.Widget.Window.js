@@ -51,10 +51,18 @@ ART.Sheet.define('window.hud #content', {
 ART.Sheet.define('window.hud #header', {
 	'corner-radius-top-left': 'inherit',
 	'corner-radius-top-right': 'inherit',
-	'height': 23,
+	'height': 28,
 	'background-color': [hsb(0, 0, 0, 0.55), hsb(0, 0, 0, 0.5)],
 	'reflection-color': [hsb(0, 0, 0, 0), hsb(0, 0, 0, 0)]
 });
+
+ART.Sheet.define('window.hud #header #buttons', {
+  'margin-top': 5
+});
+
+ART.Sheet.define('window.hud #title', {
+  'line-height': 24
+})
 
 ART.Sheet.define('window.hud #content', {
   'corner-radius-bottom-left': 'inherit',
@@ -179,7 +187,7 @@ ART.Sheet.define('window#preferences #header input#search', {
 	'float': 'right'
 })
 
-ART.Sheet.define('window.fancy #header #toolbar', {
+ART.Sheet.define('window.fancy #toolbar', {
 	'clear': 'both',
 	'padding-top': 5,
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
@@ -225,7 +233,7 @@ ART.Sheet.define('window #header #toggler:active', {
 })
 
 
-ART.Sheet.define('window #header #buttons button, window #header #toggler, window #header #toolbar button, input', {
+ART.Sheet.define('window #header #buttons button, window #header #toggler, window #toolbar button, input', {
   'shadow-blur': 1,
 	'shadow-offset-y': 1,
 	'shadow-color': hsb(0, 0, 77)
@@ -240,7 +248,7 @@ ART.Sheet.define('window #header #buttons button:active', {
 	'shadow-color': hsb(0, 0, 0)
 })
 
-ART.Sheet.define('window.fancy button', {
+ART.Sheet.define('window button', {
 	'height': 13,
 	'cursor': 'pointer',
 	'fill-color': [hsb(0, 0, 75), hsb(0, 0, 100, 0.3)],
@@ -287,7 +295,7 @@ ART.Sheet.define('window.fancy:minified #content', {
 	'reflection-color': [hsb(0, 0, 100, 0.5), hsb(0, 0, 0, 0)],
 });
 
-ART.Sheet.define('window#preferences:minified #header #toolbar', {
+ART.Sheet.define('window#preferences:minified #toolbar', {
 	'display': 'none'
 });
 
@@ -344,12 +352,12 @@ ART.Sheet.define('window.fancy #toolbar button.right', {
 	'width': 25
 });
 
-ART.Sheet.define('window.fancy #header #toolbar button', {
+ART.Sheet.define('window #toolbar button', {
 	'background-color': [hsb(0, 0, 99), hsb(0, 0, 74)],
 	'reflection-color': [hsb(0, 0, 30, 0), hsb(0, 0, 40, 0.3)]
 });
 
-ART.Sheet.define('window#browser #header #toolbar button', {
+ART.Sheet.define('window#browser #toolbar button', {
   'glyph-scale': 2,
   'glyph-top': 6,
   'glyph-left': 6,
@@ -357,7 +365,7 @@ ART.Sheet.define('window#browser #header #toolbar button', {
 	'width': 36
 });
 
-ART.Sheet.define('window#browser:minified #header #toolbar button', {
+ART.Sheet.define('window#browser:minified #toolbar button', {
 	'height': 16,
 	'width': 16,
 	'glyph-top': 2,
@@ -365,31 +373,31 @@ ART.Sheet.define('window#browser:minified #header #toolbar button', {
 	'glyph-scale': 1
 });
 
-ART.Sheet.define('window.fancy #header #toolbar button:disabled', {
+ART.Sheet.define('window.fancy #toolbar button:disabled', {
 	'glyph-color': hsb(0, 0, 50),
 	'cursor': 'default'
 });
 
-ART.Sheet.define('window.fancy #header #toolbar button:active', {
+ART.Sheet.define('window.fancy #toolbar button:active', {
   'background-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
 });
 
-ART.Sheet.define('window.fancy #header #toolbar button#search', {
+ART.Sheet.define('window.fancy #toolbar button#search', {
 	'glyph': ART.Glyphs.search
 });
-ART.Sheet.define('window.fancy #header #toolbar button#reload', {
+ART.Sheet.define('window.fancy #toolbar button#reload', {
 	'glyph': ART.Glyphs.refresh
 });
-ART.Sheet.define('window.fancy #header #toolbar button#wrench', {
+ART.Sheet.define('window.fancy #toolbar button#wrench', {
 	'glyph': ART.Glyphs.wrench
 });
 
 
-ART.Sheet.define('window.fancy #header #toolbar button#back', {
+ART.Sheet.define('window.fancy #toolbar button#back', {
 	'glyph': ART.Glyphs.triangleLeft
 });
 
-ART.Sheet.define('window#browser #header #toolbar button#back', {
+ART.Sheet.define('window#browser #toolbar button#back', {
 	'glyph-top': 11,
 	'glyph-left': 10,
 	'corner-radius': 18,
@@ -397,11 +405,11 @@ ART.Sheet.define('window#browser #header #toolbar button#back', {
 	'z-index': 10
 });
 
-ART.Sheet.define('window.fancy #header #toolbar button#forward', {
+ART.Sheet.define('window.fancy #toolbar button#forward', {
 	'glyph': ART.Glyphs.triangleRight
 });
 
-ART.Sheet.define('window#browser #header #toolbar button#forward', {
+ART.Sheet.define('window#browser #toolbar button#forward', {
 	'height': 25,
 	'corner-radius': [0, 13, 13, 0],
 	'glyph-scale': 1.2,
@@ -412,20 +420,20 @@ ART.Sheet.define('window#browser #header #toolbar button#forward', {
 	'z-index': 5
 });
 
-ART.Sheet.define('window.fancy:minified #header #toolbar button', {
+ART.Sheet.define('window.fancy:minified #toolbar button', {
 	'glyph-scale': 1,
 	'glyph-top': 2,
 	'glyph-left': 2
 });
 
-ART.Sheet.define('window#browser:minified #header #toolbar button#forward, window#browser:minified #header #toolbar button#back', {
+ART.Sheet.define('window#browser:minified #toolbar button#forward, window#browser:minified #toolbar button#back', {
 	'corner-radius': 5,
 	'glyph-scale': 1,
 	'glyph-top': 4,
 	'glyph-left': 4
 });
 
-ART.Sheet.define('window#browser:minified #header #toolbar button#forward', {
+ART.Sheet.define('window#browser:minified #toolbar button#forward', {
   'margin-right': 5,
   'margin-left': 0,
 	'margin-top': 0,

@@ -247,9 +247,9 @@ ART.Widget = new Class({
 
   getChangedStyles: function(property) {
     var styles = this.getStyles.apply(this, arguments);
-    var last = this.styles.last;
-    if (Hash.every(styles, function(value, key) { return $equals(last[key], value) }.bind(this))) return false;
-    $extend(this.styles.last, styles);
+    //var last = this.styles.last;
+    //if (Hash.every(styles, function(value, key) { return $equals(last[key], value) }.bind(this))) return false;
+    //$extend(this.styles.last, styles);
     return styles;
   },
 	
@@ -364,11 +364,26 @@ ART.Widget = new Class({
 		return height;
 	},
 	
+	getOffsetWidth: function() {
+		var height = this.getClientWidth();
+		height += (this.styles.current.strokeWidth || 0) * 2
+		height += this.styles.current.borderLeftWidth || 0;
+		height += this.styles.current.borderBottomWidth || 0;
+		return height;
+	},
+	
 	getLayoutHeight: function() {
 		var height = this.getOffsetHeight();
-		height += this.styles.current.marginBottom || 0;
-		height += this.styles.current.marginTop || 0;
+		height += ((this.offset.total.top || 0) - (this.offset.padding.top || 0));
+		height += ((this.offset.total.bottom || 0) - (this.offset.padding.bottom || 0));
 		return height;
+	},
+
+	getLayoutWidth: function() {
+		var width = this.getOffsetWidth();
+		width += ((this.offset.padding.left || 0) + (this.styles.current.marginLeft || 0));
+		width += ((this.offset.padding.right || 0) + (this.styles.current.marginRight || 0));
+		return width;
 	},
 	
 	adopt: function(widget) {
