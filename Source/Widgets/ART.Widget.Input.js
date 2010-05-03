@@ -64,7 +64,12 @@ ART.Sheet.define('input#search button#canceller', {
   'background-color': hsb(0, 0, 60),
   'margin-top': 1,
   'margin-right': 4,
-  'margin-left': 0
+  'margin-left': 0,
+  'display': 'none'
+});
+
+ART.Sheet.define('input#search:filled button#canceller', {	
+  'display': 'block'
 });
 
 ART.Sheet.define('textarea', {		
@@ -116,6 +121,7 @@ ART.Widget.Input.Search = new Class({
     Widget.Stateful({
     	'expanded': ['expand', 'collapse']
     }),
+    ART.Widget.Traits.Observer,
     ART.Widget.Traits.HasMenu,
     ART.Widget.Traits.Aware
   ),
@@ -144,8 +150,17 @@ ART.Widget.Input.Search = new Class({
       element: {
         click: 'expand'
       }
+    },
+    canceller: {
+      element: {
+        click: 'empty'
+      }
     }
-  }
+  },
+  
+  empty: Macro.onion(function() {
+    this.input.set('value', '');
+  })
 });
 
 

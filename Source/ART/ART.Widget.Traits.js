@@ -84,7 +84,6 @@ ART.Widget.Traits.Layered = new Class({
           injected = true;
         } else{
           if (!injected) return;
-          console.error(value, args.name, instance.paint, instance.element)
           instance.eject();
           injected = false;
         }
@@ -133,13 +132,18 @@ ART.Widget.Traits.Layout = new Class({
   	      if (events[i].call) { //stick to old behaviour when key: function object is passed
   	        addEvents.call(this, events);
   	      } else {
-        	  events = this.bindEvents($merge(events));
-            addEvents.call(this, events.self);
-        		this.element.addEvents(events.element);
+  	        this.addWidgetEvents(events);
   	      };  
   	      break;
   	    }
   	  }
+  		return events;
+  	},
+  	
+  	addWidgetEvents: function(events) {
+  	  events = this.bindEvents($merge(events));
+      addEvents.call(this, events.self);
+  		this.element.addEvents(events.element);
   		return events;
   	},
 	
@@ -185,7 +189,7 @@ ART.Widget.Traits.LayoutEvents = new Class({
   
   attachLayoutEvents: function(events) {
 		var callbacks = {};
-		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider', 'outer', 'menu'];
+		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider', 'outer', 'menu', 'observer', 'input'];
 		var walk = function(tree, prefix) {
 		  if (!prefix) prefix = '';
   		for (var type in tree) {
@@ -611,6 +615,10 @@ ART.Widget.Traits.HasInput = new Class({
     if (this.glyph) width -= this.glyph.getLayoutWidth();
     this.input.setStyle('width', width);
     return true;
+  },
+  
+  getObservedElement: function() {
+    return this.getInput();
   }
 })
 
@@ -624,6 +632,65 @@ ART.Widget.Traits.OuterClick = new Class({
   
   detachOuterClick: function() {
     this.removeEvents(this.events.outer);
+  }
+});
+
+
+
+ART.Widget.Traits.Observer = new Class({
+  Extends: Widget.Stateful({
+  	'filled': ['fill', 'empty']
+  }),
+  
+  options: {
+    observer: {
+      periodical: true,
+      delay: 200
+    }
+  },
+  
+  events: {
+    observer: {
+      input: {
+        focus: 'attachObserver',
+        blur: 'detachObserver'
+      }
+    }
+  },
+  
+  attach: Macro.onion(function() {
+    this.addEvents(this.events.observer);
+  }),
+  
+  detach: Macro.onion(function() {
+    this.removeEvents(this.events.observer);
+  }),
+  
+  attachObserver: function() {
+    if (!this.observer) this.observer = new Observer(this.getObservedElement(), this.onChange.bind(this), this.options.observer)
+    this.observer.resume();
+  },
+  
+  detachObserver: function() {
+    this.observer.pause();
+  },
+  
+  getObservedElement: Macro.defaults(function() {
+    return this.element;
+  }),
+  
+  onChange: function(value) {
+    if (value.match(/^\s*$/)) {
+      this.empty();
+    } else {
+      this.fill.apply(this, arguments);
+    }
+  },
+  
+  addWidgetEvents: function() {
+    var events = this.parent.apply(this, arguments)
+    this.getInput().addEvents(events.input);
+    return events;
   }
 });
 
