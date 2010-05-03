@@ -73,17 +73,16 @@ $equals = function(one, another) {
 	if (one == another) return true;
 	if ((!one) ^ (!another)) return false;
 	
-	switch ($type(one)) {
-		case "array":
-			if (one.length != another.length) return false;
-			for (var i = 0, j = one.length; i < j; i++) if (!$equals(one[i], another[i])) return false;
-			return true;
-		case "color": 
-			return $equals(one.color, another.color) && (one.type == another.type) 
-		case "object":
-			if (one.equals) return one.equals(another)
-			for (var i in one) if (!$equals(one[i], another[i])) return false;
-			return true;
+	if (one instanceof Array) {
+		if (one.length != another.length) return false;
+		for (var i = 0, j = one.length; i < j; i++) if (!$equals(one[i], another[i])) return false;
+		return true;
+	} else if (one instanceof Color) {
+	  return $equals(one.color, another.color) && (one.type == another.type) 
+	} else if (typeof one == 'object') {
+		if (one.equals) return one.equals(another)
+		for (var i in one) if (!$equals(one[i], another[i])) return false;
+		return true;
 	}
 	return false;
 }
@@ -103,3 +102,15 @@ ART.implement({
 	}
 
 });
+
+ART.SVG.Element.implement({
+  
+	_writeTransform: function(){
+		var transforms = [];
+		for (var transform in this.transform) transforms.push(transform + '(' + this.transform[transform].join(',') + ')');
+		var string = transforms.join(' ');
+		if (string == this.lastTransform) return;
+		this.element.setAttribute('transform', string);
+		this.lastTransform = string;
+	}
+})
