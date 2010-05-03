@@ -178,7 +178,7 @@ ART.Widget.Traits.LayoutEvents = new Class({
   
   attachLayoutEvents: function(events) {
 		var callbacks = {};
-		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider'];
+		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider', 'outer'];
 		var walk = function(tree, prefix) {
 		  if (!prefix) prefix = '';
   		for (var type in tree) {
@@ -563,3 +563,100 @@ ART.Widget.Traits.HasSlider = new Class({
 	})
 	
 });
+
+ART.Widget.Traits.HasInput = new Class({
+  options: {
+    input: {}
+  },
+  
+  events: {
+    input: {}
+  },
+	
+	
+	attach: Macro.onion(function() {
+	  this.getInput().addEvents({
+	    blur: this.blur.bind(this),
+	    focus: this.focus.bind(this)
+	  }).addEvents(this.events.input);
+	  this.addEvent('resize', this.setInputSize.bind(this))
+	}),
+	
+  build: Macro.onion(function() {
+    this.getInput().inject(this.element);
+  }),
+  
+  getInput: Macro.setter('input', function() {
+    return new Element('input', $extend({'type': 'text'}, this.options.input));
+  }),
+  
+  setInputSize: function(size) {
+    var height = size.height - this.input.getStyle('padding-top').toInt() - this.input.getStyle('padding-bottom').toInt();
+    this.input.setStyle('height', height);
+    this.input.setStyle('line-height', height);
+    var width = this.size.width - this.input.getStyle('padding-left').toInt() - this.input.getStyle('padding-right').toInt();
+    if (this.styles.current.glyph) {
+      var glyph = this.layers.glyph.measure().width + (this.styles.current.glyphRight || 0) + (this.styles.current.glyphLeft || 0);
+      width -= glyph;
+      this.input.setStyle('margin-left', glyph);
+    }
+    this.input.setStyle('width', width);
+  }
+})
+
+
+
+ART.Widget.Traits.OuterClick = new Class({
+  
+  attachOuterClick: function() {
+    this.addEvents(this.events.outer);
+  },
+  
+  detachOuterClick: function() {
+    this.removeEvents(this.events.outer);
+  }
+});
+
+
+
+
+
+ART.Widget.Traits.HasMenu = new Class({	
+  Extends: ART.Widget.Traits.OuterClick,
+  
+  events: {
+    outer: {
+      element: {
+        outerClick: 'collapse'
+      }
+    }
+  },
+  
+  buildMenu: function() {
+    this.applyLayout('menu#menu');
+    this.menu.getAnimation().hide();
+  },
+  
+  expand: Macro.onion(function() {
+    if (!arguments.callee.built) {
+      arguments.callee.built = true;
+      this.buildMenu();
+    }
+    this.menu.setStyle('width', this.getStyle('width'));
+    this.menu.refresh();
+    this.menu.show();
+    this.attachOuterClick();
+  }),
+  
+  collapse: Macro.onion(function() {
+    this.menu.hide();
+    this.detachOuterClick();
+  })
+});
+
+
+
+
+
+
+

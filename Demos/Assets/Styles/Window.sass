@@ -20,6 +20,16 @@
 
 
 
+=clearfix
+  &:after
+    :content "."
+    :display block
+    :height 0
+    :clear both
+    :visibility hidden
+    :_display block
+    :zoom 1
+    
 svg
   :display block
   
@@ -29,7 +39,7 @@ v\:*
 .art 
 
   &.section
-    :overflow hidden
+    +clearfix
   &.section, &.button
     :font-family Helvetica
     :font-size 12px
@@ -50,6 +60,7 @@ v\:*
     :border 0
     :line-height 14px
     :font-size 13px
+    :padding-top 4px
     :padding-left 4px
     :font-family Helvetica
     :background none

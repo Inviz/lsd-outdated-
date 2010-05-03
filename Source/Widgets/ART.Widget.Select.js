@@ -1,4 +1,4 @@
-ART.Sheet.define('input, textarea', {		
+ART.Sheet.define('select', {		
 	'corner-radius': 3,
 	'stroke-color': hsb(0, 0, 50),
 	'stroke-width': 1,
@@ -8,23 +8,18 @@ ART.Sheet.define('input, textarea', {
 	'height': 20
 });
 
-ART.Sheet.define('input#search', {	
+ART.Sheet.define('window.fancy select button', {		
+	'width': 20,
 	'height': 20,
-	'corner-radius': 10,
-	'width': 150,
-	'glyph': ART.Glyphs.search,
-	'glyph-color': hsb(0, 0, 50),
-	'glyph-top': 4,
-	'glyph-left': 4,
-	'glyph-right': 4
+	'margin-right': -1,
+	'margin-top': -1,
+	'float': 'right',
+	'glyph-top': 7,
+	'glyph-scale': 0.8,
+	'glyph-left': 7,
+	'glyph': ART.Glyphs.triangleDown
 });
-
-
-ART.Sheet.define('textarea', {		
-  'height': 88
-});
-
-ART.Sheet.define('input:focused, textarea:focused', {		
+ART.Sheet.define('select:focused', {		
   'shadow-color': hsb(212, 58, 93),
   'shadow-blur': 5,
   'shadow-offset-y': 0,
@@ -32,13 +27,16 @@ ART.Sheet.define('input:focused, textarea:focused', {
 });
 
 
-ART.Widget.Input = new Class({
+ART.Widget.Select = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
-    ART.Widget.Traits.HasInput
+    Widget.Stateful({
+    	'expanded': ['expand', 'collapse']
+    }),
+    ART.Widget.Traits.HasMenu
   ),
   
-  name: 'input',
+  name: 'select',
   
   layered: {
     shadow:  ['shadow'],
@@ -60,5 +58,19 @@ ART.Widget.Input = new Class({
   		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
   		if (scale) this.scale(scale, scale)
 	  }]
+	},
+	
+	layout: {
+	  'select-button#button': {}
+	},
+	
+	events: {
+	  element: {
+  	  click: 'expand'
+	  }
 	}
+});
+
+ART.Widget.Select.Button = new Class({
+  Extends: ART.Widget.Button
 })

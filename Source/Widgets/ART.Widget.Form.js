@@ -12,7 +12,7 @@ ART.Sheet.define('form.two-column label', {
   'margin-bottom': 16
 });
 
-ART.Sheet.define('form.two-column input, form.two-column slider', {
+ART.Sheet.define('form.two-column input, form.two-column slider, form.two-column select', {
   'float': 'left',
   'margin-bottom': 16
 });

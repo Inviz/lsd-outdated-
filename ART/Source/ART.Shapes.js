@@ -98,7 +98,7 @@ ART.Shadow = new Class({
     this.draw(width + stroke * 2, height + stroke * 2, cornerRadius.map(function(r) { return r + stroke}));
   	if (color) this.fill.apply(this, $splat(color));
   	if (shadow) this.blur(shadow);
-  	this.translate(x + Math.max(shadow - 1), (shadow > 1 ? shadow : 0) + y)
+  	this.translate(x + (shadow > 3 ? shadow : Math.max(shadow - 1, 0)), (shadow > 3 ? shadow : Math.max(shadow - 1, 0)) + y)
   }
 });
 

@@ -67,7 +67,10 @@ Moo.Application.Preferences = new Class({
   	      {'label[for=appearance]': 'Text input:'},
   	      'input#appearance'
   	    ],
-  	    'section#third': {}
+  	    'section#third': [
+  	      {'label[for=selectbox]': 'Selectbox:'},
+  	      'select#selectbox'
+  	    ]
 	    }
 	  }
 	},
