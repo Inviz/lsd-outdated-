@@ -10,6 +10,16 @@ ART.Sheet.define('slider', {
 	'cornerRadius': 1
 });
 
+
+ART.Sheet.define('slider:focused', {		
+  'shadow-color': hsb(212, 58, 93),
+  'shadow-blur': 5,
+  'shadow-offset-y': 0,
+	'stroke-color': hsb(212, 58, 93, 0.3)
+});
+
+
+
 ART.Sheet.define('slider thumb', {
 	'height': 14,
 	'width': 14,
@@ -26,12 +36,14 @@ ART.Sheet.define('slider thumb', {
 ART.Widget.Slider = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
-    ART.Widget.Traits.HasSlider
+    ART.Widget.Traits.HasSlider,
+    ART.Widget.Traits.Focusable
   ),
   
   name: 'slider',
 	
 	layered: {
+	  shadow: ['shadow'],
     border: ['rectangle-stroke'],
 	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
 	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
@@ -49,6 +61,10 @@ ART.Widget.Slider = new Class({
 	  this.parent.apply(this, arguments);
 	  this.addPseudo(this.options.mode);
 	  this.getSlider();
+	},
+
+	onSet: function() {
+	  this.focus();
 	},
 	
 	layout: {

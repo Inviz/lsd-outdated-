@@ -33,7 +33,8 @@ ART.Widget.Select = new Class({
     Widget.Stateful({
     	'expanded': ['expand', 'collapse']
     }),
-    ART.Widget.Traits.HasMenu
+    ART.Widget.Traits.HasMenu,
+    ART.Widget.Traits.Focusable
   ),
   
   name: 'select',

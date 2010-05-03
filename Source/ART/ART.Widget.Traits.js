@@ -698,6 +698,8 @@ ART.Widget.Traits.Observer = new Class({
 
 
 
+
+
 ART.Widget.Traits.HasMenu = new Class({	
   Extends: ART.Widget.Traits.OuterClick,
   
@@ -754,10 +756,6 @@ ART.Widget.Traits.HasMenu = new Class({
   })
 });
 
-
-
-
-
 ART.Widget.Traits.Icon = new Class({
   layered: {
     triangle: ['shape', ['icon', 'iconLeft', 'iconTop', 'iconScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, icon, left, top, scale, stroke, shadow, x, y) {
@@ -766,6 +764,41 @@ ART.Widget.Traits.Icon = new Class({
   		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
   		if (scale) this.scale(scale, scale)
 	  }]
+  }
+});
+
+
+ART.Widget.Traits.Focusable = new Class({
+  options: {
+    tabindex: 0
+  },
+  
+  getFocuser: Macro.setter('focuser', function() {
+    return new QFocuser(this.getWrapper(), {
+      onWidgetFocus: this.onFocus.bind(this),
+      onWidgetBlur: this.onBlur.bind(this),
+      tabIndex: this.options.tabindex
+    })
+  }),
+  
+  attach: Macro.onion(function() {
+    this.getFocuser();
+  }),
+  
+  focus: Macro.onion(function(element) {
+    this.getFocuser().focus(element || this.element)
+  }),
+  
+  onFocus: Macro.defaults(function() {
+    this.focus();
+  }),
+  
+  onBlur: Macro.defaults(function() {
+    this.blur();
+  }),
+  
+  getKeyListener: function() {
+    return this.getFocuser().getKeyListener()
   }
 })
 

@@ -112,7 +112,11 @@ ART.Widget.Input = new Class({
   		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
   		if (scale) this.scale(scale, scale)
 	  }]
-	}
+	},
+	
+	focus: Macro.onion(function() {
+	  this.input.focus();
+	})
 });
 
 ART.Widget.Input.Search = new Class({
