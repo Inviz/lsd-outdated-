@@ -34,7 +34,8 @@ ART.Widget.Select = new Class({
     	'expanded': ['expand', 'collapse']
     }),
     ART.Widget.Traits.HasMenu,
-    ART.Widget.Traits.Focusable
+    ART.Widget.Traits.Focusable,
+    ART.Widget.Traits.Accessible
   ),
   
   name: 'select',
@@ -70,6 +71,7 @@ ART.Widget.Select = new Class({
   	  click: 'expand'
 	  }
 	}
+	
 });
 
 ART.Widget.Select.Button = new Class({

@@ -78,9 +78,7 @@ Moo.Application.Preferences = new Class({
 	events: {
 	  header: {
 	    toggler: {
-	      element: {
-	        click: 'mutate'
-	      }
+        click: 'mutate'
 	    }
 	  }
 	}
@@ -127,9 +125,7 @@ Moo.Application.Browser = new Class({
 	events: {
 	  header: {
 	    toggler: {
-	      element: {
-	        click: 'mutate'
-	      }
+        click: 'mutate'
 	    }
 	  }
 	}

@@ -11,7 +11,8 @@ ART.Sheet.define('input, textarea', {
 ART.Sheet.define('input#search', {	
 	'height': 20,
 	'corner-radius': 10,
-	'width': 150
+	'width': 150,
+	'fill-color': hsb(0, 0, 100, 1)
 });
 
 ART.Sheet.define('input#search glyph', {	
@@ -27,7 +28,7 @@ ART.Sheet.define('input#search button', {
   'reflection-color': false,
   'background-color': false,
   'stroke-width': 0,
-  'shadow-blur': 0,
+  'shadow-blur': 0
 })
 
 
@@ -127,7 +128,8 @@ ART.Widget.Input.Search = new Class({
     }),
     ART.Widget.Traits.Observer,
     ART.Widget.Traits.HasMenu,
-    ART.Widget.Traits.Aware
+    ART.Widget.Traits.Aware,
+    ART.Widget.Traits.Accessible
   ),
   
   layout: {
@@ -151,9 +153,7 @@ ART.Widget.Input.Search = new Class({
   
   events: {
     glyph: {
-      element: {
-        click: 'expand'
-      }
+      click: 'expand'
     },
     canceller: {
       element: {

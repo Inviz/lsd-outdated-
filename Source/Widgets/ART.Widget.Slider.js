@@ -7,7 +7,10 @@ ART.Sheet.define('slider', {
 	'cursor': 'pointer',
 	'stroke-color': hsb(0, 0, 0, 0.3),
 	'stroke-width': 1,
-	'cornerRadius': 1
+	'cornerRadius': 1,
+  'shadow-color': false,
+  'shadow-blur': 0,
+  'shadow-offset-y': 0
 });
 
 
@@ -28,8 +31,8 @@ ART.Sheet.define('slider thumb', {
 	'reflection-color': ['radial', {0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}],
 	'fill-color': ['radial', {0.5: hsb(0, 0, 100, 0.496875), 0.9: hsb(0, 0, 100, 0)}, {cy: '5%', r: '20%', fy: '5%'}],
 	'background-color': ['radial', {0.3: hsb(0, 0, 35, 0.6), 0.5: hsb(0, 0, 60, 0.5)}],
-	'strokeColor': hsb(0, 0, 30, 0.7),
-	'strokeWidth': 1
+	'stroke-color': hsb(0, 0, 30, 0.7),
+	'stroke-width': 1
 });
 
 
@@ -37,7 +40,8 @@ ART.Widget.Slider = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
     ART.Widget.Traits.HasSlider,
-    ART.Widget.Traits.Focusable
+    ART.Widget.Traits.Focusable,
+    ART.Widget.Traits.Accessible
   ),
   
   name: 'slider',
@@ -69,6 +73,20 @@ ART.Widget.Slider = new Class({
 	
 	layout: {
     'slider-thumb#thumb': {}
+	},
+	
+	shortcuts: {
+	  next: 'increment',
+	  previous: 'decrement'
+	},
+	
+	increment: function() {
+	  console.log(this.slider.step)
+	  this.slider.set(this.slider.step + 10)
+	},
+	
+	decrement: function() {
+	  this.slider.set(this.slider.step - 10)
 	}
 })
 

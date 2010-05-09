@@ -148,11 +148,10 @@ ART.Widget.Traits.Layout = new Class({
   	},
 	
   	removeEvents: function(events) {
-  	  if (events) {
-    	  events = this.bindEvents($merge(events));
-        removeEvents.call(this, events.self);
-    		this.element.removeEvents(events.element);
-  	  }
+  	  events = this.bindEvents($merge(events));
+  	  console.info(events)
+      removeEvents.call(this, events.self);
+  		this.element.removeEvents(events.element);
   		return events;
   	},
   	
@@ -181,6 +180,10 @@ ART.Widget.Traits.Layout = new Class({
 
 })(Events.prototype.addEvents, Events.prototype.removeEvents);
 
+(function() {
+  
+var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider', 'outer', 'menu', 'observer', 'input', 'accessibility'];
+
 ART.Widget.Traits.LayoutEvents = new Class({
   
   addEvents: Macro.onion(function(events) {
@@ -189,12 +192,12 @@ ART.Widget.Traits.LayoutEvents = new Class({
   
   attachLayoutEvents: function(events) {
 		var callbacks = {};
-		var ignored = ['self', 'element', 'parent', 'dragger', 'resizer', 'hover', 'slider', 'outer', 'menu', 'observer', 'input'];
 		var walk = function(tree, prefix) {
 		  if (!prefix) prefix = '';
   		for (var type in tree) {
   		  var event = tree[type];
-  		  if (event.call || ignored.contains(type)) {
+  		  if (ignored.contains(type)) continue;
+  		  if (event.call) {
   		    if (!prefix) continue;
   		    if (!callbacks[prefix]) callbacks[prefix] = {};
   		    callbacks[prefix][type] = event;
@@ -211,6 +214,9 @@ ART.Widget.Traits.LayoutEvents = new Class({
 	  }, this);
   }
 });
+
+
+})();
 
 ART.Widget.Base = new Class({
   Extends: Class.inherit(
@@ -711,16 +717,40 @@ ART.Widget.Traits.HasMenu = new Class({
   
   events: {
     outer: {
-      element: {
-        outerClick: 'collapse'
-      }
+     element: {
+       outerClick: 'collapse'
+     }
     },
     menu: {
       self: {
-        redraw: 'repositionMenu'
+        redraw: 'repositionMenu',
+        blur: 'collapse'
       }
     }
   },
+
+	shortcuts: {
+	  next: 'next',
+	  previous: 'previous',
+	  cancel: 'cancel',
+	  ok: 'select'
+	},
+
+	cancel: function() {
+	  this.collapse();
+	},
+
+	select: function() {
+	  this.collapse();
+	},
+
+	next: function() {
+	  this.expand();
+	},
+
+	previous: function() {
+	  this.expand();
+	},
   
   attach: Macro.onion(function() {
     this.addEvents(this.events.menu);
@@ -731,10 +761,10 @@ ART.Widget.Traits.HasMenu = new Class({
   }),
   
   repositionMenu: function() {
-    if (!this.menu || this.collapsed) return;
-    if (this.options.menu.position == 'bottom') this.menu.setStyle('top', this.getLayoutHeight() + 1);
-    this.menu.setStyle('left', this.offset.paint.left);
-    this.menu.setStyle('width', this.getStyle('width'));
+   if (!this.menu || this.collapsed) return;
+   if (this.options.menu.position == 'bottom') this.menu.setStyle('top', this.getLayoutHeight() + 1);
+   this.menu.setStyle('left', this.offset.paint.left);
+   this.menu.setStyle('width', this.getStyle('width'));
   },
   
   buildMenu: function() {
@@ -752,7 +782,7 @@ ART.Widget.Traits.HasMenu = new Class({
   
   collapse: Macro.onion(function() {
     this.menu.hide();
-    this.detachOuterClick();
+    //this.detachOuterClick();
   })
 });
 
@@ -786,19 +816,152 @@ ART.Widget.Traits.Focusable = new Class({
   }),
   
   focus: Macro.onion(function(element) {
-    this.getFocuser().focus(element || this.element)
+    if (element !== false) this.getFocuser().focus(element || this.element)
   }),
   
   onFocus: Macro.defaults(function() {
+    if (document.activeElement) {
+      var element = $(document.activeElement).getParent()
+      while (element) if (element == this.element) return this.focus(false); else element = element.getParent();
+    }
     this.focus();
   }),
   
   onBlur: Macro.defaults(function() {
     this.blur();
+    this.refresh(true)
   }),
   
   getKeyListener: function() {
     return this.getFocuser().getKeyListener()
   }
-})
+});
 
+
+(function() {
+	var parsed = {};
+	var modifiers = ['shift', 'control', 'alt', 'meta'];
+	var aliases = {
+		'ctrl': 'control',
+		'command': Browser.Platform.mac ? 'meta': 'control',
+		'cmd': Browser.Platform.mac ? 'meta': 'control'
+	}
+	
+	var presets = {
+	  'next': ['right', 'down'],
+	  'previous': ['left', 'up'],
+	  'ok': ['enter', 'space'],
+	  'cancel': ['esc']
+	}
+
+	var parse = function(expression){
+	  if (presets[expression]) expression = presets[expression];
+	  return $splat(expression).map(function(type) {
+  		if (!parsed[type]){
+  			var bits = [], mods = {}, string, event;
+  			if (type.contains(':')) {
+  				string = type.split(':');
+  				event = string[0];
+  				string = string[1];
+  			} else {	
+  				string = type;
+  				event = 'keydown';
+  			}
+  			string.split('+').each(function(part){
+  				if (aliases[part]) part = aliases[part];
+  				if (modifiers.contains(part)) mods[part] = true;
+  				else bits.push(part);
+  			});
+
+  			modifiers.each(function(mod){
+  				if (mods[mod]) bits.unshift(mod);
+  			});
+
+  			parsed[type] = event + ':' + bits.join('+');
+  		}
+  		return parsed[type];
+	  });
+	};
+	
+	Shortcuts = new Class({
+		shortcuts: {},		
+		
+		addShortcuts: function(shortcuts, internal) {
+			Hash.each(shortcuts, function(fn, shortcut) {
+				this.addShortcut(shortcut, fn, internal);
+			}, this)
+		},
+
+		removeShortcuts: function(shortcuts, internal) {
+			Hash.each(shortcuts, function(fn, shortcut) {
+				this.removeShortcut(shortcut, fn, internal);
+			}, this)
+		},
+		
+		addShortcut: function(shortcut, fn, internal) {
+		  parse(shortcut).each(function(cut) {
+  			this.addEvent(cut, fn, internal)
+		  }, this)
+		},
+		
+		removeShortcut: function(shortcut, fn, internal) {
+		  parse(shortcut).each(function(cut) {
+  			this.removeEvent(cut, fn, internal)
+		  }, this)
+		},
+		
+		getKeyListener: function() {
+			return this.element;
+		},
+
+		enableShortcuts: function() {
+			if (!this.shortcutter) {
+				this.shortcutter = function(event) {
+					var bits = [event.key];
+					modifiers.each(function(mod){
+						if (event[mod]) bits.unshift(mod);
+					});
+					this.fireEvent(event.type + ':' + bits.join('+'), arguments)
+				}.bind(this)
+			}
+			if (this.shortcutting) return;
+			this.shortcutting = true;
+			this.getKeyListener().addEvent('keydown', this.shortcutter);
+		},
+
+		disableShortcuts: function() {
+			if (!this.shortcutting) return;
+			this.shortcutting = false;
+			this.getKeyListener().removeEvent('keydown', this.shortcutter);
+		}
+	});
+	
+})();
+
+
+
+ART.Widget.Traits.Accessible = new Class({
+	
+	Implements: [Shortcuts],
+	
+	events: {
+	  accessibility: {
+	    focus: 'enableShortcuts',
+	    blur: 'disableShortcuts'
+	  }
+	},
+	
+	setShortcuts: function() {
+		return this.bindEvents(this.shortcuts || {});
+	},
+	
+	attach: Macro.onion(function() {
+	  var shortcuts = this.setShortcuts();
+		for (var shortcut in this.shortcuts) this.addShortcut(shortcut, shortcuts[shortcut]);
+		this.addEvents(this.events.accessibility);
+	}),
+	
+	detach: Macro.onion(function() {
+		this.removeEvents(this.events.accessibility)
+	})
+});

@@ -7,13 +7,19 @@ Widget.Animated = new Class({
 		if (!this.animation) this.animation = this.getAnimatedElement().get('fade');
 		return this.animation;
 	},
-	
+  
 	show: function() {
-		return this.getAnimation().hide().start('in');
+	  var parent = this.parent;
+		this.getAnimation().start('in').chain(function() {
+		  ART.Widget.prototype.show.apply(this, arguments);
+		}.bind(this))
 	},
 	
 	hide: function() {
-		return this.getAnimation().start('out')
+	  var parent = this;
+		this.getAnimation().start('out').chain(function() {
+		  ART.Widget.prototype.hide.apply(this, arguments);
+		}.bind(this))
 	},
 	
 	remove: function() {
