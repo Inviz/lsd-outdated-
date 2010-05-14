@@ -38,14 +38,19 @@ ART.Sheet.define('input#search button#glyph', {
   'glyph-left': 2,
   'glyph-top': 2,
   'glyph-color': hsb(0, 0, 40),
+  'height': 20,
+  'width': 20,
+  'margin-top': 2,
+  'margin-left': 2,
+  'margin-right': 0
+});
+
+ART.Sheet.define('input#search:detailed button#glyph', {	
+  'icon': ART.Glyphs.triangleDown,
   'icon-left': 14,
   'icon-top': 7,
   'icon-scale': 0.7,
-  'icon': ART.Glyphs.triangleDown,
-  'height': 20,
-  'width': 20,
-  'margin-top': 1,
-  'margin-left': 2,
+  'margin-right': 5
 });
 
 ART.Sheet.define('input#search button#glyph:active', {
@@ -81,7 +86,7 @@ ART.Sheet.define('input:focused, textarea:focused', {
   'shadow-color': hsb(212, 58, 93),
   'shadow-blur': 5,
   'shadow-offset-y': 0,
-	'stroke-color': hsb(212, 58, 93, 0.3)
+	'stroke-color': hsb(212, 58, 93)
 });
 
 
@@ -99,18 +104,18 @@ ART.Widget.Input = new Class({
 	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke  + shadow - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke  + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
 	  }],
 	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
 	  }],
     glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
 	    if (!glyph) return;
 	    this.draw(glyph);
   		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
+  		this.translate(left + stroke + Math.max(shadow - x, 0), top + stroke + Math.max(shadow - y, 0));
   		if (scale) this.scale(scale, scale)
 	  }]
 	},
@@ -124,13 +129,16 @@ ART.Widget.Input.Search = new Class({
   Extends: Class.inherit(
     ART.Widget.Input,
     Widget.Stateful({
-    	'expanded': ['expand', 'collapse']
+    	'expanded': ['expand', 'collapse'],
+    	'detailed': ['enrich', 'clean']
     }),
     ART.Widget.Traits.Observer,
     ART.Widget.Traits.HasMenu,
     ART.Widget.Traits.Aware,
     ART.Widget.Traits.Accessible
   ),
+  
+  items: [1,2],
   
   layout: {
     'input-icon#glyph': {},
@@ -143,12 +151,21 @@ ART.Widget.Input.Search = new Class({
     }
   },
   
+  
+  attach: Macro.onion(function() {
+    if (this.hasItems()) {
+      this.enrich();
+    } else {
+      this.clean();
+    }
+  }),
+  
   setInputSize: Macro.onion(function() {
-    if (!this.resorted) {
+    if (!this.resorted && this.glyph.element.parentNode) {
       this.resorted = true;
       $(this.input).inject(this.glyph, 'after')
     }
-    this.canceller.refresh();
+    if (this.canceller) this.canceller.refresh();
   }),
   
   events: {
@@ -156,9 +173,7 @@ ART.Widget.Input.Search = new Class({
       click: 'expand'
     },
     canceller: {
-      element: {
-        click: 'empty'
-      }
+      click: 'empty'
     }
   },
   

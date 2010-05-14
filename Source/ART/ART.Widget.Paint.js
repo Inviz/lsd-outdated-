@@ -58,11 +58,13 @@ ART.Widget.Paint = new Class({
 		this.outdated = false;
 		
 		var padding = this.offset.padding = this.getPadding();
-		var offset = this.offset.paint = this.getCanvasOffset();
+		var canvas = this.offset.canvas = this.getPaintOffset();
+		var offset = this.offset.paint = this.getPaintOffset();
 		for (var property in padding) {
 		  this.offset.total[property] = padding[property] + offset[property];
 
 		  this.element.setStyle('padding-' + property, padding[property] + offset[property]);
+		  //if (property == 'top' || property == 'left') $(this.paint).setStyle(property, canvas[property])
 		  this.element.setStyle('margin-' + property, (this.styles.current['margin' + property.capitalize()] || 0) - offset[property]);
 		}
 		
@@ -89,9 +91,13 @@ ART.Widget.Paint = new Class({
 	
 	getPaintOffset: function() {
 		var offset = this.getCanvasOffset();
-		var stroke = (this.styles.current.strokeWidth || 0) ;
-		for (var side in offset) if (offset[side] < stroke) offset[side] = stroke;
-    return offset;
+		var stroke = (this.styles.current.strokeWidth || 0);
+		return {
+			left: this.styles.current.width == 'auto' ? Math.max(offset.left, stroke) : offset.left + stroke,
+			top: offset.top,
+			right: stroke + offset.right,
+			bottom: stroke + offset.bottom
+		} 
 	},
 	
 	getOffset: function() {

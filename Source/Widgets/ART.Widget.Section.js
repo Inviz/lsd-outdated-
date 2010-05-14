@@ -10,6 +10,11 @@ ART.Sheet.define('section.row.even', {
   
 });
 
+
+ART.Sheet.define('section', {
+	'width': 'inherit'
+});
+
 ART.Widget.Section = new Class({
   Extends: ART.Widget.Paint,
   

@@ -29,3 +29,9 @@ ART.Glyphs = {
 	triangleRight: "M0,0L8,4L0,8L0,0"
 	
 };
+
+
+ART.Sheet.define('glyph', {
+  'glyph-top': 0,
+  'glyph-left': 0
+})

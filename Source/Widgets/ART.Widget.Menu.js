@@ -34,7 +34,7 @@ ART.Widget.Menu = new Class({
       if (!color) return false;
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + Math.max(shadow - 1) - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow - y)
 	  }]
 	}
 });

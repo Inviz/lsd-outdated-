@@ -14,16 +14,6 @@ ART.Sheet.define('*', {
   'stroke-width': 0
 })
 
-ART.Sheet.define('glyph', {
-  'glyph-top': 0,
-  'glyph-left': 0
-})
-
-
-ART.Sheet.define('section', {
-	'width': 'inherit'
-});
-
 
 ART.Sheet.define('window', {		
 	'display': 'inline-block',
@@ -141,7 +131,7 @@ ART.Sheet.define('window.fancy', {
 });
 
 
-ART.Sheet.define('window#preferences', {
+ART.Sheet.define('window#preferences, window#network', {
   'stroke-width': 1,
   'stroke-color': hsb(0, 0, 40, 0.5),
 	'corner-radius-bottom-left': 0,
@@ -153,6 +143,25 @@ ART.Sheet.define('window#preferences #content', {
 	'height': 'auto',
 	'background-color': hsb(0, 0, 93),
 	'border-top': '1px solid #666'
+});
+
+ART.Sheet.define('window#network #content', {		
+	'width': 500,
+	'height': 'auto',
+	'background-color': hsb(0, 0, 93),
+	'border-top': '1px solid #666'
+});
+
+
+ART.Sheet.define('window#network #actions', {
+  'float': 'right', 
+  'margin-bottom': 10
+});
+
+ART.Sheet.define('window#network #actions button', {
+  'corner-radius': 10,
+  'margin-left': 5,
+  'margin-right': 0
 });
 
 
@@ -183,7 +192,7 @@ ART.Sheet.define('window.fancy #header', {
 	'border-bottom-color': '#979797'
 });
 
-ART.Sheet.define('window#preferences #header input#search', {
+ART.Sheet.define('window #header input#search', {
 	'float': 'right'
 })
 
@@ -217,6 +226,21 @@ ART.Sheet.define('window #header #buttons', {
 	'height': 16
 });
 
+ART.Sheet.define('#legend', {
+  'text-align': 'center',
+  'margin-top': 15
+});
+
+ART.Sheet.define('#legend label, #legend input, #legend select', {
+	'display': 'inline-block',
+	'float': 'none',
+	'vertical-align': 'top'
+});
+
+ART.Sheet.define('#legend label', {
+	'width': 'auto'
+});
+
 ART.Sheet.define('window #header #toggler', {
 	'float': 'right',
 	'margin-left': -20,
@@ -234,7 +258,7 @@ ART.Sheet.define('window #header #toggler:active', {
 
 
 ART.Sheet.define('window #header #buttons button, window #header #toggler, window #toolbar button, input', {
-  'shadow-blur': 1,
+  'shadow-blur': 0,
 	'shadow-offset-y': 1,
 	'shadow-color': hsb(0, 0, 77)
 });
@@ -306,7 +330,7 @@ ART.Sheet.define('window #handle', {
   'glyph-left': 0,
   
 	
-	'width': 15,
+	'width': 13,
 	'height': 15,
 	'shadow-color': hsb(0, 0, 0, 0.4),
 	
@@ -329,10 +353,19 @@ ART.Sheet.define('window.fancy #toolbar button', {
   'glyph-left': 5,
 });
 
-ART.Sheet.define('window.fancy #toolbar button:text', {
+ART.Sheet.define('window.fancy button:text', {
   'width': 'auto',
+  'height': 20,
   'padding-left': 5,
   'padding-right': 5,
+  'display': 'block'
+});
+
+ART.Sheet.define('window.fancy #toolbar button:text', {
+  'width': 'auto'
+});
+
+ART.Sheet.define('window.fancy #toolbar button:text', {
   'display': 'block'
 });
 
@@ -352,9 +385,19 @@ ART.Sheet.define('window.fancy #toolbar button.right', {
 	'width': 25
 });
 
-ART.Sheet.define('window #toolbar button', {
+ART.Sheet.define('window.fancy button', {
 	'background-color': [hsb(0, 0, 99), hsb(0, 0, 74)],
 	'reflection-color': [hsb(0, 0, 30, 0), hsb(0, 0, 40, 0.3)]
+});
+
+ART.Sheet.define('window.fancy button:active', {
+  'background-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
+});
+
+ART.Sheet.define('window.fancy button:disabled', {
+	'glyph-color': hsb(0, 0, 50),
+	'color': '#777',
+	'cursor': 'default'
 });
 
 ART.Sheet.define('window#browser #toolbar button', {
@@ -371,15 +414,6 @@ ART.Sheet.define('window#browser:minified #toolbar button', {
 	'glyph-top': 2,
 	'glyph-left': 2,
 	'glyph-scale': 1
-});
-
-ART.Sheet.define('window.fancy #toolbar button:disabled', {
-	'glyph-color': hsb(0, 0, 50),
-	'cursor': 'default'
-});
-
-ART.Sheet.define('window.fancy #toolbar button:active', {
-  'background-color': [hsb(0, 0, 40), hsb(0, 0, 74)]
 });
 
 ART.Sheet.define('window.fancy #toolbar button#search', {
@@ -489,10 +523,6 @@ ART.Widget.Window = new Class({
 		this.hide();
 	},
 	
-	getHandle: function() {
-	  return $(this.footer.handle)
-	},
-
 	getResized: function() {
 	  return this.content;
 	}

@@ -12,9 +12,6 @@ ART.Sheet.define('button', {
 	'font-color': hsb(0, 100, 10),
 	'padding': [0, 0, 0, 0],
 
-	'height': false,
-	'width': false,
-
 	'glyph': false,
 	'glyph-stroke': 2,
 	'glyph-color': hsb(0, 0, 0, 0.8),
@@ -57,19 +54,19 @@ ART.Widget.Button = new Class({
       if (!color) return false;
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke  + Math.max(shadow - 1) - x, stroke + shadow - y)
+  		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
 	  }],
 	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
       if (!color) return false;
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + Math.max(shadow - 1) - x, stroke + shadow - y)
+  		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
 	  }],
     glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
       if (!(color && glyph)) return false;
 	    this.draw(glyph);
   		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(left + stroke + Math.max(shadow - 1) - x, top + stroke + shadow - y);
+  		this.translate(left + stroke + Math.max(shadow - x, 0), top + stroke + Math.max(shadow - y, 0));
   		if (scale) this.scale(scale, scale)
 	  }]
 	},
@@ -80,12 +77,6 @@ ART.Widget.Button = new Class({
 
   setContent: Macro.onion(function(content) {
     this.addPseudo('text')
-  }),
-
-	makeText: function(text, size){
-		if (!this.layers.text) return;
-		this.layers.text.draw(text, size);
-		this.fontBounds = this.textLayer.measure();
-	}
+  })
 
 });

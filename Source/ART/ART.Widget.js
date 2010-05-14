@@ -164,6 +164,7 @@ ART.Widget = new Class({
 		if (this.options.id) selector += "#" + this.options.id;
 		if (this.classes.length) selector += '.' + this.classes.join('.');
 		if (this.pseudos.length) selector += ':' + this.pseudos.join(':');
+		if (this.attributes) for (var name in this.attributes) selector += '[' + name + '=' + this.attributes[name] + ']';
 		return selector;
 	},
 
@@ -365,11 +366,11 @@ ART.Widget = new Class({
 	},
 	
 	getOffsetWidth: function() {
-		var height = this.getClientWidth();
-		height += (this.styles.current.strokeWidth || 0) * 2
-		height += this.styles.current.borderLeftWidth || 0;
-		height += this.styles.current.borderBottomWidth || 0;
-		return height;
+		var width = this.getClientWidth();
+		width += (this.styles.current.strokeWidth || 0) * 2
+		width += this.styles.current.borderLeftWidth || 0;
+		width += this.styles.current.borderBottomWidth || 0;
+		return width;
 	},
 	
 	getLayoutHeight: function() {

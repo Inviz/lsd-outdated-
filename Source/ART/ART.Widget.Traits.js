@@ -218,6 +218,20 @@ ART.Widget.Traits.LayoutEvents = new Class({
 
 })();
 
+
+ART.Widget.Traits.Positionable = new Class({
+  
+  attach: Macro.onion(function() {
+    var position = this.options.at;
+    if (!position) return;
+    position.split(/\s+/).each(function(property) {
+      this.element.setStyle(property, 0)
+    }, this);
+    this.position = 'absolute';
+  })
+  
+})
+
 ART.Widget.Base = new Class({
   Extends: Class.inherit(
     ART.Widget.Base, 
@@ -225,7 +239,8 @@ ART.Widget.Base = new Class({
     ART.Widget.Traits.Layout,
     ART.Widget.Traits.Events, 
     ART.Widget.Traits.LayoutEvents,
-    ART.Widget.Traits.Expression
+    ART.Widget.Traits.Expression,
+    ART.Widget.Traits.Positionable
   ),
   
   initialize: function() {
@@ -319,7 +334,7 @@ ART.Widget.Traits.Resizable = new Class({
   
   getResizer: Macro.setter('resizer', function() {
     var resized = this.getResized();
-    var element = $(resized);
+    var element = $(resized).setStyle('overflow', 'hidden');
     resized.addEvent('resize', function(size) {
       $extend(element, size);
     });
@@ -657,7 +672,7 @@ ART.Widget.Traits.Observer = new Class({
   
   events: {
     observer: {
-      input: {
+      self: {
         focus: 'attachObserver',
         blur: 'detachObserver'
       }
@@ -703,11 +718,79 @@ ART.Widget.Traits.Observer = new Class({
 
 
 
+ART.Widget.Traits.HasList = new Class({	
+  options: {
+    list: {
+      endless: true,
+      force: false
+    }
+  },
+  
+  shortcuts: {
+	  previous: 'previous',
+	  next: 'next'
+  },
+  
+  attach: Macro.onion(function() {
+    var items = this.items || this.options.list.items;
+    if (items) {
+      this.setItems(items);
+      if (this.options.force) this.select(items[0])
+    }
+  }),
+  
+  select: function(item) {
+    if (item == this.selected) return false;
+    if (!item && this.options.force) return false;
+    this.selected = item;
+    console.log('select', [item, this.getSelectedItemIndex()])
+    this.fireEvent('select', [item, this.getSelectedItemIndex()]);
+    return true;
+  },
+  
+  setItems: function(list) {
+    this.items = items;
+    return this;
+  },
+  
+  getItems: function() {
+    return this.items;
+  },
+  
+  hasItems: function() {
+    return this.getItems() && (this.getItems().length > 0)
+  },
+  
+  getSelectedItem: function() {
+    return this.selected;
+  },
+  
+  getSelectedItemIndex: function() {
+    return this.getItems().indexOf(this.getSelectedItem());
+  },
 
+	next: function() {
+	  var next = this.getItems()[this.getSelectedItemIndex() + 1];
+	  if (!next && this.options.list.endless) next = this.getItems()[0];
+	  if (this.select(next)) return !!this.fireEvent('next', next);
+	  return false;
+	},
+
+	previous: function() {
+	  var previous = this.getItems()[this.getSelectedItemIndex() - 1];
+	  if (!previous && this.options.list.endless) previous = this.getItems().getLast();
+	  if (this.select(previous)) return !!this.fireEvent('previous', [previous]);
+	  return false;
+	}
+  
+});
 
 
 ART.Widget.Traits.HasMenu = new Class({	
-  Extends: ART.Widget.Traits.OuterClick,
+  Extends: Class.inherit(
+    ART.Widget.Traits.HasList,
+    ART.Widget.Traits.OuterClick
+  ),
   
   options: {
     menu: {
@@ -724,32 +807,25 @@ ART.Widget.Traits.HasMenu = new Class({
     menu: {
       self: {
         redraw: 'repositionMenu',
-        blur: 'collapse'
+        blur: 'collapse',
+        next: 'expand',
+        select: 'expand',
+        cancel: 'collapse'
       }
     }
   },
 
 	shortcuts: {
-	  next: 'next',
-	  previous: 'previous',
-	  cancel: 'cancel',
-	  ok: 'select'
+	  ok: 'set',
+    cancel: 'cancel'
 	},
 
 	cancel: function() {
 	  this.collapse();
 	},
 
-	select: function() {
+	set: function() {
 	  this.collapse();
-	},
-
-	next: function() {
-	  this.expand();
-	},
-
-	previous: function() {
-	  this.expand();
 	},
   
   attach: Macro.onion(function() {

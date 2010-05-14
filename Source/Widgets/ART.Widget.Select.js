@@ -23,7 +23,13 @@ ART.Sheet.define('select:focused', {
   'shadow-color': hsb(212, 58, 93),
   'shadow-blur': 5,
   'shadow-offset-y': 0,
-	'stroke-color': hsb(212, 58, 93, 0.3)
+	'stroke-color': hsb(212, 58, 93)
+});
+
+ART.Sheet.define('select:focused button', {		
+	'stroke-color': hsb(212, 58, 93, 0.5),
+	'margin-bottom': -1,
+	'margin-left': 1
 });
 
 
@@ -46,18 +52,18 @@ ART.Widget.Select = new Class({
 	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke  + shadow - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke  + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
 	  }],
 	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow - y)
+  		if (stroke || shadow) this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
 	  }],
     glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
 	    if (!glyph) return;
 	    this.draw(glyph);
   		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(left + stroke + shadow - x, top + stroke + shadow - y);
+  		this.translate(left + stroke + Math.max(shadow - x, 0), top + stroke + Math.max(shadow - y, 0));
   		if (scale) this.scale(scale, scale)
 	  }]
 	},
@@ -70,7 +76,9 @@ ART.Widget.Select = new Class({
 	  element: {
   	  click: 'expand'
 	  }
-	}
+	},
+	
+	items: [1,2,3]
 	
 });
 

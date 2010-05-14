@@ -25,6 +25,7 @@ Moo.Application = new Class({
 			'#status[container]': {}
 	  }
 	}
+	
 });
 
 Moo.Application.Preferences = new Class({
@@ -82,7 +83,61 @@ Moo.Application.Preferences = new Class({
 	    }
 	  }
 	}
-})
+});
+
+Moo.Application.Preferences.Network = new Class({
+	Extends: Class.inherit(
+	  ART.Widget.Window,
+	  ART.Widget.Traits.Draggable,
+	  ART.Widget.Traits.Resizable,
+	  ART.Widget.Traits.ResizableContainer,
+	  ART.Widget.Traits.Fitting
+	),
+  
+  expression: "window.fancy#network",
+  
+	layout: {
+	  'section#header': {
+      'button#toggler[shy]': {},
+	    '#buttons[hoverable][shy]': {
+        'button#close': {},
+	      'button#minimize': {},
+        'button#maximize:disabled': {}
+	    },
+	    '#title[container]': {},
+  	  '#toolbar': {
+        'input-search[type=search]#search': {},
+  	    'button#back.left': {},
+  	    'button#forward.right:disabled': {},
+  	    'button#index': 'Show All'
+  	  }
+	  },
+	  'section#content[container][scrollable]': {
+  	  'glyph[name=drag-handle]#handle.corner[at=bottom right]': {},
+	    'form.two-column#appearance': {
+	      '#legend': [
+  	      {'label[for=location]': 'Location:'},
+  	      'select#location'
+  	    ],
+  	    'panel#left[width=160]': {
+	        'toolbar[at=bottom]': {
+      	    'button#remove:disabled': {},
+      	    'button#add': {},
+      	    'button#configure': {}
+	        }
+  	    },
+  	    'panel#right[width=auto]': {
+	      
+  	    },
+  	    '#actions': {
+    	    'button#assist': 'Assist me...',
+    	    'button#revert:disabled': 'Revert',
+    	    'button#apply:disabled': 'Apply'
+  	    }
+  	  }
+	  }
+	}
+});
 
 Moo.Application.Browser = new Class({
 	Extends: Class.inherit(
@@ -128,7 +183,12 @@ Moo.Application.Browser = new Class({
         click: 'mutate'
 	    }
 	  }
+	},
+
+	getHandle: function() {
+	  return $(this.footer.handle)
 	}
+
 });
 
 

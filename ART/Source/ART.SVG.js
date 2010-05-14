@@ -306,6 +306,10 @@ ART.SVG.Base = new Class({
   	//stdDeviation="4" result="blur"
   	return this;
   },
+  
+  unblur: function() {
+    if (this.filter) this.blur(0.01)
+  },
 
 	stroke: function(color, width, cap, join){
 		var element = this.element;

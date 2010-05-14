@@ -10,6 +10,9 @@ Class.Mergers = {
   events: function(mixin) {
     this.events = $mixin(this.events || {}, mixin.events);
   },
+  shortcuts: function(mixin) {
+    this.shortcuts = $mixin(this.shortcuts || {}, mixin.shortcuts);
+  },
   layered: function(mixin) {
     this.layered = $mixin(this.layered || {}, mixin.layered)
   }

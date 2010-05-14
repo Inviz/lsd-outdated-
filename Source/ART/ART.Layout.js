@@ -21,6 +21,7 @@ ART.Layout = new Class({
     var parsed = SubtleSlickParse(selector)[0][0]
     if (!parsed.tag) parsed.tag = 'container';
     var options = {};
+    var attributes = {};
 		if (parsed.id) options.id = parsed.id
 		var mixins = [parsed.tag];
 		var styles;
@@ -32,12 +33,13 @@ ART.Layout = new Class({
 		      styles[bits[0]] = bits[1];
 		    })
 		  } else {
-  			options[attribute.name] = attribute.value || true;
+  			attributes[attribute.name] = options[attribute.name] = attribute.value || true;
   			if (ART.Widget.Traits[attribute.name.capitalize()]) mixins.push(attribute.name);
 		  }
 		});
 		var widget = ART.Widget.create(mixins, options);
 		widget.build();
+		if (parsed.attributes) widget.attributes = attributes;
 		
 		if (!options.id) {
 		  var property = parsed.tag + 's';

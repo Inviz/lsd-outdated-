@@ -49,6 +49,8 @@
 	<script src="../Source/Widgets/ART.Widget.Form.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widgets/ART.Widget.Select.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widgets/ART.Widget.Menu.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Panel.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Widgets/ART.Widget.Toolbar.js" type="text/javascript" charset="utf-8"></script>
 	
 	
 	<script src="../Source/Moo/Moo.js" type="text/javascript" charset="utf-8"></script>
@@ -83,7 +85,13 @@
   		
   		$p = new Moo.Application.Preferences;
   		$p.header.title.setContent('Preferences');
-	    $p.setStyles({top: 50, left: 550, zIndex: 400})
+	    $p.setStyles({top: 50, left: 550, zIndex: 400});
+	    
+	    console.profile('Network render')
+  		$n = new Moo.Application.Preferences.Network;
+  		$n.header.title.setContent('Network');
+	    $n.setStyles({top: 300, left: 300, zIndex: 400});
+	    console.profileEnd('Network render')
 	    //$p.fit();
   		
 	  });
