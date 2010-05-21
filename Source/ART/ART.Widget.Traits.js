@@ -105,6 +105,10 @@ ART.Widget.Traits.Layout = new Class({
 	
 	applyLayout: function(layout) {
 	  return new ART.Layout(this, layout)
+	},
+	
+	buildLayout: function(selector, layout, parent) {
+	  return ART.Layout.build(selector, layout, parent || this)
 	}
 });
 
@@ -232,6 +236,30 @@ ART.Widget.Traits.Positionable = new Class({
   
 })
 
+ART.Widget.Traits.Value = new Class({
+
+	setValue: function(item) {
+	  var value = this.value;
+	  this.value = this.processValue(item);
+	  if (value != this.value) {
+      var result = this.applyValue(this.value);
+	    this.onChange(this.value);
+	    return result;
+	  }
+	},
+	
+	applyValue: function(item) {
+	  return this.setContent(item)
+	},
+
+	getValue: function(item) {
+	  return this.formatValue(this.value);
+	},
+
+	formatValue: $arguments(0),
+	processValue: $arguments(0)
+})
+
 ART.Widget.Base = new Class({
   Extends: Class.inherit(
     ART.Widget.Base, 
@@ -240,7 +268,8 @@ ART.Widget.Base = new Class({
     ART.Widget.Traits.Events, 
     ART.Widget.Traits.LayoutEvents,
     ART.Widget.Traits.Expression,
-    ART.Widget.Traits.Positionable
+    ART.Widget.Traits.Positionable,
+    ART.Widget.Traits.Value
   ),
   
   initialize: function() {
@@ -334,7 +363,7 @@ ART.Widget.Traits.Resizable = new Class({
   
   getResizer: Macro.setter('resizer', function() {
     var resized = this.getResized();
-    var element = $(resized).setStyle('overflow', 'hidden');
+    var element = $(resized)//.setStyle('overflow', 'hidden');
     resized.addEvent('resize', function(size) {
       $extend(element, size);
     });
@@ -731,7 +760,9 @@ ART.Widget.Traits.HasList = new Class({
 	  next: 'next'
   },
   
-  attach: Macro.onion(function() {
+  list: [],
+  
+  attach: Macro.onion(function() {  
     var items = this.items || this.options.list.items;
     if (items) {
       this.setItems(items);
@@ -739,18 +770,40 @@ ART.Widget.Traits.HasList = new Class({
     }
   }),
   
-  select: function(item) {
-    if (item == this.selected) return false;
+  select: function(item, temp) {
+    if (item && !(item instanceof ART.Widget)) item = this.findItemByValue(item);
     if (!item && this.options.force) return false;
-    this.selected = item;
-    console.log('select', [item, this.getSelectedItemIndex()])
-    this.fireEvent('select', [item, this.getSelectedItemIndex()]);
-    return true;
+    this.setSelectedItem.apply(this, arguments);
+    return item;
   },
   
-  setItems: function(list) {
+  setSelectedItem: function(item) {
+    this.selected = item;
+    this.fireEvent('select', [item, this.getItemIndex()]);
+  },
+  
+  buildItem: function(value) {
+    return new Element('div', {
+      'class': 'art option', 
+      'html': value.toString(), 
+      'events': {
+        click: function() {
+          this.select(value);
+        }.bind(this)
+      }
+    });
+  },
+  
+  setItems: function(items) {
     this.items = items;
+    if (this.items) this.items.map(this.makeItem.bind(this))
     return this;
+  },
+  
+  makeItem: function(item) {
+    var option = this.buildItem.apply(this, arguments);
+    this.list.push(option); 
+    return option;
   },
   
   getItems: function() {
@@ -765,30 +818,48 @@ ART.Widget.Traits.HasList = new Class({
     return this.selected;
   },
   
-  getSelectedItemIndex: function() {
-    return this.getItems().indexOf(this.getSelectedItem());
+  getItemIndex: function(item) {
+    return this.getItems().indexOf(item || this.selected);
+  },
+  
+  findItemByValue: function(value) {
+    for (var i = 0, j = this.list.length; i < j; i++) {
+      if (this.list[i].value == value) return this.list[i];
+    }
+    return null;
+  },
+  
+  getActiveItem: function() {
+    var active = (this.chosen || this.selected);
+    return active ? active.value : null;
   },
 
 	next: function() {
-	  var next = this.getItems()[this.getSelectedItemIndex() + 1];
+	  var next = this.getItems()[this.getItemIndex(this.getActiveItem()) + 1];
 	  if (!next && this.options.list.endless) next = this.getItems()[0];
-	  if (this.select(next)) return !!this.fireEvent('next', next);
+	  if (this.select(next, true)) return !!this.fireEvent('next', next);
 	  return false;
 	},
 
 	previous: function() {
-	  var previous = this.getItems()[this.getSelectedItemIndex() - 1];
+	  var previous = this.getItems()[this.getItemIndex(this.getActiveItem()) - 1];
 	  if (!previous && this.options.list.endless) previous = this.getItems().getLast();
-	  if (this.select(previous)) return !!this.fireEvent('previous', [previous]);
+	  if (this.select(previous, true)) return !!this.fireEvent('previous', [previous]);
 	  return false;
 	}
   
 });
 
 
+ART.Widget.Traits.HasDropdown = new Class({
+  
+  
+  
+})
+
+
 ART.Widget.Traits.HasMenu = new Class({	
   Extends: Class.inherit(
-    ART.Widget.Traits.HasList,
     ART.Widget.Traits.OuterClick
   ),
   
@@ -800,16 +871,16 @@ ART.Widget.Traits.HasMenu = new Class({
   
   events: {
     outer: {
-     element: {
-       outerClick: 'collapse'
-     }
+      element: {
+        outerClick: 'collapse'
+      }
     },
     menu: {
       self: {
         redraw: 'repositionMenu',
+        focus: 'repositionMenu',
         blur: 'collapse',
         next: 'expand',
-        select: 'expand',
         cancel: 'collapse'
       }
     }
@@ -836,11 +907,25 @@ ART.Widget.Traits.HasMenu = new Class({
     this.removeEvents(this.events.menu);
   }),
   
-  repositionMenu: function() {
-   if (!this.menu || this.collapsed) return;
-   if (this.options.menu.position == 'bottom') this.menu.setStyle('top', this.getLayoutHeight() + 1);
-   this.menu.setStyle('left', this.offset.paint.left);
-   this.menu.setStyle('width', this.getStyle('width'));
+  repositionMenu: function(once) {
+    if (!this.menu || this.collapsed) return;
+    var top = 0;
+    switch (this.options.menu.position) {
+      case 'bottom': 
+        top = this.getLayoutHeight() + 1;
+        break;
+      case 'center':
+        top = - this.getLayoutHeight() / 2;
+        break;
+      case 'focus':
+        top = - this.getSelectedOptionPosition();
+        break;
+      default:
+    }
+    this.menu.setStyle('top', top + this.offset.paint.top - (this.menu.styles.current.paddingTop || 0));
+    this.menu.setStyle('left', this.offset.paint.left);
+    this.menu.setStyle('width', this.getStyle('width'));
+    if (!once) arguments.callee.delay(30, this, true)
   },
   
   buildMenu: function() {
@@ -859,8 +944,52 @@ ART.Widget.Traits.HasMenu = new Class({
   collapse: Macro.onion(function() {
     this.menu.hide();
     //this.detachOuterClick();
-  })
+  }),
+  
+  getSelectedOptionPosition: $lambda(0)
 });
+
+//Trait that completes HasList. Adds a capability to first choose something and then select (think dropdown)
+ART.Widget.Traits.Chooser = new Class({
+	select: function(item, temp) {
+	  var chosen = this.chosen;
+	  if (!(item = this.parent.apply(this, arguments))) return false;
+    if (temp !== true) {
+      this.setValue(item);
+    } else {
+  	  if (item.choose() && chosen) chosen.forget();
+    }
+	  return item;
+	},
+	
+	forgetChosenItem: function() {
+	  if (this.chosen) this.chosen.forget();
+	  (function() {
+  	  delete this.chosen;
+	  }).delay(30, this);
+	},
+	
+	setSelectedItem: function(item, temp) {
+	  if (!temp) return this.parent.apply(this, arguments);
+    this.chosen = item;
+    this.fireEvent('choose', [item, this.getItemIndex()]);
+    return item;
+	},
+	
+	selectChosenItem: function() {
+	  return this.select(this.chosen)
+	},
+	
+	getSelectedOptionPosition: function() {
+	  var height = 0;
+	  if (!this.selected) return height;
+	  for (var i = 0, j = this.list.length; i < j; i++) {
+	    if (this.list[i] == this.selected) break;
+	    height += this.list[i].getLayoutHeight();
+	  }
+	  return height
+	}
+})
 
 ART.Widget.Traits.Icon = new Class({
   layered: {
@@ -894,6 +1023,10 @@ ART.Widget.Traits.Focusable = new Class({
   focus: Macro.onion(function(element) {
     if (element !== false) this.getFocuser().focus(element || this.element)
   }),
+  
+  refocus: function() {
+    if (!this.focused) return this.focus();
+  },
   
   onFocus: Macro.defaults(function() {
     if (document.activeElement) {

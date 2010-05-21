@@ -58,7 +58,6 @@ ART.Widget.Paint = new Class({
 		this.outdated = false;
 		
 		var padding = this.offset.padding = this.getPadding();
-		var canvas = this.offset.canvas = this.getPaintOffset();
 		var offset = this.offset.paint = this.getPaintOffset();
 		for (var property in padding) {
 		  this.offset.total[property] = padding[property] + offset[property];
@@ -82,8 +81,8 @@ ART.Widget.Paint = new Class({
 			y: (this.styles.current.shadowOffsetY || 0)
 		}
 		return {
-			left: blur + offset.x,
-			top: blur - offset.y,
+			left: Math.max(blur - offset.x, 0),
+			top: Math.max(blur - offset.y, 0),
 			right: blur + offset.x,
 			bottom: blur + offset.y
 		}

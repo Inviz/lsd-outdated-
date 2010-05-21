@@ -56,19 +56,27 @@ ART.Sheet.define('input#search:detailed button#glyph', {
 ART.Sheet.define('input#search button#glyph:active', {
   'background-color': false,
   'glyph-color': hsb(0, 0, 30)
-});	
+});
+
+ART.Sheet.define('input#search:detailed:uniconed button#glyph', {
+  'glyph': false,
+  'icon-left': 17,
+  'width': 23,
+  'margin-left': 4
+});
 
 ART.Sheet.define('input#search button#canceller', {	
   'corner-radius': 7,
   'glyph': ART.Glyphs.smallCross,
-  'glyph-left': 1,
-  'glyph-top': 2,
-  'glyph-scale': 1.15,
+  'glyph-left': 0.5,
+  'glyph-top': 0.5,
+  'glyph-scale': 1.10,
+  'cursor': 'pointer',
   'height': 14,
   'width': 14,
   'glyph-color': hsb(0, 0, 100),
   'background-color': hsb(0, 0, 60),
-  'margin-top': 1,
+  'margin-top': 3,
   'margin-right': 4,
   'margin-left': 0,
   'display': 'none'
@@ -98,6 +106,12 @@ ART.Widget.Input = new Class({
   
   name: 'input',
   
+  events: {
+    element: {
+  	  mousedown: 'refocus'
+    }
+  },
+  
   layered: {
     shadow:  ['shadow'],
     stroke: ['rectangle-stroke'],
@@ -122,7 +136,15 @@ ART.Widget.Input = new Class({
 	
 	focus: Macro.onion(function() {
 	  this.input.focus();
-	})
+	}),
+	
+	refocus: function() {
+	  this.focus();
+	},
+	
+	applyValue: function(item) {
+	  this.input.set('value', item);
+	}
 });
 
 ART.Widget.Input.Search = new Class({
@@ -130,15 +152,16 @@ ART.Widget.Input.Search = new Class({
     ART.Widget.Input,
     Widget.Stateful({
     	'expanded': ['expand', 'collapse'],
-    	'detailed': ['enrich', 'clean']
+    	'detailed': ['enrich', 'clean'],
+    	'uniconed': ['uniconize', 'iconize']
     }),
-    ART.Widget.Traits.Observer,
     ART.Widget.Traits.HasMenu,
+    ART.Widget.Traits.HasList,
+    ART.Widget.Traits.Chooser,
+    ART.Widget.Traits.Observer,
     ART.Widget.Traits.Aware,
     ART.Widget.Traits.Accessible
   ),
-  
-  items: [1,2],
   
   layout: {
     'input-icon#glyph': {},
@@ -151,6 +174,16 @@ ART.Widget.Input.Search = new Class({
     }
   },
   
+  items: [
+    {
+      title: 'Google', 
+      icon: 'http://www.kew.org/ucm/resources/kew/images/css-images/content/google-icon.gif'
+    },
+    {
+      title: 'Bing',
+      icon: 'http://www.microsoft.com/canada/msn/bing/images/bing_icon.png'
+    }
+  ],
   
   attach: Macro.onion(function() {
     if (this.hasItems()) {
@@ -174,14 +207,76 @@ ART.Widget.Input.Search = new Class({
     },
     canceller: {
       click: 'empty'
+    },
+    self: {
+      select: 'setIcon'
     }
   },
   
   empty: Macro.onion(function() {
     this.input.set('value', '');
-  })
+  }),
+
+	buildItem: function(item) {
+    if (!this.menu) this.buildMenu();
+	  var widget = this.buildLayout('input-option', item.title.toString(), this.menu, $(this.menu.getContainer()));
+	  widget.value = item;
+	  widget.selectWidget = this;
+	  return widget;
+	},
+
+	processValue: function(item) {
+	  return item.value.title;
+	},
+	
+	setIcon: function(item) {
+	  if (item && item.value) item = item.value.icon;
+	  this.collapse();
+	  if (!item) {
+	    this.iconize();
+  	  this.glyph.element.setStyle('background-image', '');
+	  } else {
+	    this.uniconize();
+  	  this.glyph.element.setStyle('background', 'url(' + item + ') no-repeat ' + this.glyph.offset.paint.top + ' ' + this.glyph.offset.paint.left);
+	  }
+	}
 });
 
+ART.Widget.Input.Option = new Class({
+  Extends: Class.inherit(
+    ART.Widget.Container,
+    Widget.Stateful({
+      chosen: ['choose', 'forget']
+    })
+  ),
+  
+  events: {
+    element: {
+      click: 'select',
+      mouseenter: 'chooseOnHover'
+    }
+  },
+  
+  name: 'option',
+  
+  render: Macro.onion(function() {
+    var icon = this.value ? this.value.icon : false;
+    if ((this.icon == icon) || !icon) return;
+    this.icon = icon;
+    this.element.setStyle('background-image', 'url(' + icon + ')');
+    this.element.setStyle('background-repeat', 'no-repeat');
+    this.element.setStyle('background-position', ((this.offset.paint.left || 0) + 4) + 'px  center');
+    this.element.setStyle('padding-left', 15)
+  }),
+  
+  select: function() {
+    this.selectWidget.select.delay(50, this.selectWidget, [this]);
+  },
+  
+  chooseOnHover: function() {
+    this.selectWidget.select(this, true)
+  }
+})
 
 
 ART.Widget.Input.Icon = new Class({

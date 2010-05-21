@@ -100,7 +100,6 @@ Moo.Container = new Class({
 	
 	render: function(html) {
 		if ($type(html) != 'string' || !html.length) return false;
-		console.log(this.element, html)
 		this.empty().set('html', html);
 		return true;
 	},

@@ -7,7 +7,6 @@ ART.Sheet.define('select', {
 	'width': 200,
 	'height': 20
 });
-
 ART.Sheet.define('window.fancy select button', {		
 	'width': 20,
 	'height': 20,
@@ -40,6 +39,8 @@ ART.Widget.Select = new Class({
     	'expanded': ['expand', 'collapse']
     }),
     ART.Widget.Traits.HasMenu,
+    ART.Widget.Traits.HasList,
+    ART.Widget.Traits.Chooser,
     ART.Widget.Traits.Focusable,
     ART.Widget.Traits.Accessible
   ),
@@ -72,16 +73,71 @@ ART.Widget.Select = new Class({
 	  'select-button#button': {}
 	},
 	
-	events: {
-	  element: {
-  	  click: 'expand'
+	options: {
+	  menu: {
+	    position: 'focus'
 	  }
 	},
 	
-	items: [1,2,3]
+	shortcuts: {
+	  'ok': 'selectChosenItem'
+	},
+	
+	events: {
+	  element: {
+  	  mousedown: 'refocus',
+  	  click: 'expand'
+	  },
+	  self: {
+  	  select: 'collapse',
+  	  focus: 'expand',
+  	  collapse: 'forgetChosenItem'
+	  }
+	},
+	
+	items: ["1","2","3"],
+	
+	buildItem: function(item) {
+    if (!this.menu) this.buildMenu();
+	  var widget = this.buildLayout('select-option', item.toString(), this.menu, $(this.menu.getContainer()));
+	  widget.value = item;
+	  widget.selectWidget = this;
+	  return widget;
+	},
+	
+	processValue: function(item) {
+	  return item.value;
+	}
 	
 });
 
+
 ART.Widget.Select.Button = new Class({
   Extends: ART.Widget.Button
+})
+
+ART.Widget.Select.Option = new Class({
+  Extends: Class.inherit(
+    ART.Widget.Container,
+    Widget.Stateful({
+      chosen: ['choose', 'forget']
+    })
+  ),
+  
+  events: {
+    element: {
+      click: 'select',
+      mouseenter: 'chooseOnHover'
+    }
+  },
+  
+  name: 'option',
+  
+  select: function() {
+    this.selectWidget.select.delay(50, this.selectWidget, [this]);
+  },
+  
+  chooseOnHover: function() {
+    this.selectWidget.select(this, true)
+  }
 })

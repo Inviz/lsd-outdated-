@@ -17,7 +17,7 @@ ART.Widget = new Class({
 	  'dirty': ['update', 'render'],
 	  'built': ['build', 'destroy'],
 		'attached': ['attach', 'detach']
-	}),
+	}, true),
 	
 	orphaned: true,
 	

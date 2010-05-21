@@ -7,8 +7,10 @@ ART.Sheet.define('menu', {
   'stroke-width': 1,
   'corner-radius': 3,
   'width': 150,
-  'height': 150,
-  'z-index': 250
+  'height': 'auto',
+  'z-index': 250,
+	'padding-top': 5,
+	'padding-bottom': 5
 })
 
 ART.Widget.Menu = new Class({

@@ -18,48 +18,9 @@ ART.Layout = new Class({
   },
   
   materialize: function(selector, layout, parent) {
-    var parsed = SubtleSlickParse(selector)[0][0]
-    if (!parsed.tag) parsed.tag = 'container';
-    var options = {};
-    var attributes = {};
-		if (parsed.id) options.id = parsed.id
-		var mixins = [parsed.tag];
-		var styles;
-		if (parsed.attributes) parsed.attributes.each(function(attribute) {
-		  if (attribute.name == "style") {
-		    styles = {};
-		    attribute.value.split(';').each(function(definition) {
-		      var bits = definition.split(':');
-		      styles[bits[0]] = bits[1];
-		    })
-		  } else {
-  			attributes[attribute.name] = options[attribute.name] = attribute.value || true;
-  			if (ART.Widget.Traits[attribute.name.capitalize()]) mixins.push(attribute.name);
-		  }
-		});
-		var widget = ART.Widget.create(mixins, options);
-		widget.build();
-		if (parsed.attributes) widget.attributes = attributes;
-		
-		if (!options.id) {
-		  var property = parsed.tag + 's';
-		  if (!parent[property]) parent[property] = [];
-		  parent[property].push(widget)
-		}
-    
-    if (parent) widget.inject(parent)
-    if (parsed.classes) {
-      widget.classes.push.apply(widget.classes, parsed.classes);
-      parsed.classes.each(widget.addClass.bind(widget));
-    }
-		if (parsed.pseudos) {
-		  parsed.pseudos.each(function(pseudo) {
-		    widget.setStateTo(pseudo.name, true)
-		  });
-		}
-		if (styles) widget.setStyles(styles);
-		if ($type(layout) == 'string') widget.setContent(layout);
-    else this.render(layout, widget);
+    var widget = ART.Layout.build(selector, layout, parent);
+    if ($type(layout) != 'string') widget = this.render(layout, widget);
+    return widget;
   },
   
   render: function(layout, parent) {
@@ -85,4 +46,49 @@ ART.Layout = new Class({
 	getName: function() {
 		return 'Layout'
 	}
-})
+});
+
+ART.Layout.build = function(selector, layout, parent, element) {
+  var parsed = SubtleSlickParse(selector)[0][0]
+  if (!parsed.tag) parsed.tag = 'container';
+  var options = {};
+  var attributes = {};
+	if (parsed.id) options.id = parsed.id
+	var mixins = [parsed.tag];
+	var styles;
+	if (parsed.attributes) parsed.attributes.each(function(attribute) {
+	  if (attribute.name == "style") {
+	    styles = {};
+	    attribute.value.split(';').each(function(definition) {
+	      var bits = definition.split(':');
+	      styles[bits[0]] = bits[1];
+	    })
+	  } else {
+			attributes[attribute.name] = options[attribute.name] = attribute.value || true;
+			if (ART.Widget.Traits[attribute.name.capitalize()]) mixins.push(attribute.name);
+	  }
+	});
+	var widget = ART.Widget.create(mixins, options);
+	widget.build();
+	if (parsed.attributes) widget.attributes = attributes;
+	
+	if (!options.id && parent) {
+	  var property = parsed.tag + 's';
+	  if (!parent[property]) parent[property] = [];
+	  parent[property].push(widget)
+	}
+  
+  if (element || parent) widget.inject(element || parent)
+  if (parsed.classes) {
+    widget.classes.push.apply(widget.classes, parsed.classes);
+    parsed.classes.each(widget.addClass.bind(widget));
+  }
+	if (parsed.pseudos) {
+	  parsed.pseudos.each(function(pseudo) {
+	    widget.setStateTo(pseudo.name, true)
+	  });
+	}
+	if (styles) widget.setStyles(styles);
+	if ($type(layout) == 'string') widget.setContent(layout);
+	return widget;
+}

@@ -161,7 +161,10 @@ ART.Sheet.define('window#network #actions', {
 ART.Sheet.define('window#network #actions button', {
   'corner-radius': 10,
   'margin-left': 5,
-  'margin-right': 0
+  'margin-right': 0,
+	'shadow-color': hsb(0, 0, 10, 0.2),
+	'shadow-blur': 3,
+	'shadow-offset-y': 1,
 });
 
 
