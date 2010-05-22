@@ -48,6 +48,20 @@ ART.Layout = new Class({
 	}
 });
 
+(function(cache) {
+  ART.Layout.findTraitByAttributeName = function(name) {
+    if (!$defined(cache[name])) {
+      switch(name) {
+        case "height": case "width":
+          name = 'dimensions';
+          break;
+      }
+      cache[name] = ART.Widget.Traits[name.capitalize()] || null;
+    }
+    return cache[name];
+  }
+})(ART.Layout.traitByAttribute = {});
+
 ART.Layout.build = function(selector, layout, parent, element) {
   var parsed = SubtleSlickParse(selector)[0][0]
   if (!parsed.tag) parsed.tag = 'container';
@@ -64,8 +78,17 @@ ART.Layout.build = function(selector, layout, parent, element) {
 	      styles[bits[0]] = bits[1];
 	    })
 	  } else {
-			attributes[attribute.name] = options[attribute.name] = attribute.value || true;
-			if (ART.Widget.Traits[attribute.name.capitalize()]) mixins.push(attribute.name);
+	    var name = attribute.name;
+	    var value = attribute.value || true;
+	    var bits = name.split('-');
+	    for (var i = bits.length - 1; i > -1; i--) {
+        var obj = {};
+        obj[bits[i]] = value;
+	      if (i == 0) $mixin(options, obj);
+	      else value = obj;
+	    }
+			attributes[name] = attribute.value || true;
+			if (ART.Widget.Traits[name.capitalize()]) mixins.push(name);
 	  }
 	});
 	var widget = ART.Widget.create(mixins, options);

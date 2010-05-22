@@ -46,7 +46,7 @@ ART.Widget.Paint = new Class({
 			'position': 'absolute',
 			'top': 0,
 			'left': 0
-		}).inject(this.getWrapper());
+		}).inject(this.getWrapper(), 'top');
 		return true;
 	},
 	

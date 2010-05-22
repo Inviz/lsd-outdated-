@@ -22,8 +22,6 @@ ART.Sheet.define('panel#right', {
 });
 
 
-
-
 ART.Widget.Panel = new Class({
 	
 	Extends: Class.inherit(

@@ -1,3 +1,4 @@
+
 Moo.Application = new Class({
 	Extends: Class.inherit(
 	  ART.Widget.Window//,
@@ -117,10 +118,11 @@ Moo.Application.Preferences.Network = new Class({
 	    'form.two-column#appearance': {
 	      '#legend': [
   	      {'label[for=location]': 'Location:'},
-  	      'select#location'
+  	      'select#location[menu-position=bottom]'
   	    ],
   	    'panel#left[width=160]': {
-	        'toolbar[at=bottom]': {
+  	      'list.networks#networks[height="parent - hub"]': {},
+	        'toolbar[at=bottom]#hub': {
       	    'button#remove:disabled': {},
       	    'button#add': {},
       	    'button#configure': {}
@@ -138,6 +140,7 @@ Moo.Application.Preferences.Network = new Class({
 	  }
 	}
 });
+
 
 Moo.Application.Browser = new Class({
 	Extends: Class.inherit(

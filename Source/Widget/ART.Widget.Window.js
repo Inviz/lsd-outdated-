@@ -477,7 +477,6 @@ ART.Sheet.define('window#browser:minified #toolbar button#forward', {
 	'height': 16
 });
 
-
 ART.Widget.Window = new Class({
 	
 	Extends: Class.inherit(

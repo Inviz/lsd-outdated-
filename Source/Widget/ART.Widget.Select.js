@@ -90,7 +90,6 @@ ART.Widget.Select = new Class({
 	  },
 	  self: {
   	  select: 'collapse',
-  	  focus: 'expand',
   	  collapse: 'forgetChosenItem'
 	  }
 	},
@@ -134,7 +133,7 @@ ART.Widget.Select.Option = new Class({
   name: 'option',
   
   select: function() {
-    this.selectWidget.select.delay(50, this.selectWidget, [this]);
+    this.selectWidget.select.delay(20, this.selectWidget, [this]);
   },
   
   chooseOnHover: function() {

@@ -457,6 +457,11 @@ ART.Widget = new Class({
 	    if (!this.disabled) options.enable.call(this);
 	  });
 	  return true;
+	},
+	
+	onChange: function() {
+	  this.fireEvent('change', arguments)
+	  return true;
 	}
 	
 });
@@ -497,3 +502,7 @@ ART.Widget.create = function(klasses, a, b, c, d) {
 
 
 ART.Widget.Base = Class.inherit(ART.Widget);
+ART.Widget.Modules = {};
+ART.Widget.Traits = {};
+ART.Widget.Cache = {};
+ART.Widget.ignoredEvents = [];

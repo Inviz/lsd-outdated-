@@ -139,7 +139,7 @@ ART.Widget.Input = new Class({
 	}),
 	
 	refocus: function() {
-	  this.focus();
+	  this.focus(); G
 	},
 	
 	applyValue: function(item) {
@@ -158,7 +158,7 @@ ART.Widget.Input.Search = new Class({
     ART.Widget.Traits.HasMenu,
     ART.Widget.Traits.HasList,
     ART.Widget.Traits.Chooser,
-    ART.Widget.Traits.Observer,
+    ART.Widget.Traits.Observed,
     ART.Widget.Traits.Aware,
     ART.Widget.Traits.Accessible
   ),
@@ -284,6 +284,6 @@ ART.Widget.Input.Icon = new Class({
   
   Extends: Class.inherit(
     ART.Widget.Button,
-    ART.Widget.Traits.Icon
+    ART.Widget.Traits.Iconed
   )
 })

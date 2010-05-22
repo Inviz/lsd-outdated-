@@ -42,7 +42,6 @@ ART.Sheet.define('panel toolbar button#configure', {
   'glyph': ART.Glyphs.wrench
 });
 
-
 ART.Widget.Toolbar = new Class({
 	
 	Extends: ART.Widget.Paint,
