@@ -92,3 +92,10 @@ v\:* {
     text-align: center; }
   .art.window svg ~ *, .art.window svg .container {
     position: relative; }
+.art.list.networks .item.selected {
+  color: #fff; }
+.art.list.networks h2, .art.list.networks p {
+  font-size: 1em;
+  line-height: 1em;
+  padding: 0;
+  margin: 0; }

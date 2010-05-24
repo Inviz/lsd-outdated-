@@ -139,7 +139,7 @@ ART.Widget.Input = new Class({
 	}),
 	
 	refocus: function() {
-	  this.focus(); G
+	  this.focus();
 	},
 	
 	applyValue: function(item) {

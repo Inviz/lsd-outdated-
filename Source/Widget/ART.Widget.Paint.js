@@ -38,8 +38,7 @@ ART.Widget.Paint = new Class({
     padding: {}
   },
   
-	build: function() {
-		if (!this.parent.apply(this, arguments)) return;
+	build: Macro.onion(function() {
 		this.paint = new ART();
 		this.element.setStyle('position', this.styles.current.position || this.position || 'relative');
 		$(this.paint).setStyles({
@@ -47,8 +46,7 @@ ART.Widget.Paint = new Class({
 			'top': 0,
 			'left': 0
 		}).inject(this.getWrapper(), 'top');
-		return true;
-	},
+	}),
 	
 	render: function() {
 		if (!this.parent.apply(this, arguments)) return;
@@ -111,20 +109,6 @@ ART.Widget.Paint = new Class({
 			bottom: stroke + (this.styles.current.paddingBottom || 0),
 			right: stroke + (this.styles.current.paddingRight || 0)
 		}
-	},
-	
-	setHeight: function(value) {
-		if (!this.parent.apply(this, arguments)) return;
-		var offset = this.offset.total;
-		//if (this.paint) this.paint.setHeight(value + offset.top + offset.bottom);
-		return true;
-	},
-		
-	setWidth: function(value) {
-		if (!this.parent.apply(this, arguments)) return;
-		var offset = this.getCanvasOffset();
-		//if (this.paint) this.paint.setWidth(value + offset.left + offset.right);
-		return true;
 	},
 	
 	inheritStyle: function(property) {

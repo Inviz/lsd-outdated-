@@ -5,7 +5,7 @@ provides: Color
 =*/
 
 (function(){
-
+var	parsed = {};
 this.Color = function(color, type){
 	
 	if (color.isColor){
@@ -16,13 +16,15 @@ this.Color = function(color, type){
 		this.alpha = color.alpha;
 
 	} else {
-
-		switch (typeof color){
-			case 'string': if (!type) type = (type = color.match(/^rgb|^hsb/)) ? type[0] : 'hex'; break;
-			case 'object': type = type || 'rgb'; color = color.toString(); break;
-			case 'number': type = 'hex'; color = color.toString(16); break;
-		}
-		color = Color['parse' + type.toUpperCase()](color);
+    if (!parsed[color]) {
+  		switch (typeof color){
+  			case 'string': if (!type) type = (type = color.match(/^rgb|^hsb/)) ? type[0] : 'hex'; break;
+  			case 'object': type = type || 'rgb'; color = color.toString(); break;
+  			case 'number': type = 'hex'; color = color.toString(16); break;
+  		}
+  		parsed[color] = Color['parse' + type.toUpperCase()](color);
+    }
+		color = parsed[color]
 		this.red = color[0];
 		this.green = color[1];
 		this.blue = color[2];

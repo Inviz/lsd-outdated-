@@ -143,11 +143,9 @@ ART.Widget.Scrollbar = new Class({
     this.refresh();
 	},
 	
-	inject: function(widget) {
-	  if (!this.parent.apply(this, arguments)) return;
+	inject: Macro.onion(function(widget) {
 	  this.adaptToSize(widget.size);
-	  return true;
-	},
+	}),
 	
 	onSet: function(value) {
     var prop = (this.options.mode == 'vertical') ? 'height' : 'width';
@@ -180,17 +178,13 @@ ART.Widget.Scrollbar = new Class({
 	  return $(this.track.thumb);
 	},
 	
-	hide: function() {
-	  if (!this.parent.apply(this, arguments)) return;
+	hide: Macro.onion(function() {
 	  this.element.setStyle('display', 'none');
-	  return true;
-	},
+	}),
 	
-	show: function() {
-	  if (!this.parent.apply(this, arguments)) return;
+	show: Macro.onion(function() {
 	  this.element.setStyle('display', 'block');
-	  return true;
-	}
+	})
 })
 
 ART.Widget.Scrollbar.Track = new Class({

@@ -35,20 +35,6 @@ ART.Widget = new Class({
 		}
 	},
 	
-	styles: {
-		current: {},    //styles that widget currently has
-		last: {},       //styles that were rendered last frame
-		found: {},      //styles that were found in stylesheets
-		given: {},      //styles that were manually assigned
-		
-		calculated: {}, //styles that are calculated in runtime
-		
-		element: {},    //styles that are currently assigned to element
-		paint: {},      //styles that are currently used to paint
-	},
-	
-	size: {},
-	
 	initialize: function(options){
 		if (options) this.setOptions(options);
 
@@ -156,6 +142,7 @@ ART.Widget = new Class({
 		 
     this[value ? "setState" : "unsetState"].apply(this, args);
     this.refresh();
+    return true;
   },
   
 	getSelector: function(){
@@ -194,12 +181,6 @@ ART.Widget = new Class({
     if (this.element) this.element.removeClass(name);
   },
 	
-	setSize: function(width, height) {
-		var size = {width: width,	height: height};
-		$extend(this.options, size);
-		this.refresh(size);
-	},
-	
 	lookupStyles: function(selector) {
 		if (!selector) selector = this.getSelector();
     if (this.selector != selector) {
@@ -211,180 +192,6 @@ ART.Widget = new Class({
 			}
 		}
 		return false;
-	},
-	
-  setStyles: function(style, temp) {
-		for (var key in style) this.setStyle(key, style[key], temp)
-  },
-	
-	setStyle: function(property, value, type) {
-		if ($equals(this.styles.current[property], value)) return;
-		this.styles.current[property] = value;
-		switch (type) {
-			case undefined:
-				this.styles.given[property] = value;
-				break;
-			case "calculated": 
-			case "given": 
-				this.styles[type][property] = value;
-				break;
-		} 
-		
-	  return true;
-	},
-	
-	getStyle: function(property) {
-		var value = this.styles.current[property];
-		if (value == "inherit") value = this.inheritStyle(property);
-		if (value == "auto") value = this.calculateStyle(property);
-		return value;
-	},
-	
-	getStyles: function(properties) {
-	  var result = {};
-	  for (var i = 0, property; property = arguments[i++];) result[property] = this.getStyle(property);
-	  return result;
-	},
-
-  getChangedStyles: function(property) {
-    var styles = this.getStyles.apply(this, arguments);
-    //var last = this.styles.last;
-    //if (Hash.every(styles, function(value, key) { return $equals(last[key], value) }.bind(this))) return false;
-    //$extend(this.styles.last, styles);
-    return styles;
-  },
-	
-	setElementStyle: function(property, value) {
-		if (Element.Styles[property] || Element.Styles.More[property]) {
-			if (this.styles.element[property] !== value) this.element.setStyle(property, value);
-			this.styles.element[property] = value;
-			return true;
-		}	
-		return false;
-	},
-	
-	resetElementStyle: function(property) {
-		this.element.setStyle(property, '');
-		delete this.styles.element[property]
-		return true;
-	},
-
-	inheritStyle: function(property) {
-		var node = this;
-		var style = node.styles.current[property];
-		while ((style == 'inherit' || !style) && node.parentWidget) {
-			node = node.parentWidget;
-			style = node.styles.current[property];
-		}
-		return style;
-	},
-	
-	calculateStyle: function(property) {
-		if (this.styles.calculated[property]) return this.styles.calculated[property];
-		var value;
-		switch (property) {
-			case "height":
-				value = this.getClientHeight();
-				break;
-			case "width":
-				value = this.inheritStyle(property);
-				var el = this.element;
-				//while (el = el.getParent()) console.log(el)
-				if (value == "auto") value = this.getClientWidth();
-				//if scrollWidth value is zero, then the widget is not in DOM yet
-				//so we wait until the root widget is injected, and then try to repeat
-				if (value == 0) {
-				  var redraw = function() {
-				    this.removeEvent('redraw', redraw)
-				    this.update(true);
-				  }.bind(this);
-				  this.onDOMInject(redraw);
-				}
-		}
-		this.styles.calculated[property] = value;
-		return value;
-	},
-	
-	setHeight: function(value, light) {
-	  value = Math.max(this.styles.current.minHeight || 0, value);
-		if (!light && (this.size.height == value)) return;
-		this.size.height = value;
-		if (!light) this.setStyle('height', value);
-		return true;
-	},
-		
-	setWidth: function(value, light) {
-		if (this.size.width == value) return;
-		this.size.width = value;
-		if (!light) this.setStyle('width', value);
-		return true;
-	},
-	
-	getClientHeight: function() {
-	  var height = this.styles.current.height;
-	  var auto = height == "auto";
-  	if (!height || auto) {
-  	  height = this.element.offsetHeight;
-  	  if (height > 0) height -= ((this.offset.total.top || 0) + (this.offset.total.bottom || 0))
-			//height = 0;
-      //var heights = [height]
-      //this.getChildren().each(function(widget) {
-			//  var value = widget.getOffsetHeight();
-			//  var styles = widget.getStyles('float', 'clear');
-			//  if (!value) return;
-			//  if (styles.clear && (styles.clear != 'none')) heights = [heights[0] + (heights.length > 1 ? Math.max.apply(Math, heights.slice(1, heights.length)) : 0)]
-			//  if (styles.float && (styles.float != 'auto')) {
-			//    heights.push(value)
-			//  } else {
-			//    heights[0] += value;
-			//  }
-			//  console.info(widget.getSelector(), heights)
-			//});  
-			//height = heights[0] + (heights.length > 1 ? Math.max.apply(Math, heights.slice(1, heights.length)) : 0)
-		}
-  		height += this.styles.current.paddingTop || 0;
-  		height += this.styles.current.paddingBottom || 0;
-		return height;
-	},
-	
-	getClientWidth: function() {
-	  var width = this.element.scrollWidth;
-	  if (width > 0) {
-	    var parent = this.parentWidget;
-	    if (this.styles.current.width == "auto" && this.styles.current.display != "block") width -= ((this.offset.padding.left || 0) + (this.offset.padding.right || 0)) 
-	    width -= ((this.offset.paint.left || 0) + (this.offset.paint.right || 0)) 
-	  }
-		return width;
-	},
-	
-	getOffsetHeight: function() {
-		var height = this.getClientHeight();
-		height += (this.styles.current.strokeWidth || 0) * 2
-		height += this.styles.current.borderBottomWidth || 0;
-		height += this.styles.current.borderTopWidth || 0;
-		return height;
-	},
-	
-	getOffsetWidth: function() {
-		var width = this.getClientWidth();
-		width += (this.styles.current.strokeWidth || 0) * 2
-		width += this.styles.current.borderLeftWidth || 0;
-		width += this.styles.current.borderBottomWidth || 0;
-		return width;
-	},
-	
-	getLayoutHeight: function() {
-		var height = this.getOffsetHeight();
-		height += ((this.offset.total.top || 0) - (this.offset.padding.top || 0));
-		height += ((this.offset.total.bottom || 0) - (this.offset.padding.bottom || 0));
-		return height;
-	},
-
-	getLayoutWidth: function() {
-		var width = this.getOffsetWidth();
-		width += ((this.offset.padding.left || 0) + (this.styles.current.marginLeft || 0));
-		width += ((this.offset.padding.right || 0) + (this.styles.current.marginRight || 0));
-		return width;
 	},
 	
 	adopt: function(widget) {
@@ -401,18 +208,23 @@ ART.Widget = new Class({
 	  while (parent = parent.parentWidget) parent.fireEvent('hello', widget)
 	},
 	
-	inject: function(widget) {
-	  if (!this.parent.apply(this, arguments)) return;
+	inject: Macro.onion(function(widget) {
 		widget.adopt(this);
 		this.fireEvent('inject', widget)
 		if (widget instanceof Element) this.render();
-		return true;
-	},
+	}),
 
 	setParent: function(widget){
 		this.parentWidget = widget;
 	},
 
+  getRoot: function() {
+    var widget = this;
+    while (widget = widget.parentWidget);
+    if (widget) return widget;
+    return null;
+  },
+  
 	getChildren: function() {
 	  return this.children;
 	},
@@ -483,7 +295,7 @@ ART.Widget.create = function(klasses, a, b, c, d) {
   
   if (klass.indexOf('-') > -1) { 
     var bits = klass.split('-');
-    base = base[bits.shift().camelCase().capitalize()];
+    while (bits.length > 1) base = base[bits.shift().camelCase().capitalize()];
     klass = bits.join('-');
   }
   klass = klass.camelCase().capitalize()

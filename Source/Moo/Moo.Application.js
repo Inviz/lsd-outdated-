@@ -121,7 +121,7 @@ Moo.Application.Preferences.Network = new Class({
   	      'select#location[menu-position=bottom]'
   	    ],
   	    'panel#left[width=160]': {
-  	      'list.networks#networks[height="parent - hub"]': {},
+  	      'list-networks#networks[height="parent - hub"]': {},
 	        'toolbar[at=bottom]#hub': {
       	    'button#remove:disabled': {},
       	    'button#add': {},
@@ -140,6 +140,44 @@ Moo.Application.Preferences.Network = new Class({
 	  }
 	}
 });
+
+ART.Widget.List.Networks = new Class({
+  Extends: ART.Widget.List,
+  
+  options: {
+    list: {
+      item: 'list-item-network'
+    }
+  },
+  
+  items: [
+    {
+      online: true,
+      name: 'Parallels adapter'
+    },
+    {
+      online: false,
+      name: 'Ethernet'
+    }
+  ],
+  
+	buildItem: function(item) {
+	  var widget = this.buildLayout(this.options.list.item);
+	  widget.value = item;
+	  widget.listWidget = this;
+	  widget.setContent(item);
+	  this.getContainer().append(widget); 
+	  return widget;
+	},
+})
+
+ART.Widget.List.Item.Network = new Class({
+  Extends: ART.Widget.List.Item,
+  
+  setContent: function(item) {
+    this.parent('<h2>' + item.name + '</h2>' + '<p>' + (item.online ? 'Connected' : 'Not connected') + '</p>');
+  }
+})
 
 
 Moo.Application.Browser = new Class({

@@ -75,7 +75,7 @@ ART.Widget.Traits.Resizable = new Class({
       this.resizer.setMinX(width);
       resized.setWidth(width);
       if (resized.horizontal) resized.horizontal.adaptToSize()
-      resized.refresh(true);
+      resized.refresh();
       $clear(self.delay);
       self.delay = (function() { //reset limit options in one second
         this.resizer.setMinX(self.limit);

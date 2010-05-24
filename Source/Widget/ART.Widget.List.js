@@ -22,7 +22,12 @@ ART.Sheet.define('list item', {
 });
 
 ART.Sheet.define('list#networks item', {
-  'height': 25
+  'width': 'auto',
+  'display': 'block',
+  'padding-top': 5,
+  'padding-left': 5,
+  'padding-right': 5,
+  'padding-bottom': 5
 });
 
 ART.Sheet.define('list item:selected', {
@@ -49,6 +54,12 @@ ART.Widget.List = new Class({
   	  mousedown: 'refocus'
 	  }
 	},
+	
+	options: {
+	  list: {
+	    item: 'list-item'
+	  }
+	},
 
 	layered: {
 	  shadow:  ['shadow'],
@@ -63,7 +74,7 @@ ART.Widget.List = new Class({
 	items: ["1","2","3"],
 	
 	buildItem: function(item) {
-	  var widget = this.buildLayout('list-item', item.toString(), this, false);
+	  var widget = this.buildLayout(this.options.list.item, item.toString(), this, false);
 	  widget.value = item;
 	  widget.listWidget = this;
 	  this.getContainer().append(widget); 

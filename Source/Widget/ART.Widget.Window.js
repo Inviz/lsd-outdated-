@@ -520,10 +520,9 @@ ART.Widget.Window = new Class({
 		return true;
 	},
 	
-	close: function() {
-		if (!this.parent.apply(this, arguments)) return;
+	close: Macro.onion(function() {
 		this.hide();
-	},
+	}),
 	
 	getResized: function() {
 	  return this.content;
