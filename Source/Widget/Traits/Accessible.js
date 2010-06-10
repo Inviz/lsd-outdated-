@@ -26,7 +26,7 @@
   				string = string[1];
   			} else {	
   				string = type;
-  				event = 'keydown';
+  				event = 'keypress';
   			}
   			string.split('+').each(function(part){
   				if (aliases[part]) part = aliases[part];
@@ -87,13 +87,13 @@
 			}
 			if (this.shortcutting) return;
 			this.shortcutting = true;
-			this.getKeyListener().addEvent('keydown', this.shortcutter);
+			this.getKeyListener().addEvent('keypress', this.shortcutter);
 		},
 
 		disableShortcuts: function() {
 			if (!this.shortcutting) return;
 			this.shortcutting = false;
-			this.getKeyListener().removeEvent('keydown', this.shortcutter);
+			this.getKeyListener().removeEvent('keypress', this.shortcutter);
 		}
 	});
 	

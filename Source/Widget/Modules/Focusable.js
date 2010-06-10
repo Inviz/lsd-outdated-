@@ -33,7 +33,6 @@ ART.Widget.Traits.Focusable = new Class({
   }),
   
   onBlur: Macro.defaults(function() {
-    console.info('blur', 123)
     this.blur();
     this.refresh();
   }),

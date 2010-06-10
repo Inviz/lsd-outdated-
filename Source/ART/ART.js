@@ -72,13 +72,15 @@
 $equals = function(one, another) {
 	if (one == another) return true;
 	if ((!one) ^ (!another)) return false;
+	if (!$defined(one)) return false;
 	
-	if (one instanceof Array) {
-		if (one.length != another.length) return false;
-		for (var i = 0, j = one.length; i < j; i++) if (!$equals(one[i], another[i])) return false;
+	if ((one instanceof Array) || one.callee) {
+	  var j = one.length;
+		if (j != another.length) return false;
+		for (var i = 0; i < j; i++) if (!$equals(one[i], another[i])) return false;
 		return true;
 	} else if (one instanceof Color) {
-	  return $equals(one.color, another.color) && (one.type == another.type) 
+	  return (one.red == another.red) && (one.green == another.green) && (one.blue == another.blue  ) && (one.alpha == another.alpha)
 	} else if (typeof one == 'object') {
 		if (one.equals) return one.equals(another)
 		for (var i in one) if (!$equals(one[i], another[i])) return false;

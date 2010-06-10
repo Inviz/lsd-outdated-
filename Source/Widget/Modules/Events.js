@@ -30,15 +30,14 @@
   	},
   	
   	addWidgetEvents: function(events) {
-  	  events = this.bindEvents($merge(events));
+  	  events = this.bindEvents($unlink(events));
       addEvents.call(this, events.self);
   		this.element.addEvents(events.element);
   		return events;
   	},
 	
   	removeEvents: function(events) {
-  	  events = this.bindEvents($merge(events));
-  	  console.info(events)
+  	  events = this.bindEvents($unlink(events));
       removeEvents.call(this, events.self);
   		this.element.removeEvents(events.element);
   		return events;

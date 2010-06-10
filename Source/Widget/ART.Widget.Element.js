@@ -16,6 +16,6 @@ ART.Widget.Element = new Class({
   },
   
   render: Macro.onion(function() {
-    this.fireEvent('redraw');
+    //this.fireEvent('redraw');
   })
 })

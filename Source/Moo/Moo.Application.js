@@ -57,7 +57,7 @@ Moo.Application.Preferences = new Class({
   	    'button#index': 'Show All'
   	  }
 	  },
-	  'section#content[container][scrollable]': {
+	  'section#content[container]': {
 	    'form.two-column#appearance': {
   	    'section#first': [
   	      {'label[for=appearance]': 'Text input:'},
@@ -95,6 +95,14 @@ Moo.Application.Preferences.Network = new Class({
 	  ART.Widget.Traits.Fitting
 	),
   
+  options: {
+    resizer: {
+      modifiers: {
+        y: false
+      }
+    }
+  },
+  
   expression: "window.fancy#network",
   
 	layout: {
@@ -113,22 +121,22 @@ Moo.Application.Preferences.Network = new Class({
   	    'button#index': 'Show All'
   	  }
 	  },
-	  'section#content[container][scrollable]': {
+	  'section#content[container]': {
   	  'glyph[name=drag-handle]#handle.corner[at=bottom right]': {},
-	    'form.two-column#appearance': {
+	    'form.two-column#networking': {
 	      '#legend': [
   	      {'label[for=location]': 'Location:'},
-  	      'select#location[menu-position=bottom]'
+  	      'select#location'
   	    ],
-  	    'panel#left[width=160]': {
-  	      'list-networks#networks[height="parent - hub"]': {},
+  	    'panel#left': {
+  	      'list-networks#networks[height="parent - hub - 1"]': {},
 	        'toolbar[at=bottom]#hub': {
       	    'button#remove:disabled': {},
       	    'button#add': {},
       	    'button#configure': {}
 	        }
   	    },
-  	    'panel#right[width=auto]': {
+  	    'panel#right[width="parent - left - 70"]': {
 	      
   	    },
   	    '#actions': {

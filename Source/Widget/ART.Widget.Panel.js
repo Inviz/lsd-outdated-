@@ -12,7 +12,8 @@ ART.Sheet.define('panel#left', {
 
 ART.Sheet.define('panel#right', {		
   'float': 'right',
-  'width': 290,
+  'min-width': 290,
+  'width': 'auto',
 	'height': 200,
 	'corner-radius': 5,
   'margin-left': 10,
@@ -38,16 +39,8 @@ ART.Widget.Panel = new Class({
 	layered: {
 	  shadow:  ['shadow'],
 	  stroke:  ['rectangle-stroke'],
-	  reflection: ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
-      if (!color) return false;
-  	  this.draw(width, height, cornerRadius);
-  		if (color) this.fill.apply(this, $splat(color));
-  	}],
-  	background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
-      if (!color) return false;
-  	  this.draw(width, height, cornerRadius);
-  		if (color) this.fill.apply(this, $splat(color));
-  	}],
+	  reflection: ['rectangle', ['reflectionColor']],
+  	background: ['rectangle', ['backgroundColor']]
 	}
 	
 });

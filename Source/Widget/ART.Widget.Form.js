@@ -1,15 +1,17 @@
 ART.Sheet.define('form.two-column', {
-  'margin': [0, 20, 20, 20]
+  'margin-left': 20,
+  'margin-right': 20,
+  'margin-bottom': 20,
 });
 
 ART.Sheet.define('form.two-column label', {
   'float': 'left',
   'clear': 'both',
-  'width': '30%',
   'text-align': 'right',
   'margin-right': 16,
   'line-height': 24,
-  'margin-bottom': 16
+  'margin-bottom': 16,
+  'width': 70
 });
 
 ART.Sheet.define('form.two-column input, form.two-column slider, form.two-column select', {

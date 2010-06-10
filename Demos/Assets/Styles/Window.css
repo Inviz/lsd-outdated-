@@ -4,7 +4,7 @@ svg {
 v\:* {
   background: transparent; }
 
-.art.section:after {
+.art.section:after, .art.container:after {
   content: ".";
   display: block;
   height: 0;
@@ -45,7 +45,7 @@ v\:* {
 .art.button {
   line-height: 1.7em;
   vertical-align: middle; }
-.art.select .container {
+.art.select > .container {
   text-align: left;
   padding: 0 10px; }
 .art.select .container {

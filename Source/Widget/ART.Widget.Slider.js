@@ -81,7 +81,6 @@ ART.Widget.Slider = new Class({
 	},
 	
 	increment: function() {
-	  console.log(this.slider.step)
 	  this.slider.set(this.slider.step + 10)
 	},
 	

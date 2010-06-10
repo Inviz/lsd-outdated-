@@ -34,7 +34,7 @@ ART.Widget.Traits.Draggable = new Class({
       element.left = position.x - element.getStyle('margin-left').toInt();
       element.top = position.y - element.getStyle('margin-top').toInt();
     }.create({delay: 50}));
-    var dragger = new Drag(element, $merge({
+    var dragger = new Drag(element, $extend({
       handle: $(this.getDragHandle())
     }, this.options.dragger));
     dragger.addEvents(this.events.dragger);

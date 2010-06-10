@@ -1,6 +1,3 @@
-
-
-
 ART.Widget.Traits.HasList = new Class({	
   options: {
     list: {
@@ -15,6 +12,7 @@ ART.Widget.Traits.HasList = new Class({
   },
   
   list: [],
+  items: [],
   
   attach: Macro.onion(function() {  
     var items = this.items || this.options.list.items;
@@ -28,12 +26,13 @@ ART.Widget.Traits.HasList = new Class({
     if (item && !(item instanceof ART.Widget)) item = this.findItemByValue(item);
     if (!item && this.options.force) return false;
     var selected = this.selected;
-    this.setSelectedItem.apply(this, arguments);
-    if (selected && selected.unselect) selected.unselect();
+    this.setSelectedItem.apply(this, arguments);  
+    if ((selected != item) && selected && selected.unselect) selected.unselect();
+    item.select();
     return item;
   },
   
-  setSelectedItem: function(item) {
+  setSelectedItem: function(item, temp, programmatic) {
     this.selected = item;
     this.fireEvent('select', [item, this.getItemIndex()]);
   },
@@ -51,13 +50,25 @@ ART.Widget.Traits.HasList = new Class({
   },
   
   setItems: function(items) {
-    this.items = items;
-    if (this.items) this.items.map(this.makeItem.bind(this))
+    this.items = [];
+    this.list = [];
+    items.each(this.addItem.bind(this))
     return this;
+  },
+  
+  addItem: function(item) {
+    this.items.push(item);
+  },
+  
+  makeItems: function() {
+    var item, i = this.list.length;
+    while (item = this.items[i++]) this.makeItem(item);
   },
   
   makeItem: function(item) {
     var option = this.buildItem.apply(this, arguments);
+    option.item = item;
+    option.render();
     this.list.push(option); 
     return option;
   },
@@ -90,17 +101,25 @@ ART.Widget.Traits.HasList = new Class({
     return active ? active.value : null;
   },
 
-	next: function() {
+	next: function(e) {
+    this.makeItems();
 	  var next = this.getItems()[this.getItemIndex(this.getActiveItem()) + 1];
 	  if (!next && this.options.list.endless) next = this.getItems()[0];
-	  if (this.select(next, true)) return !!this.fireEvent('next', next);
+	  if (this.select(next, true, !!e)) {
+	    if (e && e.stop) e.stop();
+    	return !!this.fireEvent('next', [next]);
+	  }
 	  return false;
 	},
 
-	previous: function() {
+	previous: function(e) {
+    this.makeItems();
 	  var previous = this.getItems()[this.getItemIndex(this.getActiveItem()) - 1];
 	  if (!previous && this.options.list.endless) previous = this.getItems().getLast();
-	  if (this.select(previous, true)) return !!this.fireEvent('previous', [previous]);
+	  if (this.select(previous, true)) {
+	    if (e && e.stop) e.stop();
+    	return !!this.fireEvent('previous', [previous]);
+    }
 	  return false;
 	}
   

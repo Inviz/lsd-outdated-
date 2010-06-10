@@ -19,6 +19,7 @@ ART.Widget.Traits.HasMenu = new Class({
     },
     menu: {
       self: {
+  	    expand: 'makeItems',
         redraw: 'repositionMenu',
         focus: 'repositionMenu',
         blur: 'collapse',
@@ -54,20 +55,20 @@ ART.Widget.Traits.HasMenu = new Class({
     var top = 0;
     switch (this.options.menu.position) {
       case 'bottom': 
-        top = this.getLayoutHeight() + 1;
+        top = this.getOffsetHeight() + ((this.offset.total.top || 0) - (this.offset.padding.top || 0)) + 1;
         break;
       case 'center':
-        top = - this.getLayoutHeight() / 2;
+        top = - (this.getOffsetHeight() + ((this.offset.total.top || 0) - (this.offset.padding.top || 0))) / 2;
         break;
       case 'focus':
         top = - this.getSelectedOptionPosition();
         break;
       default:
     }
-    this.menu.setStyle('top', top + this.offset.paint.top - (this.menu.styles.current.paddingTop || 0));
+    this.menu.setStyle('top', top);
     this.menu.setStyle('left', this.offset.paint.left);
     this.menu.setStyle('width', this.getStyle('width'));
-    if (!once) arguments.callee.delay(30, this, true)
+    //if (!once) arguments.callee.delay(30, this, true)
   },
   
   buildMenu: function() {
@@ -85,6 +86,7 @@ ART.Widget.Traits.HasMenu = new Class({
   
   collapse: Macro.onion(function() {
     this.menu.hide();
+    this.repositionMenu();
     //this.detachOuterClick();
   }),
   

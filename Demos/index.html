@@ -16,6 +16,8 @@
 	<script type="text/javascript" src="../Source/Extras/Element.Ext.js"></script>
 	<script type="text/javascript" src="../Source/Extras/Widget.js"></script>
 	<script type="text/javascript" src="../Source/Extras/QFocuser.js"></script>
+	<script type="text/javascript" src="../Source/Extras/Event.Ext.js"></script>
+	<script type="text/javascript" src="../Source/Extras/Element.Event.Ext.js"></script>
 	
 	
 	
@@ -64,6 +66,8 @@
 	<script src="../Source/Widget/Traits/Iconed.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widget/Traits/Dimensions.js" type="text/javascript" charset="utf-8"></script>
   <script src="../Source/Widget/Traits/Chooser.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../Source/Widget/Traits/Scrollable.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../Source/Widget/Traits/Fitting.js" type="text/javascript" charset="utf-8"></script>
 	
 	<script src="../Source/Widget/ART.Widget.Base.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widget/ART.Widget.Element.js" type="text/javascript" charset="utf-8"></script>
@@ -90,7 +94,10 @@
 	<script src="../Source/Moo/Moo.Application.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Moo/Moo.Container.js" type="text/javascript" charset="utf-8"></script>
 	
-	
+	<style>
+	  .art.button .art.window {vertical-align: top;}
+	  .buttons {float: left};
+	</style>
 	
 	<script>
 	  window.addEvent('domready', function() {
@@ -104,6 +111,7 @@
   			else throw e
   		}
   		
+  		ART.Sheet.compile();
   		
 	    $z = new Moo.Application.Browser;	
 	    $z.setStyles({top: 50, left: 50, zIndex: 400})

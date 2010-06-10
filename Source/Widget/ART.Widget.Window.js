@@ -46,14 +46,6 @@ ART.Sheet.define('window.hud #header', {
 	'reflection-color': [hsb(0, 0, 0, 0), hsb(0, 0, 0, 0)]
 });
 
-ART.Sheet.define('window.hud #header #buttons', {
-  'margin-top': 5
-});
-
-ART.Sheet.define('window.hud #title', {
-  'line-height': 24
-})
-
 ART.Sheet.define('window.hud #content', {
   'corner-radius-bottom-left': 'inherit',
   'corner-radius-bottom-right': 'inherit',
@@ -148,6 +140,8 @@ ART.Sheet.define('window#preferences #content', {
 ART.Sheet.define('window#network #content', {		
 	'width': 500,
 	'height': 'auto',
+	'display': 'block',
+	'min-width': 500,
 	'background-color': hsb(0, 0, 93),
 	'border-top': '1px solid #666'
 });
@@ -184,9 +178,9 @@ ART.Sheet.define('window.fancy #header', {
 	'corner-radius-top-left': 'inherit',
 	'corner-radius-top-right': 'inherit',
 	'padding-right': 5,
-	'padding-top': 5,
+	'padding-top': 3,
 	'padding-left': 5,
-	'padding-bottom': 5,
+	'padding-bottom': 3,
 	'height': 'auto',
 	'background-color': [hsb(0, 0, 80), hsb(0, 0, 60)],
 	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 0, 0)],
@@ -229,19 +223,20 @@ ART.Sheet.define('window #header #buttons', {
 	'height': 16
 });
 
-ART.Sheet.define('#legend', {
+ART.Sheet.define('container#legend', {
   'text-align': 'center',
   'margin-top': 15
 });
 
-ART.Sheet.define('#legend label, #legend input, #legend select', {
+ART.Sheet.define('container#legend label, container#legend input, container#legend select', {
 	'display': 'inline-block',
 	'float': 'none',
 	'vertical-align': 'top'
 });
 
-ART.Sheet.define('#legend label', {
-	'width': 'auto'
+ART.Sheet.define('container#legend label', {
+	'width': 'auto',
+	'float': 'none'
 });
 
 ART.Sheet.define('window #header #toggler', {
@@ -493,30 +488,32 @@ ART.Widget.Window = new Class({
 	
 	layout: {},
 	
+	events: {
+	  buttons: {
+	    close: {
+	      click: 'close'
+	    },
+	    collapse: {
+	      click: 'collapse'
+	    },
+	    expand: {
+	      click: 'expand'
+	    }
+	  }
+	},
+	
 	layered: {
 	  shadow:  ['shadow'],
 	  stroke:  ['rectangle-stroke'],
-	  reflection: ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
-      if (!color) return false;
-  	  this.draw(width, height, cornerRadius);
-  		if (color) this.fill.apply(this, $splat(color));
-  	}],
-  	background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
-      if (!color) return false;
-  	  this.draw(width, height, cornerRadius);
-  		if (color) this.fill.apply(this, $splat(color));
-  	}],
+	  reflection: ['rectangle', ['reflectionColor']],
+  	background: ['rectangle', ['backgroundColor']],
 	},
 	
 	initialize: function() {
 		this.parent.apply(this, arguments);
 		this.inject(document.body);
 		
-		if (this.header.buttons.close) this.header.buttons.close.addEvent('click', this.close.bind(this));
-		if (this.header.buttons.minimize) this.header.buttons.minimize.addEvent('click', this.collapse.bind(this));
-		if (this.header.buttons.maximize) this.header.buttons.maximize.addEvent('click', this.expand.bind(this));
-		
-		
+	
 		return true;
 	},
 	

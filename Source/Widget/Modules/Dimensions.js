@@ -16,6 +16,7 @@ ART.Widget.Modules.Dimensions = new Class({
 	},
 		
 	setWidth: function(value, light) {
+	  value = Math.max(this.styles.current.minWidth || 0, value);
 		if (this.size.width == value) return;
 		this.size.width = value;
 		if (!light) this.setStyle('width', value);
@@ -24,7 +25,7 @@ ART.Widget.Modules.Dimensions = new Class({
 	
 	getClientHeight: function() {
 	  var height = this.styles.current.height;
-	  var auto = height == "auto";
+	  var auto = (height == "auto");
   	if (!height || auto) {
   	  height = this.element.offsetHeight;
   	  if (height > 0) height -= ((this.offset.total.top || 0) + (this.offset.total.bottom || 0))
@@ -44,8 +45,8 @@ ART.Widget.Modules.Dimensions = new Class({
 			//});  
 			//height = heights[0] + (heights.length > 1 ? Math.max.apply(Math, heights.slice(1, heights.length)) : 0)
 		}
-  		height += this.styles.current.paddingTop || 0;
-  		height += this.styles.current.paddingBottom || 0;
+		height += this.styles.current.paddingTop || 0;
+		height += this.styles.current.paddingBottom || 0;
 		return height;
 	},
 	

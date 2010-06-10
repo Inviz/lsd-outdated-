@@ -1,9 +1,7 @@
 ART.Sheet.define('list', {
   'width': 'auto',
   'height': 'auto',
-  'background-color': false,
-  'shadow-color': false,
-  'shadow-blur': false
+  'z-index': 25
 });
 
 ART.Sheet.define('list:focused', {		
@@ -15,8 +13,6 @@ ART.Sheet.define('list:focused', {
 });
 
 ART.Sheet.define('list item', {
-  'fill-color': false,
-  'reflection-color': false,
   'width': 'auto',
   'height': 'auto'
 });
@@ -52,6 +48,9 @@ ART.Widget.List = new Class({
 	events: {
 	  element: {
   	  mousedown: 'refocus'
+	  },
+	  self: {
+	    dominject: 'makeItems'
 	  }
 	},
 	
@@ -64,7 +63,7 @@ ART.Widget.List = new Class({
 	layered: {
 	  shadow:  ['shadow'],
 	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
-      if (!color) return false;
+      if (!isFinite(width) || !isFinite(height) || (!color && !stroke)) return false;
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
   		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))

@@ -67,7 +67,7 @@ ART.Sheet = {};
   	  var second = parse(needle);
   	  var i = second.length - 1, j = first.length - 1;
 			if (!containsAll(first[j], second[i])) return;
-			while (i-- > 0){
+			while (i-- >  0){
 				while (true){
 					if (j-- <= 0) return;
 					if (containsAll(first[j], second[i])) break;
@@ -78,9 +78,8 @@ ART.Sheet = {};
 	})();
 
 	var containsAll = function(self, other){
-		return other.every(function(x){
-			return self.contains(x);
-		}, this);
+	  for (var i = 0, j = other.length; i < j; i++) if (!self.contains(other[i])) return false;
+	  return true;
 	};
 
 	var cache = {};
@@ -105,6 +104,126 @@ ART.Sheet = {};
 			
 			$mixin(result.styles, rule.style);
 		});
+		
+		cache[selector] = result;
+		
+		return result;
+	};
+	
+	
+	
+	//static css compilation
+	var css = {
+	  selectors: [],
+	  rules: {}
+	};
+	var toCSSSelector = function(selectors) {
+		return selectors.map(function(parsed){
+  	  var classes = ['', 'art'];
+  	  if (parsed.tag) classes.push(parsed.tag);
+  	  if (parsed.id) classes.push(parsed.id);
+  	  if (parsed.pseudos) {
+    	  parsed.pseudos.each(function(pseudo) {
+    	    classes.push(pseudo.name);
+    	  });
+    	};
+  	  return classes.join('.')
+  	}).join(' ');
+	}
+	
+	Element.Styles.Except = {
+	  backgroundColor: true,
+	  width: true,
+	  height: true,
+	  display: true,
+	  minWidth: true
+	};
+	
+	ART.Sheet.isElementStyle = function(cc) {
+	  return ((Element.Styles[cc] || Element.Styles.More[cc]) && !Element.Styles.Except[cc]);
+	}
+	ART.Sheet.define = function(selectors, style){
+		SubtleSlickParse(selectors).each(function(selector){
+			var rule = {
+				'specificity': getSpecificity(selector),
+				'selector': parseSelector(selector),
+				'style': {}
+			};
+			for (p in style) {
+			  var cc = p.camelCase();
+			  if (ART.Sheet.isElementStyle(cc)) {
+			    var cssed = toCSSSelector(selector);
+			    if (!css.rules[cssed]) css.rules[cssed] = {};
+			    css.rules[cssed][cc] = style[p];
+			  }
+  			rule.style[cc] = style[p];
+			}
+			
+			rules.push(rule);
+
+			rules.sort(function(a, b){
+				return a.specificity - b.specificity;
+			});
+		});
+	};
+	
+	ART.Sheet.compile = function() {
+	  var bits = [];
+	  for (var selector in css.rules) {
+	    var rule = css.rules[selector];
+	    bits.push(selector + " {")
+	    for (var property in rule) {  
+	      var value = rule[property];
+	      switch ($type(value)) {
+	        case "number": 
+	          if (property != 'zIndex') value += 'px';
+	          break;
+	        case "array":
+	          value = value.map(function(bit) { return bit + 'px'}).join(' ');
+	          break;
+	      }
+	      bits.push(property.hyphenate() + ': ' + value + ';')
+	    }
+	    bits.push("}")
+	  }
+	  var text = bits.join("\n");
+	  if (window.createStyleSheet) {
+			var style = window.createStyleSheet("");
+			style.cssText = text;
+	  } else {
+	    var style = new Element('style', {type: 'text/css', media: 'screen'}).adopt(document.newTextNode(text)).inject(document.body);
+	  }
+	}
+	
+	
+	
+	ART.Sheet.lookup = function(selector){
+		if (cache[selector]) return cache[selector];
+		
+		var result = {styles: {}, rules: [], implied: {}}
+		
+		var parsed = parseSelector(SubtleSlickParse(selector)[0]);
+		rules.each(function(rule){
+			var i = rule.selector.length - 1, j = parsed.length - 1;
+			if (!containsAll(parsed[j], rule.selector[i])) return;
+			while (i-- > 0){
+				while (true){
+					if (j-- <= 0) return;
+					if (containsAll(parsed[j], rule.selector[i])) break;
+				}
+			}
+			result.rules.push(rule.selector.map(function(b) { return b.join("") }).join(" "));
+			
+			
+			$mixin(result.styles, rule.style);
+		});
+		
+		for (var property in result.styles) {
+		  if (ART.Sheet.isElementStyle(property)) {
+		    result.implied[property] = result.styles[property];
+		    delete result.styles[property];
+		  }
+		}
 		
 		cache[selector] = result;
 		

@@ -13,13 +13,10 @@ ART.Widget = new Class({
 	  'active': ['activate', 'deactivate'],
 	  'focused': ['focus', 'blur'],
 	  'disabled': ['disable', 'enable'],
-	  'orphaned': ['dispose', 'inject'],
 	  'dirty': ['update', 'render'],
 	  'built': ['build', 'destroy'],
 		'attached': ['attach', 'detach']
-	}, true),
-	
-	orphaned: true,
+	}),
 	
 	insensitive: ['dirty', 'built', 'attached'],
 	
@@ -47,7 +44,7 @@ ART.Widget = new Class({
 	},
 	
 	build: Macro.onion(function() {
-		var attrs = $merge(this.options.element);
+		var attrs = $unlink(this.options.element);
 		var tag = attrs.tag;
 		delete attrs.tag;
 		this.element = new Element(tag, attrs).store('widget', this);
@@ -72,46 +69,55 @@ ART.Widget = new Class({
 		delete this.element;
 	}),
 	
+	walk: function(callback) {
+	  callback(this);
+		this.getChildren().each(function(child){
+			child.walk(callback);
+		});
+	},
+	
+	collect: function(fn) {
+	  var result = []
+	  this.walk(function(child) {
+	    if (fn(child)) result.push(child)
+	  });
+	  return result;	  
+	},
+	
 	render: function(style){
 		if (this.selector && this.selector != this.getSelector()) this.update();
 		if (!this.parent.apply(this, arguments)) return; //only renders if dirty == true
 	  
+	  delete this.halted;
+	  
   	var size = this.size;
-		var found = this.lookupStyles();
-		if (found) {
-			for (var property in found) if (property in this.styles.given) delete found[property];
-			this.setStyles(found, true);
-			this.styles.found = found;
-		}
+  	this.findStyles();
 		
-		$extend(this.styles.given, style);
-		this.setStyles(this.styles.given)
-		for (var property in this.styles.element)	{
-			if (!(property in this.styles.given) && !(property in this.styles.found) && !(property in this.styles.calculated)) {
-				delete this.styles.current[property];
-				this.resetElementStyle(property);
-			}
-	  }
-		this.getChildren().each(function(child){
+	  this.renderStyles(style);
+		this.walk(function(child){
 			child.render();
 		});
-		
 		var newSize = {height: this.getStyle('height'), width: this.getStyle('width')};
-		this.size = newSize
-		if (true) {
-      if (size.height != newSize.height) this.setHeight(newSize.height, true);
-      if (size.width != newSize.width) this.setWidth(newSize.width, true);
-		  this.fireEvent('resize', [newSize, size])
-		}
+		//console.log('resize',newSize, size)
+    if (size.height != newSize.height) this.setHeight(newSize.height, true);
+    if (size.width != newSize.width) this.setWidth(newSize.width, true);
+	  this.fireEvent('resize', [newSize, size])
     
 		return true;
 	},
 	
+	//halt render process	
+	halt: function() {
+	  if (this.halted) return false;
+	  //console.info('halted', this.getSelector(), $A(arguments))
+	  this.halted = true;
+	  return true;
+	},
 	
 	update: function(recursive) {
 		if (recursive) {
-			this.getChildren().each(function(widget) {
-				widget.update(recursive);
+			this.walk(function(widget) {
+				widget.update();
 			});
 		}
 		if (!this.parent.apply(this, arguments)) return;
@@ -139,7 +145,6 @@ ART.Widget = new Class({
 	  args.splice(1, 2); //state + args
 		
 		if (this.insensitive && this.insensitive.contains(state)) return;
-		 
     this[value ? "setState" : "unsetState"].apply(this, args);
     this.refresh();
     return true;
@@ -181,19 +186,6 @@ ART.Widget = new Class({
     if (this.element) this.element.removeClass(name);
   },
 	
-	lookupStyles: function(selector) {
-		if (!selector) selector = this.getSelector();
-    if (this.selector != selector) {
-			this.selector = selector;
-			var result = ART.Sheet.lookup(selector);
-			if (!$equals(result.rules, this.rules)) {
-				this.rules = result.rules;
-				for (var i in result.styles) return result.styles;
-			}
-		}
-		return false;
-	},
-	
 	adopt: function(widget) {
 		if (widget.options.id) {
 			if (this[widget.options.id]) this[widget.options.id].dispose();
@@ -208,22 +200,31 @@ ART.Widget = new Class({
 	  while (parent = parent.parentWidget) parent.fireEvent('hello', widget)
 	},
 	
-	inject: Macro.onion(function(widget) {
+	inject: function(widget, quiet) {
 		widget.adopt(this);
-		this.fireEvent('inject', widget)
-		if (widget instanceof Element) this.render();
-	}),
+		var element = $(widget);
+		this.parentNode = element;
+		this.fireEvent('inject', arguments);
+		this.fireEvent('afterInject', arguments);
+		if ((element == widget) && (quiet !== true)) {
+		  var postponed = false
+    	this.render();
+		  this.walk(function(child) {
+		    if (child.postponed) {
+		      postponed = true;
+		      child.update();
+		    }
+		    child.fireEvent('dominject', element)
+		    child.dominjected = true;
+		  });
+		  if (postponed && !this.dirty) this.dirty = true;
+    	this.render();
+		}
+	},
 
 	setParent: function(widget){
 		this.parentWidget = widget;
 	},
-
-  getRoot: function() {
-    var widget = this;
-    while (widget = widget.parentWidget);
-    if (widget) return widget;
-    return null;
-  },
   
 	getChildren: function() {
 	  return this.children;
@@ -234,28 +235,19 @@ ART.Widget = new Class({
 	},
 	
 	onWidgetReady: function(callback) {
-	  var onReady = function() {
-	    callback.call(this);
-	  }.bind(this)
-	  if (!this.orphaned) {
-	    onReady();
-	  } else {
-	    var event = function() {
-	      var redraw = function() {
-  	      this.removeEvent('redraw', redraw);
-  	      onReady();
-	      }.bind(this)
-	      this.addEvent('redraw', redraw)
-	      this.removeEvent('inject', event);
-	    }.bind(this);
-	    this.addEvent('inject', event);
-	  }
+	  this.onDOMInject(callback.bind(this))
 	},
+
+  getRoot: function() {
+    var widget = this;
+    while (widget.parentWidget) widget = widget.parentWidget;
+    return widget;
+  },
 	
 	onDOMInject: function(callback) {
-	  var parent = this;
-	  while (parent.parentWidget) parent = parent.parentWidget;
-	  parent.addEvent('inject', callback);
+	  var root = this.getRoot();
+	  if (!root.parentWidget && root.parentNode) callback(root) 
+	  else this.addEvent('dominject', callback)
 	},
 	
 	addAction: function(options) {
@@ -303,7 +295,7 @@ ART.Widget.create = function(klasses, a, b, c, d) {
 	var widget = base[klass];
 	if (klasses.length) {
   	klasses = klasses.map(function(name) {
-  	  return ART.Widget.Traits[name.camelCase().capitalize()]
+  	  return $type(name) == 'string' ? ART.Widget.Traits[name.camelCase().capitalize()] : name;
   	});
   	widget = Class.inherit.apply(Class, [widget].concat(klasses));
   }

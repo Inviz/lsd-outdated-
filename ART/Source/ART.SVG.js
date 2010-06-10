@@ -277,6 +277,7 @@ ART.SVG.Base = new Class({
   _ejectFilter: function(type){
   	if (!this.container) return;
   	var filter = this.filter;
+  	delete this.filter;
   	if (filter) this.container.defs.removeChild(filter);
   },
   
@@ -293,22 +294,6 @@ ART.SVG.Base = new Class({
   	this.element.setAttribute('filter', 'url(#' + id + ')');
   
   	return filter;
-  },
-  
-  blur: function(radius){
-  	if (radius == null) radius = 4;
-  	var filter = this._createFilter();
-  	var blur = createElement('feGaussianBlur');
-  	blur.setAttribute('stdDeviation', radius * 0.3);
-  	blur.setAttribute('result', 'blur');
-  	filter.appendChild(blur);
-  	//in=SourceGraphic
-  	//stdDeviation="4" result="blur"
-  	return this;
-  },
-  
-  unblur: function() {
-    if (this.filter) this.blur(0.01)
   },
 
 	stroke: function(color, width, cap, join){
@@ -369,7 +354,6 @@ ART.SVG.Image = new Class({
 	
 });
 
-})();
 
 
 ART.SVG.Base.implement({
@@ -401,9 +385,19 @@ ART.SVG.Base.implement({
 
 		return this;
 	},
+	
+	_writeTransform: function(){
+	  if ($equals(this.transformed, this.transform)) return;
+		this.transformed = $unlink(this.transform);
+		var transforms = [];
+		for (var transform in this.transform) transforms.push(transform + '(' + this.transform[transform].join(',') + ')');
+		this.element.setAttribute('transform', transforms.join(' '));
+	},
 
 	fill: function(color){
 	  var args = arguments;
+    if ($equals(args, this.filled)) return;
+    this.filled = args;
 		if (args.length > 1) {
 	    if (color == 'radial') {
 	      var opts = args.length == 3 ? args[2] : {}
@@ -422,5 +416,27 @@ ART.SVG.Base.implement({
 		else this._setColor('stroke', color);
 		
 		return this;
-	}
-})
+	},
+
+  blur: function(radius){
+	  if (radius == null) radius = 4;
+    if (radius == this.blurred) return;
+    this.blurred = radius;
+    
+  	var filter = this._createFilter();
+  	var blur = createElement('feGaussianBlur');
+  	blur.setAttribute('stdDeviation', radius * 0.25);
+  	blur.setAttribute('result', 'blur');
+  	filter.appendChild(blur);
+  	//in=SourceGraphic
+  	//stdDeviation="4" result="blur"
+  	return this;
+  },
+
+  unblur: function() {
+    delete this.blurred;
+    this._ejectFilter();
+  }
+});
+
+})();

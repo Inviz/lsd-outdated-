@@ -88,7 +88,8 @@ ART.Layout.build = function(selector, layout, parent, element) {
 	      else value = obj;
 	    }
 			attributes[name] = attribute.value || true;
-			if (ART.Widget.Traits[name.capitalize()]) mixins.push(name);
+			var trait = ART.Layout.findTraitByAttributeName(name);
+			if (trait) mixins.push(trait);
 	  }
 	});
 	var widget = ART.Widget.create(mixins, options);
@@ -101,7 +102,9 @@ ART.Layout.build = function(selector, layout, parent, element) {
 	  parent[property].push(widget)
 	}
   
-  if (element || parent) widget.inject(element || parent)
+  if (!element) element = parent;
+  if (element) widget.inject(element, true)
+  
   if (parsed.classes) {
     widget.classes.push.apply(widget.classes, parsed.classes);
     parsed.classes.each(widget.addClass.bind(widget));

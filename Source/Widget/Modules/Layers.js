@@ -22,13 +22,15 @@ ART.Widget.Modules.Layers = new Class({
         var stop = (value === false);
         if (!stop) {
           if (injected) return;
-          this.paint.grab(instance);
+          instance.inject(this.paint);
           injected = true;
-        } else{
+        } else {
           if (!injected) return;
           instance.eject();
           injected = false;
         }
+      } else {
+        console.log('styles unchanged', this.getSelector(), instance)
       }
     });
     return instance;  

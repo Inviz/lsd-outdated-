@@ -26,17 +26,7 @@ ART.Widget.Menu = new Class({
 	layered: {
 	  shadow:  ['shadow'],
 	  stroke:  ['rectangle-stroke'],
-	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
-      if (!color) return false;
-	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
-  		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke  + shadow - x, stroke + shadow - y)
-	  }],
-	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
-      if (!color) return false;
-	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
-  		if (color) this.fill.apply(this, $splat(color));
-  		if (stroke || shadow) this.translate(stroke + shadow - x, stroke + shadow - y)
-	  }]
+	  background:  ['rectangle-shadow', ['backgroundColor']],
+	  reflection:  ['rectangle-shadow', ['reflectionColor']],
 	}
 });

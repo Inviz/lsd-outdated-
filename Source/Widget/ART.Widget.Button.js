@@ -50,25 +50,9 @@ ART.Widget.Button = new Class({
 	layered: {
 	  shadow:  ['shadow'],
     stroke: ['rectangle-stroke'],
-	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
-      if (!color) return false;
-	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
-  		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
-	  }],
-	  reflection:  ['rectangle', ['reflectionColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
-      if (!color) return false;
-	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
-  		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
-	  }],
-    glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(glyph, color, left, top, scale, stroke, shadow, x, y) {
-      if (!(color && glyph)) return false;
-	    this.draw(glyph);
-  		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(left + stroke + Math.max(shadow - x, 0), top + stroke + Math.max(shadow - y, 0));
-  		if (scale) this.scale(scale, scale)
-	  }]
+	  background:  ['rectangle-shadow', ['backgroundColor']],
+	  reflection:  ['rectangle-shadow', ['reflectionColor']],
+    glyph: ['shape-shadow']
 	},
 	
 	onClick: function() {

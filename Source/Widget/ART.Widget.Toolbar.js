@@ -52,16 +52,8 @@ ART.Widget.Toolbar = new Class({
 	
 	layered: {
 	  stroke:  ['rectangle-stroke'],
-	  reflection: ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
-      if (!color) return false;
-  	  this.draw(width, height, cornerRadius);
-  		if (color) this.fill.apply(this, $splat(color));
-  	}],
-  	background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
-      if (!color) return false;
-  	  this.draw(width, height, cornerRadius);
-  		if (color) this.fill.apply(this, $splat(color));
-  	}],
+	  reflection: ['rectangle', ['reflectionColor']],
+  	background: ['rectangle', ['backgroundColor']],
 	},
 	
 	position: 'absolute',

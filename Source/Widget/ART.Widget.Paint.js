@@ -1,26 +1,3 @@
-(function() {
-	var properties = [
-		'glyphColor', 'glyphShadow', 'glyphSize', 'glyphStroke', 'glyph', 'glyphColor', 'glyphColor', 'glyphHeight', 'glyphWidth', 'glyphTop', 'glyphLeft', 		
-		'cornerRadius', 'cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight',		
-		'reflectionColor',  'backgroundColor', 'strokeColor', 'fillColor',
-		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'
-	];
-	//properties = properties.concat(Hash.getKeys(ART.Adapter.prototype.style).map(function(e) { return e.camelCase() }));
-	
-	ART.Styles = {};
-	properties.each(function(prop) {
-		ART.Styles[prop] = true;
-	});
-	
-	ART.ComplexStyles = {
-		'cornerRadius': {
-			set: ['cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight'],
-			get: ['cornerRadiusTopLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomLeft', 'cornerRadiusBottomRight']
-		}
-	}
-})();
-
-
 ART.Widget.Paint = new Class({
   Extends: Class.inherit(
 		ART.Widget.Base,
@@ -48,13 +25,9 @@ ART.Widget.Paint = new Class({
 		}).inject(this.getWrapper(), 'top');
 	}),
 	
-	render: function() {
-		if (!this.parent.apply(this, arguments)) return;
-		if (!this.paint) return;
-		if (!this.outdated) return;
+	renderStyles: function(style) {
+	  this.parent.apply(this, arguments);
 	  
-		this.outdated = false;
-		
 		var padding = this.offset.padding = this.getPadding();
 		var offset = this.offset.paint = this.getPaintOffset();
 		for (var property in padding) {
@@ -64,8 +37,17 @@ ART.Widget.Paint = new Class({
 		  //if (property == 'top' || property == 'left') $(this.paint).setStyle(property, canvas[property])
 		  this.element.setStyle('margin-' + property, (this.styles.current['margin' + property.capitalize()] || 0) - offset[property]);
 		}
+    
+	},
+	
+	render: function() {
+		if (!this.parent.apply(this, arguments)) return;
+		if (!this.paint) return;
+		if (!this.outdated) return;
+	  
+		this.outdated = false;
 		
-		this.fireEvent('redraw');
+		if (!this.halted) this.fireEvent('redraw');
 		this.redraws++;
 		ART.Widget.Paint.redraws++;
 		
@@ -140,9 +122,15 @@ ART.Widget.Paint = new Class({
 		var properties = ART.ComplexStyles[property];
 		if (properties) {
 			if (properties.set) properties = properties.get;
-			return properties.map(function(property) {
-				return this.getStyle(property) || 0;
-			}, this)
+			var current = this.styles.current;
+		  var result = [];
+		  var property;
+		  var i = 0;
+		  while (property = properties[i++]) {
+			  var value = current[property];
+				result.push(((isFinite(value)) ? value : this.getStyle(property)) || 0)
+		  }
+			return result;
 		} else {
 			return this.parent.apply(this, arguments);
 		}
