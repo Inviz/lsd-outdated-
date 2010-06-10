@@ -7,8 +7,6 @@
 		base: 'keydown',
 		
 		onAdd: function(fn) {
-			this.addEvent('keypress:listener', fn);
-			
 			if (!this.retrieve('keypress:listeners')) {
 				var events = {
 					keypress: function(e) {
@@ -18,7 +16,7 @@
 						event.key = this.retrieve('keypress:key');
 						event.type = 'keypress';
 						event.from = 'keypress';
-            this.fireEvent('keypress:listener', event)
+            this.fireEvent('keypress', event)
 					}.bind(this),
 					keyup: function() {
 						this.eliminate('keypress:code');
@@ -40,10 +38,13 @@
 			this.store('keypress:code', event.code);
 		  this.store('keypress:key', event.key);
 			event.repeat = (event.key == this.retrieve('keypress:key'));
-			if (!event.firesKeyPressEvent(this.retrieve('keypress:code'))) {
+			if (event.firesKeyPressEvent(this.retrieve('keypress:code'))) {
 				event.pressed = true;
-				return event.stopPropagation();
-			} else {
+				event.stopPropagation();
+				return false;
+			} else {  
+				event.type = 'keypress';
+				event.from = 'keypress';
 			  return true;
 			}
 		}
