@@ -226,6 +226,12 @@ Moo.Application.Browser = new Class({
 	  }
 	},
 	
+	options: {
+	  resizer: {
+	    crop: true
+	  }
+	},
+	
 	events: {
 	  header: {
 	    toggler: {

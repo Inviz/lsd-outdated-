@@ -12,6 +12,7 @@ ART.Widget.Traits.Resizable = new Class({
       },
       snap: false,
       style: false,
+      crop: false,
       container: true,
       limit: {
         x: [0, 3000],
@@ -57,10 +58,8 @@ ART.Widget.Traits.Resizable = new Class({
     		}
     	});
     	
-    	if (this.options.resizer.container) {
-    	  $(this.getResized()).setStyle('overflow', 'hidden')
-    	  this.content.addEvent('resize', this.checkOverflow.bind(this));
-      }
+    	if (this.options.resizer.container) this.content.addEvent('resize', this.checkOverflow.bind(this));
+      if (this.options.resizer.crop) $(this.getResized()).setStyle('overflow', 'hidden')
 		})
 	}),
 	

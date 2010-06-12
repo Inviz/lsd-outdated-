@@ -98,25 +98,122 @@ ART.RectangleShadow = new Class({
   	if (color) this.fill.apply(this, $splat(color));
   	if (stroke || shadow) this.translate(stroke  + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
   }
-})
-
-
-
+});
 
 ART.Shadow = new Class({
   Extends: ART.Rectangle,
+    
+  properties: ['width', 'height', 'cornerRadius', 'strokeWidth', 'shadowBlur', 'shadowColor', 'shadowOffsetX', 'shadowOffsetY', 'shadowQuality'],
   
-  properties: ['width', 'height', 'cornerRadius', 'strokeWidth', 'shadowBlur', 'shadowColor', 'shadowOffsetX', 'shadowOffsetY'],
+  layers: [],
+  
+  paint: function(width, height, cornerRadius, stroke, shadow, color, x, y, quality) {
+    if (!isFinite(width) || !isFinite(height) || (!color)) return false;
+    
+    if (ART.Features.Blur && (quality == 'best' || shadow > 10)) {
+      ART.ShadowBlur.prototype.paint.apply(this, arguments);
+    } else {
+      ART.ShadowOnion.prototype.paint.apply(this, arguments);
+    }
+  },
+
+  inject: function(node) {
+    this.parent.apply(this, arguments)
+    for (var i = 0, j = this.layers.length; i < j; i++) if (this.layers[i]) this.layers[i].inject(node)
+  },
+  
+  eject: function() {
+    this.parent.apply(this, arguments)
+    for (var i = 0, j = this.layers.length; i < j; i++) {
+      var layer = this.layers[i];
+      if (layer && layer.element.parentNode) {
+        layer.element.parentNode.removeChild(layer.element);
+      }
+    }
+  }
+});
+
+ART.ShadowOnion = new Class({
+  Extends: ART.Shadow,
   
   paint: function(width, height, cornerRadius, stroke, shadow, color, x, y) {
-    if (!isFinite(width) || !isFinite(height)) return false;
+    if (shadow > 0 || y > 0 || x > 0) {
+      var fill = new Color(color);
+      fill.base = fill.alpha;
+      var transition = Fx.Transitions.Quint.easeIn;
+      var node = this.element.parentNode;
+      for (var i = 0; i < shadow; i++) {
+        fill.alpha = fill.base / 2 * (i == shadow ? .29 : (.1- shadow * 0.01) + Math.sqrt(i / 100));
+        //if (fill.alpha < 0.02) continue;
+        var rectangle = this.layers[i];
+        if (!rectangle) rectangle = this.layers[i] = ART.Shadow.Layer.getInstance(this);
+        rectangle.shadow = this;
+        rectangle.draw(width + stroke * 2 - i * 2 + shadow, height + stroke * 2 - i * 2 + shadow, cornerRadius.map(function(r) { 
+          return Math.max(shadow - i, r + stroke * 2 + shadow / 2 - i)
+        }))
+        rectangle.translate(i + x + shadow / 2, i + y + shadow / 2);
+        rectangle.fill(fill);
+        if (node) {
+          var layer = this.layers[i - 1];
+          
+          if (layer) {
+            if (layer.element.nextSibling) {
+              node.insertBefore(rectangle.element, layer.element.nextSibling);
+            } else {
+              node.appendChild(rectangle.element)
+            }
+          } else {
+            rectangle.inject(this.container)
+          }
+        }
+      }
+      for (var i = shadow, j = this.layers.length; i < j; i++) {
+        if (this.layers[i]) ART.Shadow.Layer.release(this.layers[i]);
+        this.layers.splice(i, 1);
+        i--;
+        j--;
+      }
+    } else {
+      this.layers.each(ART.Shadow.Layer.release);
+      this.layers = [];
+    }
+  }
+})
+
+ART.ShadowBlur = new Class({
+  Extends: ART.Shadow,
+
+  paint: function(width, height, cornerRadius, stroke, shadow, color, x, y) {
     this.draw(width + stroke * 2, height + stroke * 2, cornerRadius.map(function(r) { return r + stroke * 2}));
   	this.fill.apply(this, color ? $splat(color) : null);
   	if (shadow > 0) this.blur(shadow);
   	else this.unblur();
   	this.translate(x + shadow, shadow + y)
   }
+})
+
+ART.Shadow.Layer = new Class({
+  Extends: ART.Rectangle,
+  
+	
+	inject: function(container){
+		this.eject();
+		if (container instanceof ART.SVG.Group) container.children.push(this);
+		this.container = container;
+		if (container.defs && container.defs.nextSibling) container.element.insertBefore(this.element, container.defs.nextSibling);
+    else container.appendChild(this.element);
+		return this;
+	}
 });
+ART.Shadow.Layer.stack = [];
+
+ART.Shadow.Layer.getInstance = function() {
+  return ART.Shadow.Layer.stack.pop() || (new ART.Shadow.Layer);
+}
+ART.Shadow.Layer.release = function(layer) {
+  layer.element.parentNode.removeChild(layer.element);
+  ART.Shadow.Layer.stack.push(layer);
+};
 
 ART.Shape.implement({
   

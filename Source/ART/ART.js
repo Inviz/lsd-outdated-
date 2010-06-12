@@ -105,6 +105,9 @@ ART.implement({
 
 });
 
+ART.Features = {};
+ART.Features.Blur = Browser.Engine.gecko; //TODO: Figure it out
+
 ART.SVG.Element.implement({
   
 	_writeTransform: function(){
