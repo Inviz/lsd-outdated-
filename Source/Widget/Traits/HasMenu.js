@@ -24,6 +24,7 @@ ART.Widget.Traits.HasMenu = new Class({
         focus: 'repositionMenu',
         blur: 'collapse',
         next: 'expand',
+        previous: 'expand',
         cancel: 'collapse'
       }
     }
