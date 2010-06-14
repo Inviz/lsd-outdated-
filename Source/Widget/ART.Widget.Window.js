@@ -141,7 +141,7 @@ ART.Sheet.define('window#network #content', {
 	'width': 500,
 	'height': 'auto',
 	'display': 'block',
-	'min-width': 500,
+	'min-width': 520,
 	'background-color': hsb(0, 0, 93),
 	'border-top': '1px solid #666'
 });

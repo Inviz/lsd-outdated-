@@ -1,7 +1,11 @@
 ART.Sheet.define('list', {
   'width': 'auto',
   'height': 'auto',
-  'z-index': 25
+  'z-index': 25,
+	'inner-shadow-blur': 1,
+	'inner-shadow-offset-y': 2,
+	'inner-shadow-color': hsb(0, 0, 0, 0.25),
+	'inner-shadow-offset-x': 0
 });
 
 ART.Sheet.define('list:focused', {		
@@ -67,7 +71,8 @@ ART.Widget.List = new Class({
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
   		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
-	  }]
+	  }],
+  	innerShadow:  ['inner-shadow']
 	},
 	
 	items: ["1","2","3"],

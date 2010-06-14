@@ -142,8 +142,12 @@ ART.ShadowOnion = new Class({
       fill.base = fill.alpha;
       var transition = Fx.Transitions.Quint.easeIn;
       var node = this.element.parentNode;
-      for (var i = 0; i < shadow; i++) {
-        fill.alpha = fill.base / 2 * (i == shadow ? .29 : (.1- shadow * 0.01) + Math.sqrt(i / 100));
+      for (var i = 0; i < Math.max(shadow, 1); i++) {
+        if (shadow == 0) {
+          fill.alpha = Math.min(fill.base * 2, 1)
+        } else {
+          fill.alpha = fill.base / 2 * (i == shadow ? .29 : (.2 - shadow * 0.017) + Math.sqrt(i / 100));
+        }
         //if (fill.alpha < 0.02) continue;
         var rectangle = this.layers[i];
         if (!rectangle) rectangle = this.layers[i] = ART.Shadow.Layer.getInstance(this);
@@ -167,7 +171,7 @@ ART.ShadowOnion = new Class({
           }
         }
       }
-      for (var i = shadow, j = this.layers.length; i < j; i++) {
+      for (var i = Math.max(shadow, 1), j = this.layers.length; i < j; i++) {
         if (this.layers[i]) ART.Shadow.Layer.release(this.layers[i]);
         this.layers.splice(i, 1);
         i--;
@@ -178,7 +182,7 @@ ART.ShadowOnion = new Class({
       this.layers = [];
     }
   }
-})
+});
 
 ART.ShadowBlur = new Class({
   Extends: ART.Shadow,
@@ -206,7 +210,6 @@ ART.Shadow.Layer = new Class({
 	}
 });
 ART.Shadow.Layer.stack = [];
-
 ART.Shadow.Layer.getInstance = function() {
   return ART.Shadow.Layer.stack.pop() || (new ART.Shadow.Layer);
 }
@@ -225,7 +228,65 @@ ART.Shape.implement({
 		if (color) this.fill.apply(this, $splat(color));
 	}
 	
+});
+
+
+
+ART.InnerShadow = new Class({
+  Extends: ART.Shadow,
+  
+  properties: ['width', 'height', 'cornerRadius', 'strokeWidth', 'innerShadowBlur', 'innerShadowColor', 'innerShadowOffsetX', 'innerShadowOffsetY', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'],
+
+  paint: function(width, height, cornerRadius, stroke, shadow, color, x, y, shadowBlur, shadowOffsetX, shadowOffsetY) {
+    if (shadow > 0 || y > 0 || x > 0) {
+      var fill = new Color(color);
+      fill.base = fill.alpha;
+      var transition = Fx.Transitions.Sine;
+      var node = this.element.parentNode;
+      shadow += Math.max(x, y);
+      //if (!shadow) shadow = 1;;
+      for (var i = 0; i < shadow; i++) {
+        if (shadow == 0) {
+          fill.alpha = Math.min(fill.base * 2, 1)
+        } else {
+          fill.alpha = fill.base * transition((shadow - i) / shadow)
+        }
+        //if (fill.alpha < 0.02) continue;
+        var rectangle = this.layers[i];
+        if (!rectangle) rectangle = this.layers[i] = ART.InnerShadow.Layer.getInstance(this);
+        rectangle.shadow = this;
+        rectangle.draw(width - i * 2  + Math.max(0, y - x) , height - i * 2 + Math.max(0, y - x), cornerRadius)
+        console.info(shadowBlur, shadowOffsetY, shadowOffsetX)
+        rectangle.translate(
+          i - Math.max(0, y - x) / 2 + stroke + Math.max(shadowBlur - shadowOffsetX, 0), 
+          i + Math.max(0, x - y) / 2 + stroke + Math.max(shadowBlur - shadowOffsetY, 0)
+        );
+        rectangle.stroke(fill, 1);
+        if (node) rectangle.inject(this.container)
+      }
+      for (var i = shadow, j = this.layers.length; i < j; i++) {
+        if (this.layers[i]) ART.Shadow.Layer.release(this.layers[i]);
+        this.layers.splice(i, 1);
+        i--;
+        j--;
+      }
+    } else {
+      this.layers.each(ART.Shadow.Layer.release);
+      this.layers = [];
+    }
+  }
 })
+ART.InnerShadow.Layer = new Class({
+  Extends: ART.Rectangle
+});
+ART.InnerShadow.Layer.stack = [];
+ART.InnerShadow.Layer.getInstance = function() {
+  return ART.InnerShadow.Layer.stack.pop() || (new ART.InnerShadow.Layer);
+}
+ART.InnerShadow.Layer.release = function(layer) {
+  layer.element.parentNode.removeChild(layer.element);
+  ART.InnerShadow.Layer.stack.push(layer);
+};
 
 ART.ShapeShadow = new Class({
   

@@ -17,9 +17,12 @@ ART.Sheet.define('panel#right', {
 	'height': 200,
 	'corner-radius': 5,
   'margin-left': 10,
-	'shadow-blur': 3,
-	'shadow-offset-y': 0,
-	'shadow-color': hsb(0, 0, 0, 0.2)
+	'inner-shadow-blur': 2,
+	'inner-shadow-offset-y': 2,
+	'inner-shadow-color': hsb(0, 0, 0, 0.25),
+	'inner-shadow-offset-x': 0,
+	//'stroke-width': 1,
+	//'stroke-color': [hsb(0, 0, 68), hsb(0, 0, 86)]
 });
 
 
@@ -40,7 +43,8 @@ ART.Widget.Panel = new Class({
 	  shadow:  ['shadow'],
 	  stroke:  ['rectangle-stroke'],
 	  reflection: ['rectangle', ['reflectionColor']],
-  	background: ['rectangle', ['backgroundColor']]
+  	background: ['rectangle', ['backgroundColor']],
+	  innerShadow:  ['inner-shadow']
 	}
 	
 });

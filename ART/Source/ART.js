@@ -15,9 +15,17 @@ ART.Element = new Class({
 	
 	/* dom */
 
-	inject: function(element){
+	inject: function(element, where){
 		if (element.element) element = element.element;
-		element.appendChild(this.element);
+		switch (where) {
+		  case "after":
+		    break;
+		  case "before":
+		    break;
+		  case "inside":
+		  default:
+    		element.appendChild(this.element);
+		}
 		return this;
 	},
 	
