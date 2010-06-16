@@ -76,7 +76,7 @@ html > body .art.window .art.id-maximize {
   -art-glyph: ART.Glyphs.smallPlus; }
 html > body .art.window .art.id-handle {
   z-index: 10;
-  -art-glyph: ART.Glyphs.resi;
+  -art-glyph: ART.Glyphs.resize;
   -art-glyph-color: hsb(0, 0, 50, 0.5);
   -art-glyph-top: 2;
   -art-glyph-left: 0;
@@ -384,6 +384,8 @@ margin-bottom: 0px; }
 border-bottom: 1px solid #8a8a8a;
 height: auto;
 margin-top: 20px; }
+.art.form .art.section.last {
+  border-bottom: 0; }
 
 .art.input, .art.textarea {
 -art-corner-radius: 3;
