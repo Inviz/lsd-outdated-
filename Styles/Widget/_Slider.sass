@@ -1,0 +1,26 @@
+slider
+  :height 3px
+  :margin-top 10px
+  :margin-bottom 6px
+  :width 100px
+  :fill-Color hsb(0, 0, 0, 0.3)
+  :cursor pointer
+  :stroke-color hsb(0, 0, 0, 0.3)
+  :stroke-width 1
+  :corner-radius 1
+  &:focused    
+    :shadow-color hsb(212, 58, 93)
+    :shadow-blur 5
+    :shadow-offset-y 0
+    :stroke-color hsb(212, 58, 93, 0.3)
+  thumb
+    :height 14px
+    :width 14px
+    :margin-top -6
+    :corner-radius 7
+    :reflection-color gradient("radial", "{0.3: hsb(0, 0, 100, 0.396875), 1: hsb(0, 0, 100, 0)}, {cy: '90%', r: '45%', fy: '90%'}")
+    :fill-color gradient("radial", "{0.5: hsb(0, 0, 100, 0.496875), 0.9: hsb(0, 0, 100, 0)}, {cy: '5%', r: '20%', fy: '5%'}")
+    :background-color gradient("radial", "{0.3: hsb(0, 0, 35, 0.6), 0.5: hsb(0, 0, 60, 0.5)}")
+    :stroke-color hsb(0, 0, 30, 0.7)
+    :stroke-width 1
+

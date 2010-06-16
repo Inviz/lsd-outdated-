@@ -68,7 +68,7 @@ ART.Widget.Traits.Resizable = new Class({
     if (!this.resizer.container) this.resizer.container = this.element;
     var resized = this.getResized();
     if (!size) size = {width: $(resized).width}
-    var width = this.resizer.container.offsetWidth - this.offset.total.left - this.offset.total.right;
+    var width = this.resizer.container.offsetWidth - this.offset.padding.left - this.offset.padding.right;
     var self = arguments.callee;  
     if (size.width < width) {
       if (!$chk(self.limit)) self.limit = this.resizer.options.limit.x[0];

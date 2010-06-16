@@ -2,12 +2,6 @@
 
 ART.Widget.Element = new Class({
   Extends: ART.Widget.Base,
-  
-  offset: {
-    padding: {},
-    paint: {},
-    total: {}
-  },
     
   setStyle: function(property, value) {
 		if (!this.parent.apply(this, arguments)) return;

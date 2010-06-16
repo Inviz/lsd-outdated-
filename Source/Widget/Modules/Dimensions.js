@@ -28,7 +28,7 @@ ART.Widget.Modules.Dimensions = new Class({
 	  var auto = (height == "auto");
   	if (!height || auto) {
   	  height = this.element.offsetHeight;
-  	  if (height > 0) height -= ((this.offset.total.top || 0) + (this.offset.total.bottom || 0))
+  	  if (height > 0) height -= ((this.offset.padding.top || 0) + (this.offset.padding.bottom || 0))
 			//height = 0;
       //var heights = [height]
       //this.getChildren().each(function(widget) {
@@ -54,7 +54,7 @@ ART.Widget.Modules.Dimensions = new Class({
 	  var width = this.element.scrollWidth;
 	  if (width > 0) {
 	    var parent = this.parentWidget;
-	    if (this.styles.current.width == "auto" && this.styles.current.display != "block") width -= ((this.offset.padding.left || 0) + (this.offset.padding.right || 0)) 
+	    if (this.styles.current.width == "auto" && this.styles.current.display != "block") width -= ((this.offset.inside.left || 0) + (this.offset.inside.right || 0)) 
 	    width -= ((this.offset.paint.left || 0) + (this.offset.paint.right || 0)) 
 	  }
 		return width;
@@ -78,15 +78,15 @@ ART.Widget.Modules.Dimensions = new Class({
 	
 	getLayoutHeight: function() {
 		var height = this.getOffsetHeight();
-		height += ((this.offset.total.top || 0) - (this.offset.padding.top || 0));
-		height += ((this.offset.total.bottom || 0) - (this.offset.padding.bottom || 0));
+		height += ((this.offset.padding.top || 0) - (this.offset.inside.top || 0));
+		height += ((this.offset.padding.bottom || 0) - (this.offset.inside.bottom || 0));
 		return height;
 	},
 
 	getLayoutWidth: function() {
 		var width = this.getOffsetWidth();
-		width += ((this.offset.padding.left || 0) + (this.styles.current.marginLeft || 0));
-		width += ((this.offset.padding.right || 0) + (this.styles.current.marginRight || 0));
+		width += ((this.offset.inside.left || 0) + (this.styles.current.marginLeft || 0));
+		width += ((this.offset.inside.right || 0) + (this.styles.current.marginRight || 0));
 		return width;
 	}
 	

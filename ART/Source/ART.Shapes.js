@@ -256,7 +256,6 @@ ART.InnerShadow = new Class({
         if (!rectangle) rectangle = this.layers[i] = ART.InnerShadow.Layer.getInstance(this);
         rectangle.shadow = this;
         rectangle.draw(width - i * 2  + Math.max(0, y - x) , height - i * 2 + Math.max(0, y - x), cornerRadius)
-        console.info(shadowBlur, shadowOffsetY, shadowOffsetX)
         rectangle.translate(
           i - Math.max(0, y - x) / 2 + stroke + Math.max(shadowBlur - shadowOffsetX, 0), 
           i + Math.max(0, x - y) / 2 + stroke + Math.max(shadowBlur - shadowOffsetY, 0)

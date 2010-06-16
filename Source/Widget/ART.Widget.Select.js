@@ -1,37 +1,3 @@
-ART.Sheet.define('select', {		
-	'corner-radius': 3,
-	'stroke-color': hsb(0, 0, 50),
-	'stroke-width': 1,
-	'fill-color': [hsb(0, 0, 90), hsb(0, 0, 95)],
-	'reflection-color': [hsb(0, 0, 100, 1), hsb(0, 0, 70, 0)],
-	'width': 200,
-	'height': 20
-});
-ART.Sheet.define('window.fancy select button', {		
-	'width': 20,
-	'height': 20,
-	'margin-right': -1,
-	'margin-top': -1,
-	'float': 'right',
-	'glyph-top': 7,
-	'glyph-scale': 0.8,
-	'glyph-left': 7,
-	'glyph': ART.Glyphs.triangleDown
-});
-ART.Sheet.define('select:focused', {		
-  'shadow-color': hsb(212, 58, 93),
-  'shadow-blur': 5,
-  'shadow-offset-y': 0,
-	'stroke-color': hsb(212, 58, 93)
-});
-
-ART.Sheet.define('select:focused button', {		
-	'stroke-color': hsb(212, 58, 93, 0.5),
-	'margin-bottom': -1,
-	'margin-left': 1
-});
-
-
 ART.Widget.Select = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,

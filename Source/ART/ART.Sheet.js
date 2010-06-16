@@ -121,7 +121,7 @@ ART.Sheet = {};
 		return selectors.map(function(parsed){
   	  var classes = ['', 'art'];
   	  if (parsed.tag) classes.push(parsed.tag);
-  	  if (parsed.id) classes.push(parsed.id);
+  	  if (parsed.id) classes.push('id-' + parsed.id);
   	  if (parsed.pseudos) {
     	  parsed.pseudos.each(function(pseudo) {
     	    classes.push(pseudo.name);
@@ -166,7 +166,55 @@ ART.Sheet = {};
 			});
 		});
 	};
+	//import CSS-defined stylesheets into ART
+	ART.Sheet.decompile = function(name, callback) {
+	  if (!name) name = 'art';
+    $$('link[rel*=' + name + ']').each(function(stylesheet) {
+      new Request({
+        url: stylesheet.get('href'),
+        onSuccess: function(text) {
+          var sheet = {}
+          
+          var parsed = cssParser.parse(text);;
+          parsed.each(function(rule) {
+            var selector = rule.selectors.map(function(selector) {
+              return selector.selector.
+                replace(/\.is-/g, ':').
+                replace(/\.id-/g , '#').
+                replace(/\.art#/g, '#').
+                replace(/\.art\./g, '').
+                replace(/^html \> body /g, '')
+            }).join(', ');
+            
+            if (!selector.length) return;
+            
+            if (!sheet[selector]) sheet[selector] = {};
+            var styles = sheet[selector];
+            
+            rule.styles.each(function(style) {
+              var name = style.name.replace('-art-', '');
+              var value = style.value;
+              var integer = value.toInt();
+              if ((integer + 'px') == value) {
+                styles[name] = integer;
+              } else {
+                if ((value.indexOf('hsb') > -1)
+                 || (value.indexOf('ART') > -1) 
+                 || (value == 'false')
+                 || (integer == value)) value = eval(value.replace(/^['"]/, '').replace(/['"]$/, ''));
+                styles[name] = value;
+              }
+            })
+          });
+          for (var selector in sheet) ART.Sheet.define(selector, sheet[selector]);
+          
+          if (callback) callback();
+        }
+      }).get();
+    });
+	};
 	
+	//compile ART-defined stylesheets to css
 	ART.Sheet.compile = function() {
 	  var bits = [];
 	  for (var selector in css.rules) {

@@ -1,0 +1,51 @@
+//sass Widgets.sass > Widgets.css
+//sass /Users/invizko/Sites/art.dev/Styles/Widgets.sass /Users/invizko/Sites/art.dev/Demos/Assets/Styles/Widgets.css
+
+@import Mixin/Base
+@import Widget/Window
+@import Widget/Window/Fancy
+@import Widget/Window/HUD
+@import Widget/Button
+@import Widget/Combobox
+@import Widget/Container
+@import Widget/Form
+@import Widget/Input
+@import Widget/List
+@import Widget/Menu
+@import Widget/Panel
+@import Widget/Scrollbar
+@import Widget/Section
+@import Widget/Select
+@import Widget/Slider
+@import Widget/Toolbar
+@import Application/Browser
+@import Application/Network
+@import Application/Preferences
+
+svg
+  :display block
+  
+v\:*
+  :background transparent
+    
+*
+  :shadow-blur 0
+  :stroke-width 0
+  :shadow-offset-x 0
+  :shadow-offset-y 0
+  
+.art:element
+  +clearfix
+    
+  &.select
+    > .container
+      :text-align left
+      :padding 0 10px
+    
+    .container
+      :line-height 22px
+
+  &.window
+    svg
+      ~ *:element, .container
+        :position relative

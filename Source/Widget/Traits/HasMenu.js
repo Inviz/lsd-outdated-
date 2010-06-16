@@ -56,10 +56,10 @@ ART.Widget.Traits.HasMenu = new Class({
     var top = 0;
     switch (this.options.menu.position) {
       case 'bottom': 
-        top = this.getOffsetHeight() + ((this.offset.total.top || 0) - (this.offset.padding.top || 0)) + 1;
+        top = this.getOffsetHeight() + ((this.offset.padding.top || 0) - (this.offset.inside.top || 0)) + 1;
         break;
       case 'center':
-        top = - (this.getOffsetHeight() + ((this.offset.total.top || 0) - (this.offset.padding.top || 0))) / 2;
+        top = - (this.getOffsetHeight() + ((this.offset.padding.top || 0) - (this.offset.inside.top || 0))) / 2;
         break;
       case 'focus':
         top = - this.getSelectedOptionPosition();

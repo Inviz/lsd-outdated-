@@ -3,13 +3,12 @@
 <head>
 	<title>ART Demo</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link rel="stylesheet" type="text/css" media="screen" href="Assets/Styles/Window.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="Assets/Styles/Common.css" />
 	
 	<script src="../Specs/Assets/Scripts/mootools.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Specs/Assets/Scripts/mootools-color.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Specs/Assets/Scripts/slickparser.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Specs/Assets/Scripts/touch.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Demos/Assets/Scripts/cssparser.js" type="text/javascript" charset="utf-8"></script>
 	
 	<script type="text/javascript" src="../Source/Extras/Class.Extras.Ext.js"></script>
 	<script type="text/javascript" src="../Source/Extras/Class.Refactor.js"></script>
@@ -33,7 +32,7 @@
 	<script src="../Source/ART/ART.Sheet.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Widget/ART.Widget.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/ART/ART.Layout.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../Source/ART/ART.Glyphs.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/ART/ART.Glyphs.js"></script>
 	
   <script src="../Source/Widget/Modules/Events.js" type="text/javascript" charset="utf-8"></script>
   <script src="../Source/Widget/Modules/Expression.js" type="text/javascript" charset="utf-8"></script>
@@ -93,25 +92,17 @@
 	<script src="../Source/Moo/Moo.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Moo/Moo.Application.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../Source/Moo/Moo.Container.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Application/Browser.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Application/Preferences.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../Source/Application/Network.js" type="text/javascript" charset="utf-8"></script>
 	
-	<style>
-	  .art.button .art.window {vertical-align: top;}
-	  .buttons {float: left};
-	</style>
-	
+	<link rel="art stylesheet" href="./Assets/Styles/Widgets.css">
 	<script>
 	  window.addEvent('domready', function() {
-	    try {
-  			//console.profile('Creating widget');
-  	    $w = new Moo.Application(123)	
-  			$w.header.title.setContent('Hello')
-  			//console.profileEnd();
-  		} catch (e) {
-  			if (e.toArgs) console.warn.apply(console, e.toArgs())
-  			else throw e
-  		}
   		
-  		ART.Sheet.compile();
+  		ART.Sheet.decompile('art', function() {
+  		  
+  		//ART.Sheet.compile();
   		
 	    $z = new Moo.Application.Browser;	
 	    $z.setStyles({top: 50, left: 50, zIndex: 400})
@@ -134,6 +125,7 @@
 	    $n.setStyles({top: 300, left: 300, zIndex: 400});
 	    console.profileEnd('Network render')
 	    //$p.fit();
+		});
   		
 	  });
 	</script>

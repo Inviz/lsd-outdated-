@@ -19,6 +19,14 @@ ART.Widget = new Class({
 	}),
 	
 	insensitive: ['dirty', 'built', 'attached'],
+  
+  offset: {
+    paint: {},
+    total: {},
+    inside: {},
+    padding: {},
+    margin: {}
+  },
 	
 	Implements: [Options, Events, Logger],
 	
@@ -50,11 +58,9 @@ ART.Widget = new Class({
 		this.element = new Element(tag, attrs).store('widget', this);
 		this.element.addClass(this.ns);
 		this.element.addClass(this.name);
+		//this.element.addClass('tag-' + this.name);
 		
-		if (this.options.id) {
-			this.element.addClass(this.options.id);
-			//this.element.id = this.parentWidget ? this.parentWidget.name + '-' + this.options.id : this.options.id;
-		}
+		if (this.options.id) this.element.addClass('id-' + this.options.id);
 		
 		this.classes.each(function(cls) {
 		  this.addClass(cls);
@@ -122,7 +128,7 @@ ART.Widget = new Class({
 		}
 		if (!this.parent.apply(this, arguments)) return;
 		this.styles.calculated = {};
-		this.styles.last = {};
+		//this.styles.last = {};
 		return true;
 	},
 	
@@ -161,12 +167,12 @@ ART.Widget = new Class({
 	},
 
   setState: function(state) {
-    this.addClass(state);
+    this.addClass('pseudo-' + state);
 		this.addPseudo(state);
   },
   
   unsetState: function(state) {
-    this.removeClass(state);
+    this.removeClass('pseudo-' + state);
 		this.removePseudo(state);
   },
 
@@ -280,6 +286,7 @@ Element.Styles.More = {
 }
 
 //Basic widget initialization
+ART.Widget.count = 0;
 ART.Widget.create = function(klasses, a, b, c, d) {
   klasses = $splat(klasses);
   var base = ART.Widget;
@@ -299,7 +306,7 @@ ART.Widget.create = function(klasses, a, b, c, d) {
   	});
   	widget = Class.inherit.apply(Class, [widget].concat(klasses));
   }
-	
+	ART.Widget.count++;
 	return new widget(a, b, c, d)
 }
 

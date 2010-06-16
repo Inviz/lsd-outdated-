@@ -9,12 +9,6 @@ ART.Widget.Paint = new Class({
 	properties: [],
 	redraws: 0,
   
-  offset: {
-    paint: {},
-    total: {},
-    padding: {}
-  },
-  
 	build: Macro.onion(function() {
 		this.paint = new ART();
 		this.element.setStyle('position', this.styles.current.position || this.position || 'relative');
@@ -27,17 +21,26 @@ ART.Widget.Paint = new Class({
 	
 	renderStyles: function(style) {
 	  this.parent.apply(this, arguments);
+	  this.renderOffsets();
+	},
+	
+	renderOffsets: function() {
+	  var inside = this.offset.inside = this.getInsideOffset();
+		var paint = this.offset.paint = this.getPaintOffset();
+    var padding = this.offset.padding;
+    var margin = this.offset.margin;
 	  
-		var padding = this.offset.padding = this.getPadding();
-		var offset = this.offset.paint = this.getPaintOffset();
-		for (var property in padding) {
-		  this.offset.total[property] = padding[property] + offset[property];
-
-		  this.element.setStyle('padding-' + property, padding[property] + offset[property]);
-		  //if (property == 'top' || property == 'left') $(this.paint).setStyle(property, canvas[property])
-		  this.element.setStyle('margin-' + property, (this.styles.current['margin' + property.capitalize()] || 0) - offset[property]);
+		for (var property in inside) {
+		  var last = padding[property];
+      padding[property] = inside[property] + paint[property];
+      var cc = 'padding' + property.capitalize();
+      if ($defined(last) ? (last != padding[property]) : padding[property]) this.element.setStyle(cc, padding[property]);
+      
+      cc = 'margin' + property.capitalize();
+      last = margin[property];
+      margin[property] =(this.styles.current[cc] || 0) - paint[property]
+      if ($defined(last) ? (last != margin[property]) : (margin[property] != 0)) this.element.setStyle(cc, margin[property]);
 		}
-    
 	},
 	
 	render: function() {
@@ -84,13 +87,19 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getPadding: function() {
-		var stroke = (this.styles.current.strokeWidth || 0);
-		return {
-			top: stroke + (this.styles.current.paddingTop || 0),
-			left: stroke + (this.styles.current.paddingLeft || 0),
-			bottom: stroke + (this.styles.current.paddingBottom || 0),
-			right: stroke + (this.styles.current.paddingRight || 0)
+	  return {
+			top: this.styles.current.paddingTop || 0,
+			left: this.styles.current.paddingLeft || 0,
+			bottom: this.styles.current.paddingBottom || 0,
+			right: this.styles.current.paddingRight || 0
 		}
+	},
+	
+	getInsideOffset: function() {
+		var stroke = (this.styles.current.strokeWidth || 0);
+		var padding = this.getPadding();
+		for (var side in padding) padding[side] += stroke;
+		return padding;
 	},
 	
 	inheritStyle: function(property) {

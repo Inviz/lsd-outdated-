@@ -21,6 +21,7 @@ ART.Element = new Class({
 		  case "after":
 		    break;
 		  case "before":
+    		element.appendChild(this.element);
 		    break;
 		  case "inside":
 		  default:

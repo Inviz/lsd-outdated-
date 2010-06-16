@@ -23,7 +23,7 @@
 	ART.ComplexStyles = {
 		'cornerRadius': {
 			set: ['cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight'],
-			get: ['cornerRadiusTopLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomLeft', 'cornerRadiusBottomRight']
+			get: ['cornerRadiusTopLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight', 'cornerRadiusBottomLeft']
 		}
 	}
 })();
@@ -38,6 +38,7 @@ ART.Widget.Modules.Styles = new Class({
 		given: {},      //styles that were manually assigned
 		
 		calculated: {}, //styles that are calculated in runtime
+		implied: {},    //styles that are assigned by environment
 		
 		element: {},    //styles that are currently assigned to element
 		paint: {},      //styles that are currently used to paint
@@ -121,7 +122,10 @@ ART.Widget.Modules.Styles = new Class({
   getChangedStyles: function() {
     var styles = this.getStyles.apply(this, arguments);
     var last = $extend({}, this.styles.last);
-    $extend(styles, this.size)
+    var size = $merge(this.size);
+    size.height += (this.styles.current.paddingTop || 0) + (this.styles.current.paddingBottom || 0)
+    $extend(styles, size);
+    return styles;
     for (var property in styles) {
       var value = styles[property];
       if (!$equals(last[property], value)) return styles;
