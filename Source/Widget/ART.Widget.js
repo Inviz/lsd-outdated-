@@ -167,12 +167,12 @@ ART.Widget = new Class({
 	},
 
   setState: function(state) {
-    this.addClass('pseudo-' + state);
+    this.addClass('is-' + state);
 		this.addPseudo(state);
   },
   
   unsetState: function(state) {
-    this.removeClass('pseudo-' + state);
+    this.removeClass('is-' + state);
 		this.removePseudo(state);
   },
 
