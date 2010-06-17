@@ -128,7 +128,7 @@ ART.Widget = new Class({
 		}
 		if (!this.parent.apply(this, arguments)) return;
 		this.styles.calculated = {};
-		//this.styles.last = {};
+		//this.styles.formatted = {};
 		return true;
 	},
 	

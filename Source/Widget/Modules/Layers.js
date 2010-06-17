@@ -30,7 +30,7 @@ ART.Widget.Modules.Layers = new Class({
           injected = false;
         }
       } else {
-        console.log('styles unchanged', this.getSelector(), instance)
+        //this.log('unchanged')
       }
     });
     return instance;  

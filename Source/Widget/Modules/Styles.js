@@ -121,18 +121,30 @@ ART.Widget.Modules.Styles = new Class({
 
   getChangedStyles: function() {
     var styles = this.getStyles.apply(this, arguments);
-    var last = $extend({}, this.styles.last);
-    var size = $merge(this.size);
-    size.height += (this.styles.current.paddingTop || 0) + (this.styles.current.paddingBottom || 0)
-    $extend(styles, size);
-    return styles;
+    var hash = $A(arguments).join('')  
+    var last = $extend({}, this.styles.last[hash]);
+    if (this.size.height) {
+      var size = $merge(this.size);
+      size.height += (this.styles.current.paddingTop || 0) + (this.styles.current.paddingBottom || 0)
+      $extend(styles, size);
+      //return styles;
+    }
+    
+    var changed = false;
     for (var property in styles) {
       var value = styles[property];
-      if (!$equals(last[property], value)) return styles;
-      delete last[property]
+      if (!$equals(last[property], value)) {
+        changed = true;
+        break;
+      }
+      delete last[property];
     };
-    if (!changed) for (var property in last) return styles;
-    return false;
+    if (!changed) for (var property in last) {
+      changed = true;
+      break;
+    }
+    this.styles.last[hash] = styles;    
+    return changed ? styles : false;
   },
 	
 	setElementStyle: function(property, value) {
