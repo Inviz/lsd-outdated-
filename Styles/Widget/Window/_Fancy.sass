@@ -25,6 +25,10 @@ window.fancy
       :stroke-color gradient(hsb(55, 71, 40), hsb(45, 24, 75))
       &:active
         :fill-color gradient("radial", "{0: hsb(100, 76, 66), 0.8: hsb(95, 46, 63), 1: hsb(103, 53, 33)}, {cy: '55%', r: '44%', fy: '55%'}")
+    #close, #minimize, #maximize
+      &:disabled
+        :fill-color false
+        :opacity 0.5
     
   &:dragged    
     :cursor move

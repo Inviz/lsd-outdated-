@@ -33,7 +33,7 @@ Moo.Application.Preferences.Network = new Class({
       'button#toggler[shy]': {},
 	    '#buttons[hoverable][shy]': {
         'button#close': {},
-	      'button#minimize': {},
+	      'button#minimize:disabled': {},
         'button#maximize:disabled': {}
 	    },
 	    '#title[container]': {},

@@ -9,7 +9,7 @@ ART.Layout = new Class({
     this.widget = widget;
     this.layout = layout;
     this.setOptions(options);
-		this.widget.log('Layout', this, 'for', widget)
+		//this.widget.log('Layout', this, 'for', widget)
     this.reset();
   }, 
   

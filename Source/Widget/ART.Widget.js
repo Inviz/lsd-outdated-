@@ -48,7 +48,7 @@ ART.Widget = new Class({
 		this.children = [];
 		this.update();
 		
-		this.log('Init', this)
+		//this.log('Init', this)
 	},
 	
 	build: Macro.onion(function() {
