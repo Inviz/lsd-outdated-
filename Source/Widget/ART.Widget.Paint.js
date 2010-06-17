@@ -128,6 +128,7 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getStyle: function(property, value) {
+	  if (this.styles.computed[property]) return this.styles.computed[property]; 
 		var properties = ART.ComplexStyles[property];
 		if (properties) {
 			if (properties.set) properties = properties.get;
@@ -139,7 +140,7 @@ ART.Widget.Paint = new Class({
 			  var value = current[property];
 				result.push(((isFinite(value)) ? value : this.getStyle(property)) || 0)
 		  }
-			return result;
+			return (this.styles.computed[property] = result);
 		} else {
 			return this.parent.apply(this, arguments);
 		}

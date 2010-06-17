@@ -38,6 +38,7 @@ ART.Widget.Modules.Styles = new Class({
 		given: {},      //styles that were manually assigned
 		
 		calculated: {}, //styles that are calculated in runtime
+		computed: {},   //styles that are already getStyled
 		implied: {},    //styles that are assigned by environment
 		
 		element: {},    //styles that are currently assigned to element
@@ -107,9 +108,11 @@ ART.Widget.Modules.Styles = new Class({
 	},
 	
 	getStyle: function(property) {
+	  if (this.styles.computed[property]) return this.styles.computed[property];
 		var value = this.styles.current[property];
 		if (value == "inherit") value = this.inheritStyle(property);
 		if (value == "auto") value = this.calculateStyle(property);
+		this.styles.computed[property] = value;
 		return value;
 	},
 	
