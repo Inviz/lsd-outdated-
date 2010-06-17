@@ -50,11 +50,9 @@ ART.Widget.Paint = new Class({
 	  
 		this.outdated = false;
 		
-		if (!this.halted) {
-		  this.fireEvent('redraw');
-		  this.redraws++;
-		  ART.Widget.Paint.redraws++;
-		}
+		if (!this.halted) this.fireEvent('redraw');
+	  this.redraws++;
+	  ART.Widget.Paint.redraws++;
 		
 		return true;
 	},
