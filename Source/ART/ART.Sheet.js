@@ -24,6 +24,9 @@ ART.Sheet = {};
 			if (chunk.classes) chunk.classes.each(function(klass){
 				result.push('.' + klass);
 			});
+			if (chunk.attributes) chunk.attributes.each(function(attribute){
+				result.push('[' + attribute.name + '=' + attribute.value + ']');
+			});
 			return result;
 		});
 	};
@@ -185,8 +188,7 @@ ART.Sheet = {};
                 replace(/\.art\./g, '').
                 replace(/^html \> body /g, '')
             }).join(', ');
-            
-            if (!selector.length) return;
+            if (!selector.length || (selector.match(/svg|v\\?:|:(?:before|after)|\.container/))) return;
             
             if (!sheet[selector]) sheet[selector] = {};
             var styles = sheet[selector];
@@ -206,6 +208,7 @@ ART.Sheet = {};
               }
             })
           });
+          console.dir(sheet)
           for (var selector in sheet) ART.Sheet.define(selector, sheet[selector]);
           
           if (callback) callback();

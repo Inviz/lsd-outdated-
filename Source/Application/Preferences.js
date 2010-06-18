@@ -20,7 +20,7 @@ Moo.Application.Preferences = new Class({
 	    },
 	    '#title[container]': {},
   	  '#toolbar': {
-        'input-search[type=search]#search': {},
+        'input[type=search]#search': {},
   	    'button#back.left': {},
   	    'button#forward.right:disabled': {},
   	    'button#index': 'Show All'
@@ -32,7 +32,7 @@ Moo.Application.Preferences = new Class({
   	      {'label[for=appearance]': 'Text input:'},
   	      'input#appearance',
   	      {'label[for=appearance]': 'Slider:'},
-    	    'slider#count'
+    	    'input[type=range]#count'
   	    ],
   	    'section#second': [
   	      {'label[for=appearance]': 'Text input:'},

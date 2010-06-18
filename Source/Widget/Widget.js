@@ -291,14 +291,19 @@ ART.Widget.create = function(klasses, a, b, c, d) {
   klasses = $splat(klasses);
   var base = ART.Widget;
   var klass = klasses.shift();
-  
+  var original = klass;
   if (klass.indexOf('-') > -1) { 
     var bits = klass.split('-');
     while (bits.length > 1) base = base[bits.shift().camelCase().capitalize()];
     klass = bits.join('-');
   }
   klass = klass.camelCase().capitalize()
-	if (!base[klass]) throw new Exception.Misconfiguration(this, "ClassName ART.Widget." + klass + " was not found");
+	if (!base[klass]) {
+	  original = original.replace(/-(.)/g, function(whole, bit) {
+	    return '.' + bit.toUpperCase();
+	  }).capitalize();
+	  throw new Exception.Misconfiguration(this, "ClassName ART.Widget." + original + " was not found");
+	}
 	var widget = base[klass];
 	if (klasses.length) {
   	klasses = klasses.map(function(name) {

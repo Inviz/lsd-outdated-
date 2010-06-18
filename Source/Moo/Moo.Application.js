@@ -20,7 +20,7 @@ Moo.Application = new Class({
       'label#for-whatever[for=minimize]': 'Whatever:',
 	    'input#whatever[name=whatever][type=text]': {},
 	    'textarea#soever[name=soever]': {},
-	    'slider#count': {},
+	    'input[type=range]#count': {},
 	  },
 	  'section#footer': {
 			'#status[container]': {}

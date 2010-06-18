@@ -1,4 +1,4 @@
-ART.Widget.Slider = new Class({
+ART.Widget.Input.Range = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
     ART.Widget.Traits.HasSlider,
@@ -6,7 +6,7 @@ ART.Widget.Slider = new Class({
     ART.Widget.Traits.Accessible
   ),
   
-  name: 'slider',
+  name: 'input',
 	
 	layered: {
 	  shadow: ['shadow'],
@@ -34,7 +34,7 @@ ART.Widget.Slider = new Class({
 	},
 	
 	layout: {
-    'slider-thumb#thumb': {}
+    'input-range-thumb#thumb': {}
 	},
 	
 	shortcuts: {
@@ -51,7 +51,7 @@ ART.Widget.Slider = new Class({
 	}
 })
 
-ART.Widget.Slider.Thumb = new Class({
+ART.Widget.Input.Range.Thumb = new Class({
   Extends: Class.inherit(
     ART.Widget.Button
   ),

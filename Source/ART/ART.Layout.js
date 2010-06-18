@@ -65,10 +65,11 @@ ART.Layout = new Class({
 ART.Layout.build = function(selector, layout, parent, element) {
   var parsed = SubtleSlickParse(selector)[0][0]
   if (!parsed.tag) parsed.tag = 'container';
+  var tag = parsed.tag;
   var options = {};
   var attributes = {};
 	if (parsed.id) options.id = parsed.id
-	var mixins = [parsed.tag];
+	var mixins = [];
 	var styles;
 	if (parsed.attributes) parsed.attributes.each(function(attribute) {
 	  if (attribute.name == "style") {
@@ -80,6 +81,7 @@ ART.Layout.build = function(selector, layout, parent, element) {
 	  } else {
 	    var name = attribute.name;
 	    var value = attribute.value || true;
+	    if (name == 'type') tag += "-" + value;
 	    var bits = name.split('-');
 	    for (var i = bits.length - 1; i > -1; i--) {
         var obj = {};
@@ -92,9 +94,13 @@ ART.Layout.build = function(selector, layout, parent, element) {
 			if (trait) mixins.push(trait);
 	  }
 	});
+	mixins.unshift(tag)
 	var widget = ART.Widget.create(mixins, options);
 	widget.build();
-	if (parsed.attributes) widget.attributes = attributes;
+	if (parsed.attributes) {
+	  if (!widget.attributes) widget.attributes = {};
+	  $extend(widget.attributes, attributes);
+	}
 	
 	if (!options.id && parent) {
 	  var property = parsed.tag + 's';

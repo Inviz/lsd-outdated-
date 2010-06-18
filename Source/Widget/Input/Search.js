@@ -1,38 +1,3 @@
-ART.Widget.Input = new Class({
-  Extends: Class.inherit(
-    ART.Widget.Paint,
-    ART.Widget.Traits.HasInput
-  ),
-  
-  name: 'input',
-  
-  events: {
-    element: {
-  	  mousedown: 'refocus'
-    }
-  },
-  
-  layered: {
-    shadow:  ['shadow'],
-    stroke: ['rectangle-stroke'],
-	  background:  ['rectangle-shadow', ['backgroundColor']],
-	  reflection:  ['rectangle-shadow', ['reflectionColor']],
-    glyph: ['shape-shadow']
-	},
-	
-	focus: Macro.onion(function() {
-	  this.input.focus();
-	}),
-	
-	refocus: function() {
-	  this.focus();
-	},
-	
-	applyValue: function(item) {
-	  this.input.set('value', item);
-	}
-});
-
 ART.Widget.Input.Search = new Class({
   Extends: Class.inherit(
     ART.Widget.Input,
@@ -53,6 +18,8 @@ ART.Widget.Input.Search = new Class({
     'input-icon#glyph': {},
     'button#canceller': {}
   },
+  
+  name: 'input',
   
   options: {
     menu: {

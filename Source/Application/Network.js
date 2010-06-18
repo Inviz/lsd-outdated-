@@ -38,7 +38,7 @@ Moo.Application.Preferences.Network = new Class({
 	    },
 	    '#title[container]': {},
   	  '#toolbar': {
-        'input-search[type=search]#search': {},
+        'input[type=search]#search': {},
   	    'button#back.left': {},
   	    'button#forward.right:disabled': {},
   	    'button#index': 'Show All'
@@ -61,12 +61,12 @@ Moo.Application.Preferences.Network = new Class({
   	    },
   	    //'splitter#resizer': {},
   	    'panel#right[width="parent - left - 56"]': [
-  	      {'label[for=appearance]': 'Text input:'},
-  	      'input#text',
+  	      {'label[for=appearance]': 'Network name:'},
+  	      'input#text[width="parent - 135"]',
   	      {'label[for=appearance]': 'Slider:'},
-    	    'slider#count',
+    	    'input[type=range]#count',
   	      {'label[for=appearance]': 'Text input:'},
-  	      'input#text2'
+  	      'input#text2[width="parent - 135"]'
   	    ],
   	    '#actions': {
     	    'button#assist': 'Assist me...',

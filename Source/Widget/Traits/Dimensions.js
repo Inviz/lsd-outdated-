@@ -4,11 +4,12 @@ ART.Widget.Traits.Dimensions = new Class({
       var height = this.options.height;
       if (height && (height.toInt() != height.replace('%', ''))) this.getClientHeight = this.createDimensionFunction(height, 'height');
       var width = this.options.width;
-      if (width && (width.toInt() != width.replace('%', '')))this.getClientWidth = this.createDimensionFunction(width, 'width');
+      if (width && (width.toInt() != width.replace('%', ''))) this.getClientWidth = this.createDimensionFunction(width, 'width');
     }.bind(this))
   }),
   
   createDimensionFunction: function(expression, dimension) {
+    this.setStyle(dimension, 'auto')
     var environment = {};
     expression = expression.replace(/([a-z]+)/g, function(name) {
       environment[name] = this.getByExpression(name);
