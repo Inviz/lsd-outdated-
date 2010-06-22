@@ -12,7 +12,7 @@ ART.Widget.Input = new Class({
   
   events: {
     element: {
-  	  mousedown: 'refocus'
+  	  mousedown: 'retain'
     }
   },
   
@@ -28,7 +28,7 @@ ART.Widget.Input = new Class({
 	  this.input.focus();
 	}),
 	
-	refocus: function() {
+	retain: function() {
 	  this.focus();
 	},
 	

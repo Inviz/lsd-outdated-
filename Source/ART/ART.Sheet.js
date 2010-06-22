@@ -138,7 +138,7 @@ ART.Sheet = {};
 	  backgroundColor: true,
 	  width: true,
 	  height: true,
-	  display: true,
+	  //display: true,
 	  minWidth: true
 	};
 	

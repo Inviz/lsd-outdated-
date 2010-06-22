@@ -95,12 +95,12 @@ ART.Layout.build = function(selector, layout, parent, element) {
 	  }
 	});
 	mixins.unshift(tag)
+	for (var i in attributes) {
+	  options.attributes = attributes;
+	  break;
+	}
 	var widget = ART.Widget.create(mixins, options);
 	widget.build();
-	if (parsed.attributes) {
-	  if (!widget.attributes) widget.attributes = {};
-	  $extend(widget.attributes, attributes);
-	}
 	
 	if (!options.id && parent) {
 	  var property = parsed.tag + 's';

@@ -11,7 +11,7 @@ ART.Widget.List = new Class({
 	
 	events: {
 	  element: {
-  	  mousedown: 'refocus'
+  	  mousedown: 'retain'
 	  },
 	  self: {
 	    dominject: 'makeItems'
@@ -31,8 +31,7 @@ ART.Widget.List = new Class({
 	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
   		if (color) this.fill.apply(this, $splat(color));
   		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
-	  }],
-  	innerShadow:  ['inner-shadow']
+	  }]
 	},
 	
 	items: ["1","2","3"],

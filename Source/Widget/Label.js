@@ -21,6 +21,16 @@ ART.Widget.Label = new Class({
   },
   
   focusRelatedWidget: function() {
-    $(this.element).getNext().retrieve('widget').focus();
+    var hook = $(this.element);
+    switch(this.attributes['for']) {
+      case "previous":
+        hook = hook.getPrevious();
+        break;
+      case "next":
+      default:
+        hook = hook.getNext();
+        break;
+    }
+    hook.retrieve('widget').retain();
   }
 })

@@ -20,8 +20,8 @@ ART.Widget.Traits.Focusable = new Class({
     if (element !== false) this.getFocuser().focus(element || this.element)
   }),
   
-  refocus: function() {
-    if (!this.focused) return this.focus();
+  retain: function() {
+    if (!this.focused) this.focus();
   },
   
   onFocus: Macro.defaults(function() {

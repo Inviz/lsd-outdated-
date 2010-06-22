@@ -43,7 +43,8 @@ ART.Widget = new Class({
 	initialize: function(options){
 		if (options) this.setOptions(options);
 
-		this.classes = this.options.classes;
+		this.classes = (this.classes || []).concat(this.options.classes);
+		this.attributes = $extend(this.attributes || {}, this.options.attributes);
 		this.pseudos = [];
 		this.children = [];
 		this.update();
@@ -66,6 +67,10 @@ ART.Widget = new Class({
 		  this.addClass(cls);
 		}, this);
 		
+		if (this.attributes) 
+		  for (var name in this.attributes) 
+		    if (name != 'width' && name != 'height') 
+		      this.element.setAttribute(name, this.attributes[name])
 		this.attach()
 	}),
 	

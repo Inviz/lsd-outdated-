@@ -45,7 +45,7 @@ Moo.Application.Preferences.Network = new Class({
   	  }
 	  },
 	  'section#content[container]': {
-  	  'glyph[name=drag-handle]#handle.corner[at=bottom right]': {},
+  	  'glyph#handle[name=drag-handle][at=bottom right]': {},
 	    'form.two-column#networking': {
 	      '#legend': [
   	      {'label[for=location]': 'Location:'},
@@ -65,8 +65,19 @@ Moo.Application.Preferences.Network = new Class({
   	      'input#text[width="parent - 135"]',
   	      {'label[for=appearance]': 'Slider:'},
     	    'input[type=range]#count',
-  	      {'label[for=appearance]': 'Text input:'},
-  	      'input#text2[width="parent - 135"]'
+  	      {'label[for=appearance]': 'Active?'},
+  	      'input[type=checkbox]#activator',
+  	      {'label[for=appearance]': 'Choose one:'},
+  	      {'.field.options': [
+  	        {'.line': [
+    	        'input[type=radio][name=choice]#apple-pies',
+    	        {'label[for=previous]': 'Apple pies'}
+  	        ]},
+  	        {'.line': [
+    	        'input[type=radio][name=choice]#instant-coffee',
+    	        {'label[for=previous]': 'Instant coffee'}
+  	        ]}
+  	      ]},
   	    ],
   	    '#actions': {
     	    'button#assist': 'Assist me...',
@@ -75,6 +86,11 @@ Moo.Application.Preferences.Network = new Class({
   	    }
   	  }
 	  }
+	},
+	
+	
+	getHandle: function() {
+	  return this.content.handle;
 	}
 });
 

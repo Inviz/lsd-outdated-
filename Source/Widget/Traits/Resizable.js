@@ -34,7 +34,7 @@ ART.Widget.Traits.Resizable = new Class({
     element.width  = resized.getStyle('width');
     element.height = resized.getStyle('height');
     var resizer = new Drag(element, $extend({
-      handle: this.getHandle()
+      handle: $(this.getHandle())
     }, this.options.resizer));
     resizer.addEvents(this.events.resizer);
     resizer.addEvents({

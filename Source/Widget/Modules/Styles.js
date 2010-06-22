@@ -128,7 +128,7 @@ ART.Widget.Modules.Styles = new Class({
     var last = $extend({}, this.styles.last[hash]);
     if (this.size.height) {
       var size = $merge(this.size);
-      size.height += (this.styles.current.paddingTop || 0) + (this.styles.current.paddingBottom || 0)
+      if (this.styles.current.height != 'auto') size.height += (this.styles.current.paddingTop || 0) + (this.styles.current.paddingBottom || 0)
       $extend(styles, size);
       //return styles;
     }

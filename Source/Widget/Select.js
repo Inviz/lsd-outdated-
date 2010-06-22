@@ -37,7 +37,7 @@ ART.Widget.Select = new Class({
 	
 	events: {
 	  element: {
-  	  mousedown: 'refocus',
+  	  mousedown: 'retain',
   	  click: 'expand'
 	  },
 	  self: {
