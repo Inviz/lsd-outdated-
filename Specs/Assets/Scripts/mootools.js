@@ -1259,7 +1259,6 @@ Class.implement({
 Class.Mutators = {
 	
 	Extends: function(parent){
-
 		this.parent = parent;
 		this.prototype = Class.instantiate(parent);
 

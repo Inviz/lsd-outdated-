@@ -10,8 +10,8 @@ ART.Widget.Menu = new Class({
   
 	layered: {
 	  shadow:  ['shadow'],
-	  stroke:  ['rectangle-stroke'],
-	  background:  ['rectangle-shadow', ['backgroundColor']],
-	  reflection:  ['rectangle-shadow', ['reflectionColor']],
+	  stroke:  ['stroke'],
+	  background:  ['fill', ['backgroundColor']],
+	  reflection:  ['fill', ['reflectionColor']],
 	}
 });

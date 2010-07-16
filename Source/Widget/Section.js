@@ -13,8 +13,8 @@ ART.Widget.Section = new Class({
 	properties: ['cornerRadius', 'offset'],
 	
 	layered: {
-	  fill:  ['rectangle-stroke'],
-	  reflection:  ['rectangle', ['reflectionColor']],
-	  background: ['rectangle', ['backgroundColor']]
+	  fill:  ['stroke'],
+	  reflection:  ['fill', ['reflectionColor']],
+	  background: ['fill', ['backgroundColor']]
 	}
 })

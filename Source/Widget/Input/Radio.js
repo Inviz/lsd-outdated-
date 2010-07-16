@@ -1,9 +1,9 @@
 ART.Widget.Input.Radio = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
-    ART.Widget.Traits.Touchable,
-    ART.Widget.Traits.Focusable,
-    ART.Widget.Traits.Accessible,
+    ART.Widget.Trait.Touchable,
+    ART.Widget.Trait.Focusable,
+    ART.Widget.Trait.Accessible,
     Widget.Stateful({
       'checked': ['check', 'uncheck']
     })
@@ -23,10 +23,10 @@ ART.Widget.Input.Radio = new Class({
 
 	layered: {
 	  shadow:  ['shadow'],
-    stroke: ['rectangle-stroke'],
-	  background:  ['rectangle-shadow', ['backgroundColor']],
-	  reflection:  ['rectangle-shadow', ['reflectionColor']],
-    glyph: ['shape-shadow']
+    stroke: ['stroke'],
+	  background:  ['fill', ['backgroundColor']],
+	  reflection:  ['fill', ['reflectionColor']],
+    glyph: ['glyph']
 	},
 	
 	check: Macro.onion(function() {

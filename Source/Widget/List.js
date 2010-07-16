@@ -2,9 +2,9 @@
 ART.Widget.List = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
-    ART.Widget.Traits.HasList,
-    ART.Widget.Traits.Focusable,
-    ART.Widget.Traits.Accessible
+    ART.Widget.Trait.HasList,
+    ART.Widget.Trait.Focusable,
+    ART.Widget.Trait.Accessible
   ),
   
   name: 'list',
@@ -26,12 +26,7 @@ ART.Widget.List = new Class({
 
 	layered: {
 	  shadow:  ['shadow'],
-	  background:  ['rectangle', ['backgroundColor', 'strokeWidth', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'], function(width, height, cornerRadius, color, stroke, shadow, x, y) {
-      if (!isFinite(width) || !isFinite(height) || (!color && !stroke)) return false;
-	    this.draw(width, height, cornerRadius.map(function(r) { return r + stroke}));
-  		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(stroke + Math.max(shadow - x, 0), stroke + Math.max(shadow - y, 0))
-	  }]
+	  background:  ['fill', ['backgroundColor']]
 	},
 	
 	items: ["1","2","3"],
@@ -67,9 +62,9 @@ ART.Widget.List.Item = new Class({
   name: 'item',
   
 	layered: {
-	  fill:  ['rectangle-stroke'],
-	  reflection:  ['rectangle', ['reflectionColor']],
-	  background: ['rectangle', ['backgroundColor']]
+	  fill:  ['stroke'],
+	  reflection:  ['fill', ['reflectionColor']],
+	  background: ['fill', ['backgroundColor']]
 	},
 	
   select: Macro.onion(function() {

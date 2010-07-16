@@ -312,7 +312,7 @@ ART.Widget.create = function(klasses, a, b, c, d) {
 	var widget = base[klass];
 	if (klasses.length) {
   	klasses = klasses.map(function(name) {
-  	  return $type(name) == 'string' ? ART.Widget.Traits[name.camelCase().capitalize()] : name;
+  	  return $type(name) == 'string' ? ART.Widget.Trait[name.camelCase().capitalize()] : name;
   	});
   	widget = Class.inherit.apply(Class, [widget].concat(klasses));
   }
@@ -323,7 +323,7 @@ ART.Widget.create = function(klasses, a, b, c, d) {
 
 
 ART.Widget.Base = Class.inherit(ART.Widget);
-ART.Widget.Modules = {};
-ART.Widget.Traits = {};
+ART.Widget.Module = {};
+ART.Widget.Trait = {};
 ART.Widget.Cache = {};
 ART.Widget.ignoredEvents = [];

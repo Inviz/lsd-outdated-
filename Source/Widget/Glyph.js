@@ -1,7 +1,7 @@
 ART.Widget.Glyph = new Class({
   Extends: Class.inherit(
 		ART.Widget.Paint,
-  	ART.Widget.Traits.Touchable
+  	ART.Widget.Trait.Touchable
 	),
 	
   name: 'glyph',
@@ -11,12 +11,7 @@ ART.Widget.Glyph = new Class({
 	},
 
 	layered: {
-    glyph: ['shape', ['glyphLeft', 'glyphTop', 'glyphScale'], function(glyph, color, left, top, scale) {
-      if (glyph) this.draw(glyph);
-  		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(left, top);
-  		if (scale) this.scale(scale, scale)
-	  }]
+    glyph: ['glyph']
 	},
 	
 	initialize: function() {

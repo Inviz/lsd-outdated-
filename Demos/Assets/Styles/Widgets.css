@@ -327,10 +327,19 @@ padding: 0px;
 line-height: 1.7em;
 vertical-align: middle;
 font-family: Helvetica;
-font-size: 12px; }
+font-size: 12px;
+-art-shadow-blur: 11;
+-art-shadow-color: hsb(0, 0, 0); }
 .art.button .container {
   text-shadow: 0 1px 0 #e5e5ee;
   -art-filter: dropshadow(color=#e5e5ee, offX=0, offY=1px); }
+.art.button[shape=arrow] {
+  width: 30px;
+  height: 40px;
+  -art-arrow-width: 10;
+  -art-arrow-height: 10;
+  -art-arrow-side: left;
+  -art-arrow-position: 9; }
 
 html > body .art.container.id-legend {
 text-align: center;
@@ -369,6 +378,8 @@ margin-bottom: 0px; }
   margin-bottom: 16px; }
 .art.form.two-column .art.input[type=checkbox] {
     margin-top: 3px; }
+.art.form.two-column .art.select {
+  float: left; }
 .art.form.two-column .field {
   float: left;
   margin-bottom: 16px;
@@ -460,16 +471,16 @@ html > body .art.panel.id-left {
   height: 198px;
   border: 1px solid #b8b8b8; }
 html > body .art.panel.id-right {
-  float: right;
-  -art-min-width: 290;
+  -art-min-width: 290px;
   width: auto;
-  height: 180px;
-  -art-fill-color: hsb(0, 0, 90);
+  margin-left: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
+  height: 180px;
+  -art-fill-color: hsb(0, 0, 90);
   -art-corner-radius: 5;
   -art-inner-shadow-blur: 2;
-  -art-inner-shadow-offset-y: 2;
+  -art-inner-shadow-offset-y: 0;
   -art-inner-shadow-color: hsb(0, 0, 0, 0.25);
   -art-inner-shadow-offset-x: 0; }
 
@@ -747,7 +758,10 @@ html > body .art.window.id-browser .art.id-toolbar .art.button.id-back {
   -art-glyph-left: 10;
   -art-corner-radius: 18;
   -art-glyph-scale: 1.5;
-  z-index: 10; }
+  z-index: 10;
+  padding-right: 10; }
+html > body .art.window.id-browser .art.id-toolbar .art.button.id-back[shape=arrow] {
+    -art-corner-radius: 5; }
 html > body .art.window.id-browser .art.id-toolbar .art.button.id-forward {
   height: 21px;
   -art-corner-radius-top-right: 10;
@@ -767,16 +781,21 @@ width: 16px;
 -art-glyph-top: 2;
 -art-glyph-left: 2;
 -art-glyph-scale: 1; }
+html > body .art.window.id-browser.is-minified .art.id-toolbar .art.button.id-back {
+  -art-arrow-width: 6;
+  -art-arrow-height: 6; }
 html > body .art.window.id-browser.is-minified .art.id-toolbar .art.button.id-back, html > body .art.window.id-browser.is-minified .art.id-toolbar .art.button.id-forward {
   -art-corner-radius: 5;
   -art-glyph-scale: 1;
   -art-glyph-top: 4;
-  -art-glyph-left: 4; }
+  -art-glyph-left: 4;
+  padding-right: 4; }
 html > body .art.window.id-browser.is-minified .art.id-toolbar .art.button.id-forward {
   margin-right: 5px;
   margin-left: 0px;
   margin-top: 0px;
-  height: 16px; }
+  height: 16px;
+  width: 16px; }
 html > body .art.window.id-browser.is-dragged {
 -art-stroke-dash: 10, 2, 2; }
 
@@ -790,10 +809,10 @@ html > body .art.window.id-network {
 -art-corner-radius-bottom-right: 0; }
 
 html > body .art.window.id-network .art.id-content {
-width: 500px;
 height: auto;
 display: block;
--art-min-width: 520;
+width: 520px;
+-art-min-width: 520px;
 -art-background-color: hsb(0, 0, 93);
 border-top: 1px solid #666666; }
 

@@ -15,7 +15,7 @@ ART.Widget.Window = new Class({
 	
 	Extends: Class.inherit(
 		ART.Widget.Paint,
-		ART.Widget.Traits.Aware,
+		ART.Widget.Trait.Aware,
 		Widget.Animated,
 		Widget.Stateful({
 			'closed': ['close', 'open'],
@@ -43,9 +43,9 @@ ART.Widget.Window = new Class({
 	
 	layered: {
 	  shadow:  ['shadow'],
-	  stroke:  ['rectangle-stroke'],
-	  reflection: ['rectangle', ['reflectionColor']],
-  	background: ['rectangle', ['backgroundColor']],
+	  stroke:  ['stroke'],
+	  reflection: ['fill', ['reflectionColor']],
+  	background: ['fill', ['backgroundColor']],
 	},
 	
 	initialize: function() {

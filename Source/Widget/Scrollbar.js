@@ -1,7 +1,7 @@
 ART.Widget.Scrollbar = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
-    ART.Widget.Traits.HasSlider
+    ART.Widget.Trait.HasSlider
   ),
   
   name: 'scrollbar',
@@ -17,13 +17,13 @@ ART.Widget.Scrollbar = new Class({
 	},
 	
 	layered: {
-    stroke: ['rectangle-stroke'],
-	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
+    stroke: ['stroke'],
+	  background: ['fill', ['backgroundColor'], function(width, height, cornerRadius, color) {
 	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
   		if (color) this.fill.apply(this, $splat(color));
   		this.translate(1, 2);
 	  }],
-	  reflection:  ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
+	  reflection:  ['fill', ['reflectionColor'], function(width, height, cornerRadius, color) {
 	    this.draw(width - 2, height - 2, cornerRadius.map(function(r) { return r - 1}));
   		if (color) this.fill.apply(this, $splat(color));
   		this.translate(1, 1);

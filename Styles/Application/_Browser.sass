@@ -10,8 +10,12 @@ window#browser
         :glyph-top 11
         :glyph-left 10
         :corner-radius 18
+        &[shape=arrow]
+          :corner-radius 5
         :glyph-scale 1.5
         :z-index 10
+        :padding-right 10
+
       &#forward
         :height 21px
         :corner-radius-top-right 10
@@ -34,17 +38,24 @@ window#browser
         :glyph-left 2
         :glyph-scale 1
         
+        &#back
+          :arrow-width 6
+          :arrow-height 6
+        
         &#back, &#forward
           :corner-radius 5
           :glyph-scale 1
           :glyph-top 4
           :glyph-left 4
+          :padding-right 4
+
           
         &#forward
           :margin-right 5px
           :margin-left 0px
           :margin-top 0px
           :height 16px
+          :width 16px
         
   &:dragged
     :stroke-dash 10, 2, 2

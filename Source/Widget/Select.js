@@ -4,21 +4,21 @@ ART.Widget.Select = new Class({
     Widget.Stateful({
     	'expanded': ['expand', 'collapse']
     }),
-    ART.Widget.Traits.HasMenu,
-    ART.Widget.Traits.HasList,
-    ART.Widget.Traits.Chooser,
-    ART.Widget.Traits.Focusable,
-    ART.Widget.Traits.Accessible
+    ART.Widget.Trait.HasMenu,
+    ART.Widget.Trait.HasList,
+    ART.Widget.Trait.Chooser,
+    ART.Widget.Trait.Focusable,
+    ART.Widget.Trait.Accessible
   ),
   
   name: 'select',
   
   layered: {
     shadow:  ['shadow'],
-    stroke: ['rectangle-stroke'],
-	  background:  ['rectangle-shadow', ['backgroundColor']],
-	  reflection:  ['rectangle-shadow', ['reflectionColor']],
-    glyph: ['shape-shadow']
+    stroke: ['stroke'],
+	  background:  ['fill', ['backgroundColor']],
+	  reflection:  ['fill', ['reflectionColor']],
+    glyph: ['glyph']
 	},
 	
 	layout: {
@@ -61,7 +61,6 @@ ART.Widget.Select = new Class({
 	}
 	
 });
-
 
 ART.Widget.Select.Button = new Class({
   Extends: ART.Widget.Button

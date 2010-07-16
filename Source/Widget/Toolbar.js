@@ -7,9 +7,9 @@ ART.Widget.Toolbar = new Class({
 	layout: {},
 	
 	layered: {
-	  stroke:  ['rectangle-stroke'],
-	  reflection: ['rectangle', ['reflectionColor']],
-  	background: ['rectangle', ['backgroundColor']],
+	  stroke:  ['stroke'],
+	  reflection: ['fill', ['reflectionColor']],
+  	background: ['fill', ['backgroundColor']],
 	},
 	
 	position: 'absolute',

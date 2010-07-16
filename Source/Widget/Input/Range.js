@@ -1,26 +1,18 @@
 ART.Widget.Input.Range = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
-    ART.Widget.Traits.HasSlider,
-    ART.Widget.Traits.Focusable,
-    ART.Widget.Traits.Accessible
+    ART.Widget.Trait.HasSlider,
+    ART.Widget.Trait.Focusable,
+    ART.Widget.Trait.Accessible
   ),
   
   name: 'input',
 	
 	layered: {
 	  shadow: ['shadow'],
-    border: ['rectangle-stroke'],
-	  background: ['rectangle', ['backgroundColor'], function(width, height, cornerRadius, color) {
-	    this.draw(width - 2, height - 3, cornerRadius.map(function(r) { return r - 1}));
-  		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(1, 2);
-	  }],
-	  reflection:  ['rectangle', ['reflectionColor'], function(width, height, cornerRadius, color) {
-	    this.draw(width - 2, height - 2, cornerRadius.map(function(r) { return r - 1}));
-  		if (color) this.fill.apply(this, $splat(color));
-  		this.translate(1, 1);
-	  }]
+    border: ['stroke'],
+	  background: ['fill', ['backgroundColor']],
+	  reflection:  ['fill', ['reflectionColor']]
 	},
 	
 	initialize: function() {

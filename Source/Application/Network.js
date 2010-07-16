@@ -1,10 +1,10 @@
 Moo.Application.Preferences.Network = new Class({
 	Extends: Class.inherit(
 	  ART.Widget.Window,
-	  ART.Widget.Traits.Draggable,
-	  ART.Widget.Traits.Resizable,
-	  ART.Widget.Traits.ResizableContainer,
-	  ART.Widget.Traits.Fitting,
+	  ART.Widget.Trait.Draggable,
+	  ART.Widget.Trait.Resizable,
+	  ART.Widget.Trait.ResizableContainer,
+	  ART.Widget.Trait.Fitting,
 	  Widget.Stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })
@@ -62,7 +62,7 @@ Moo.Application.Preferences.Network = new Class({
   	    //'splitter#resizer': {},
   	    'panel#right[width="parent - left - 56"]': [
   	      {'label[for=appearance]': 'Network name:'},
-  	      'input#text[width="parent - 135"]',
+  	      'input#text[width="parent - 150"]',
   	      {'label[for=appearance]': 'Slider:'},
     	    'input[type=range]#count',
   	      {'label[for=appearance]': 'Active?'},

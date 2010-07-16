@@ -2,7 +2,7 @@
   // you can specify ART.Widget.modules as an array of classes to disable autoloading
   if (!ART.Widget.modules) {
     ART.Widget.modules = [ART.Widget.Base];
-    for (var name in ART.Widget.Modules) ART.Widget.modules.push(ART.Widget.Modules[name]);
+    for (var name in ART.Widget.Module) ART.Widget.modules.push(ART.Widget.Module[name]);
   }
 
   ART.Widget.Base = new Class({

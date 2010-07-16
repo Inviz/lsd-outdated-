@@ -1,8 +1,8 @@
 Moo.Application.Preferences = new Class({
 	Extends: Class.inherit(
 	  ART.Widget.Window,
-	  ART.Widget.Traits.Draggable,
-	  ART.Widget.Traits.Fitting,
+	  ART.Widget.Trait.Draggable,
+	  ART.Widget.Trait.Fitting,
 	  Widget.Stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })

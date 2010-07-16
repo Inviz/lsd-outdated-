@@ -1,7 +1,7 @@
 ART.Widget.Input = new Class({
   Extends: Class.inherit(
     ART.Widget.Paint,
-    ART.Widget.Traits.HasInput
+    ART.Widget.Trait.HasInput
   ),
   
   name: 'input',
@@ -18,10 +18,10 @@ ART.Widget.Input = new Class({
   
   layered: {
     shadow:  ['shadow'],
-    stroke: ['rectangle-stroke'],
-	  background:  ['rectangle-shadow', ['backgroundColor']],
-	  reflection:  ['rectangle-shadow', ['reflectionColor']],
-    glyph: ['shape-shadow']
+    stroke: ['stroke'],
+	  background:  ['fill', ['backgroundColor']],
+	  reflection:  ['fill', ['reflectionColor']],
+    glyph: ['glyph']
 	},
 	
 	focus: Macro.onion(function() {

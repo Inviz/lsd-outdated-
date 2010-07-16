@@ -11,7 +11,7 @@ ART.Widget.Button = new Class({
 
 	Extends: Class.inherit(
 		ART.Widget.Paint,
-		ART.Widget.Traits.Touchable
+		ART.Widget.Trait.Touchable
 	),
 
 	name: 'button',
@@ -28,10 +28,10 @@ ART.Widget.Button = new Class({
 	
 	layered: {
 	  shadow:  ['shadow'],
-    stroke: ['rectangle-stroke'],
-	  background:  ['rectangle-shadow', ['backgroundColor']],
-	  reflection:  ['rectangle-shadow', ['reflectionColor']],
-    glyph: ['shape-shadow']
+    stroke: ['stroke'],
+	  background:  ['fill', ['backgroundColor']],
+	  reflection:  ['fill', ['reflectionColor']],
+    glyph: ['glyph']
 	},
 	
 	onClick: function() {

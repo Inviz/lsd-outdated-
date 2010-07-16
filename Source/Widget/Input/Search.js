@@ -6,12 +6,12 @@ ART.Widget.Input.Search = new Class({
     	'detailed': ['enrich', 'clean'],
     	'uniconed': ['uniconize', 'iconize']
     }),
-    ART.Widget.Traits.HasMenu,
-    ART.Widget.Traits.HasList,
-    ART.Widget.Traits.Chooser,
-    ART.Widget.Traits.Observed,
-    ART.Widget.Traits.Aware,
-    ART.Widget.Traits.Accessible
+    ART.Widget.Trait.HasMenu,
+    ART.Widget.Trait.HasList,
+    ART.Widget.Trait.Chooser,
+    ART.Widget.Trait.Observed,
+    ART.Widget.Trait.Aware,
+    ART.Widget.Trait.Accessible
   ),
   
   layout: {
@@ -136,7 +136,10 @@ ART.Widget.Input.Icon = new Class({
   name: 'button', 
   
   Extends: Class.inherit(
-    ART.Widget.Button,
-    ART.Widget.Traits.Iconed
-  )
+    ART.Widget.Button
+  ),
+  
+  layered: {
+    icon: ['icon']
+  }
 })

@@ -106,4 +106,3 @@ Color.detach = function(color){
 };
 
 })();
-

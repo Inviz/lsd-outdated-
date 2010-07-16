@@ -2,10 +2,10 @@
 Moo.Application.Browser = new Class({
 	Extends: Class.inherit(
 	  ART.Widget.Window,
-	  ART.Widget.Traits.Draggable,
-	  ART.Widget.Traits.Resizable,
-	  ART.Widget.Traits.ResizableContainer,
-	  ART.Widget.Traits.Fitting,
+	  ART.Widget.Trait.Draggable,
+	  ART.Widget.Trait.Resizable,
+	  ART.Widget.Trait.ResizableContainer,
+	  ART.Widget.Trait.Fitting,
 	  Widget.Stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })
@@ -23,7 +23,7 @@ Moo.Application.Browser = new Class({
 	    },
 	    '#title[container]': {},
   	  '#toolbar': {
-  	    'button#back': {},
+  	    'button#back[shape=arrow]': {},
   	    'button#forward:disabled': {},
   	    'button#search': {},
   	    'button#wrench': {},

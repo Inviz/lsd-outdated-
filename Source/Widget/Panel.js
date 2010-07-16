@@ -14,9 +14,9 @@ ART.Widget.Panel = new Class({
 	
 	layered: {
 	  shadow:  ['shadow'],
-	  stroke:  ['rectangle-stroke'],
-	  reflection: ['rectangle', ['reflectionColor']],
-  	background: ['rectangle', ['backgroundColor']],
+	  stroke:  ['stroke'],
+	  reflection: ['fill', ['reflectionColor']],
+  	background: ['fill', ['backgroundColor']],
 	  innerShadow:  ['inner-shadow']
 	}
 	
