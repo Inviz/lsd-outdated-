@@ -58,10 +58,11 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getCanvasOffset: function() {
-		var blur = (this.styles.current.shadowBlur || 0);
+	  var styles = this.styles.current;
+		var blur = (styles.shadowBlur || 0);
 		var offset = {
-			x: (this.styles.current.shadowOffsetX || 0),
-			y: (this.styles.current.shadowOffsetY || 0)
+			x: (styles.shadowOffsetX || 0),
+			y: (styles.shadowOffsetY || 0)
 		}
 		return {
 			left: Math.max(blur - offset.x, 0),
@@ -70,16 +71,13 @@ ART.Widget.Paint = new Class({
 			bottom: blur + offset.y
 		}
 	},
-	
+		
 	getPaintOffset: function() {
 		var offset = this.getCanvasOffset();
-		var stroke = (this.styles.current.strokeWidth || 0);
-		return {
-			left: this.styles.current.width == 'auto' ? Math.max(offset.left, stroke) : offset.left + stroke,
-			top: offset.top,
-			right: stroke + offset.right,
-			bottom: stroke + offset.bottom
-		} 
+		if (!this.shape) return offset;
+		var shape = this.shape.getOffset(this.styles.current, offset);
+		for (var i in offset) offset[i] += shape[i];
+		return offset;
 	},
 	
 	getOffset: function() {
@@ -87,11 +85,12 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getPadding: function() {
+	  var styles = this.styles.current;
 	  return {
-			top: this.styles.current.paddingTop || 0,
-			left: this.styles.current.paddingLeft || 0,
-			bottom: this.styles.current.paddingBottom || 0,
-			right: this.styles.current.paddingRight || 0
+			top: styles.paddingTop || 0,
+			left: styles.paddingLeft || 0,
+			bottom: styles.paddingBottom || 0,
+			right: styles.paddingRight || 0
 		}
 	},
 	

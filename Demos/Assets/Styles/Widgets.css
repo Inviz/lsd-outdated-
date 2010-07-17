@@ -747,6 +747,17 @@ html > body .art.input.id-search.is-detailed.is-uniconed .art.button.id-glyph {
 html > body .art.input.id-search.is-filled .art.button.id-canceller {
   display: block; }
 
+html > body .art.window.id-browser, html > body .art.window.id-browser .art.id-footer {
+-art-arrow-width: 20;
+-art-arrow-height: 20;
+-art-arrow-side: bottom;
+-art-arrow-position: 9; }
+
+html > body .art.window.id-browser .art.id-footer {
+-art-arrow-width: 18;
+-art-arrow-height: 18;
+-art-arrow-position: 10; }
+
 html > body .art.window.id-browser .art.id-toolbar .art.button {
 -art-glyph-scale: 2;
 -art-glyph-top: 6;
@@ -758,8 +769,7 @@ html > body .art.window.id-browser .art.id-toolbar .art.button.id-back {
   -art-glyph-left: 10;
   -art-corner-radius: 18;
   -art-glyph-scale: 1.5;
-  z-index: 10;
-  padding-right: 10; }
+  z-index: 10; }
 html > body .art.window.id-browser .art.id-toolbar .art.button.id-back[shape=arrow] {
     -art-corner-radius: 5; }
 html > body .art.window.id-browser .art.id-toolbar .art.button.id-forward {

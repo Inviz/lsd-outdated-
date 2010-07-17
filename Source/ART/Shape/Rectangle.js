@@ -56,5 +56,15 @@ ART.Shape.Rectangle = new Class({
 	  return this.paint(this.styles.width + delta * 2, this.styles.height + delta * 2, this.styles.cornerRadius.map(function(r) {
 	    return r + delta
 	  }))
+	},
+	
+	getOffset: function(styles, offset) {
+		var stroke = (styles.strokeWidth || 0);
+		return {
+			left: ((styles.width == 'auto') ? Math.max(stroke - offset.left, 0) : stroke),
+			top: 0,
+			right: stroke,
+			bottom: stroke
+		}
 	}
 });

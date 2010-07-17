@@ -11,7 +11,7 @@ Moo.Application.Browser = new Class({
 	  })
 	),
 	
-  expression: "window.fancy#browser",
+  expression: "window.fancy#browser[shape=arrow]",
   
 	layout: {
 	  'section#header': {
@@ -31,7 +31,7 @@ Moo.Application.Browser = new Class({
   	  }
 	  },
 	  'section#content[container][scrollable]': {},
-	  'section#footer.flexible': {
+	  'section#footer.flexible[shape=arrow]': {
 			'#status[container]': {},
 	    'glyph[name=drag-handle]#handle': {}
 	  }

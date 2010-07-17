@@ -82,6 +82,16 @@ ART.Shape.Arrow = new Class({
 	  return this.paint(this.styles.width + delta * 2, this.styles.height + delta * 2, this.styles.cornerRadius.map(function(r) {
 	    return r + delta
 	  }), this.styles.arrowWidth, this.styles.arrowHeight, this.styles.arrowSide, this.styles.arrowPosition)
+	},
+
+	getOffset: function(styles, offset) {
+		var stroke = (styles.strokeWidth || 0);
+		return {
+			left: ((styles.width == 'auto') ? Math.max(stroke - offset.left, 0) : stroke) + ((styles.arrowSide == 'left') ? styles.arrowWidth : 0),
+			right: stroke + ((styles.arrowSide == 'right') ? styles.arrowWidth : 0),
+			top: ((styles.arrowSide == 'top') ? styles.arrowHeight : 0),
+			bottom: stroke + ((styles.arrowSide == 'bottom') ? styles.arrowHeight : 0)
+		}
 	}
 
 });
