@@ -60,7 +60,7 @@ Moo.Application.Preferences.Network = new Class({
 	        }
   	    },
   	    //'splitter#resizer': {},
-  	    'panel#right[width="parent - left - 56"]': [
+  	    'panel#right[width="parent - left - 50"]': [
   	      {'label[for=appearance]': 'Network name:'},
   	      'input#text[width="parent - 150"]',
   	      {'label[for=appearance]': 'Slider:'},

@@ -17,7 +17,7 @@ ART.Shape.Ellipse = new Class({
 	},
 	
 	produce: function(delta) {
-	  return new ART.Shapes.Ellipse(this.styles.width + delta * 2, this.styles.height + delta * 2)
+	  return new ART.Shapes.Ellipse(this.style.width + delta * 2, this.style.height + delta * 2)
 	}
 
 });

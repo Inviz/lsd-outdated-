@@ -34,3 +34,5 @@ ART.Widget.Label = new Class({
     hook.retrieve('widget').retain();
   }
 })
+
+ART.Widget.Ignore.attributes.push('container');

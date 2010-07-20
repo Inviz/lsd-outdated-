@@ -30,8 +30,8 @@ ART.Widget.Trait.HasInput = new Class({
     this.input.setStyle('height', height);
     this.input.setStyle('line-height', height);
     var width = this.size.width - this.input.getStyle('padding-left').toInt() - this.input.getStyle('padding-right').toInt();
-    if (this.styles.current.glyph) {
-      var glyph = this.layers.glyph.measure().width + (this.styles.current.glyphRight || 0) + (this.styles.current.glyphLeft || 0);
+    if (this.style.current.glyph) {
+      var glyph = this.layers.glyph.measure().width + (this.style.current.glyphRight || 0) + (this.style.current.glyphLeft || 0);
       width -= glyph;
       this.input.setStyle('margin-left', glyph);
     }
@@ -46,4 +46,4 @@ ART.Widget.Trait.HasInput = new Class({
   }
 })
 
-ART.Widget.ignoredEvents.push('input');
+ART.Widget.Ignore.events.push('input');

@@ -1,17 +1,11 @@
 (function() {
-	var properties = [
-		'glyphColor', 'glyphShadow', 'glyphSize', 'glyphStroke', 'glyph', 'glyphColor', 'glyphColor', 'glyphHeight', 'glyphWidth', 'glyphTop', 'glyphLeft', 		
+	
+	ART.Styles = new ART.Hash(
+	  'glyphColor', 'glyphShadow', 'glyphSize', 'glyphStroke', 'glyph', 'glyphColor', 'glyphColor', 'glyphHeight', 'glyphWidth', 'glyphTop', 'glyphLeft', 		
 		'cornerRadius', 'cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight',		
 		'reflectionColor',  'backgroundColor', 'strokeColor', 'fillColor',
 		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'
-	];
-	//properties = properties.concat(Hash.getKeys(ART.Adapter.prototype.style).map(function(e) { return e.camelCase() }));
-	
-	ART.Styles = {};
-	ART.Styles.Paint = {};
-	properties.each(function(prop) {
-		ART.Styles[prop] = true;
-	});
+	)
 	
 	ART.Styles.Defaults = {
 	  shadowBlur: 0,
@@ -31,7 +25,7 @@
 
 ART.Widget.Module.Styles = new Class({
 	
-	styles: {
+	style: {
 		current: {},    //styles that widget currently has
 		last: {},       //styles that were rendered last frame
 		found: {},      //styles that were found in stylesheets
@@ -48,13 +42,13 @@ ART.Widget.Module.Styles = new Class({
 	findStyles: function() {
 		var found = this.lookupStyles();
 		if (found) {
-			for (var property in found.styles) if (property in this.styles.given) delete found.styles[property];
-			this.styles.found = found.styles;
-			this.setStyles(found.styles, true);
+			for (var property in found.style) if (property in this.style.given) delete found.style[property];
+			this.style.found = found.style;
+			this.setStyles(found.style, true);
 			
-			for (var property in found.implied) if (property in this.styles.given) delete found.implied[property];
-			this.styles.implied = found.implied;
-			$extend(this.styles.current, this.styles.implied);
+			for (var property in found.implied) if (property in this.style.given) delete found.implied[property];
+			this.style.implied = found.implied;
+			$extend(this.style.current, this.style.implied);
 		}
 	},
 
@@ -65,24 +59,24 @@ ART.Widget.Module.Styles = new Class({
 			var result = ART.Sheet.lookup(selector);
 			if (!$equals(result.rules, this.rules)) {
 				this.rules = result.rules;
-				for (var i in result.styles) return result;
+				for (var i in result.style) return result;
 			}
 		}
 		return false;
 	},
 	
 	renderStyles: function(style) {
-		$extend(this.styles.given, style);
-		this.setStyles(this.styles.given)
-		for (var property in this.styles.element)	{
-			if (!(property in this.styles.given) && !(property in this.styles.found) && !(property in this.styles.calculated) && !(property in this.styles.implied)) {
+		$extend(this.style.given, style);
+		this.setStyles(this.style.given)
+		for (var property in this.style.element)	{
+			if (!(property in this.style.given) && !(property in this.style.found) && !(property in this.style.calculated) && !(property in this.style.implied)) {
 				this.resetElementStyle(property);
 			}
 	  }
-		for (var property in this.styles.current)	{
-			if (!(property in this.styles.given) && !(property in this.styles.found) && !(property in this.styles.calculated) && !(property in this.styles.implied)) {
-				delete this.styles.current[property];
-  			delete this.styles.paint[property];
+		for (var property in this.style.current)	{
+			if (!(property in this.style.given) && !(property in this.style.found) && !(property in this.style.calculated) && !(property in this.style.implied)) {
+				delete this.style.current[property];
+  			delete this.style.paint[property];
 			}
 	  }
 	},
@@ -92,11 +86,11 @@ ART.Widget.Module.Styles = new Class({
   },
 	
 	setStyle: function(property, value, type) {
-		if ($equals(this.styles.current[property], value)) return;
-		this.styles.current[property] = value;
+		if ($equals(this.style.current[property], value)) return;
+		this.style.current[property] = value;
 		switch (type) {
 			case undefined:
-				this.styles.given[property] = value;
+				this.style.given[property] = value;
 				break;
 			case "calculated": 
 			case "given": 
@@ -108,12 +102,12 @@ ART.Widget.Module.Styles = new Class({
 	},
 	
 	getStyle: function(property) {
-	  if (this.styles.computed[property]) return this.styles.computed[property];
-		var value = this.styles.current[property];
+	  if (this.style.computed[property]) return this.style.computed[property];
+		var value = this.style.current[property];
 		if (value == "inherit") value = this.inheritStyle(property);
 		if (value == "auto") value = this.calculateStyle(property);
 		if (property == 'height') value = this.getClientHeight();
-		this.styles.computed[property] = value;
+		this.style.computed[property] = value;
 		return value;
 	},
 	
@@ -126,10 +120,10 @@ ART.Widget.Module.Styles = new Class({
   getChangedStyles: function() {
     var styles = this.getStyles.apply(this, arguments);
     var hash = $A(arguments).join('')  
-    var last = $extend({}, this.styles.last[hash]);
+    var last = $extend({}, this.style.last[hash]);
     if (this.size.height) {
       var size = $merge(this.size);
-      if (this.styles.current.height != 'auto') size.height += (this.styles.current.paddingTop || 0) + (this.styles.current.paddingBottom || 0)      
+      if (this.style.current.height != 'auto') size.height += (this.style.current.paddingTop || 0) + (this.style.current.paddingBottom || 0)      
       $extend(styles, size);
       //return styles;
     }
@@ -147,14 +141,14 @@ ART.Widget.Module.Styles = new Class({
       changed = true;
       break;
     }
-    this.styles.last[hash] = styles;    
+    this.style.last[hash] = styles;    
     return changed ? styles : false;
   },
 	
 	setElementStyle: function(property, value) {
 		if (Element.Styles[property] || Element.Styles.More[property]) {
-			if (this.styles.element[property] !== value) this.element.setStyle(property, value);
-			this.styles.element[property] = value;
+			if (this.style.element[property] !== value) this.element.setStyle(property, value);
+			this.style.element[property] = value;
 			return true;
 		}	
 		return false;
@@ -162,22 +156,22 @@ ART.Widget.Module.Styles = new Class({
 	
 	resetElementStyle: function(property) {
 		this.element.setStyle(property, '');
-		delete this.styles.element[property]
+		delete this.style.element[property]
 		return true;
 	},
 
 	inheritStyle: function(property) {
 		var node = this;
-		var style = node.styles.current[property];
+		var style = node.style.current[property];
 		while ((style == 'inherit' || !style) && node.parentWidget) {
 			node = node.parentWidget;
-			style = node.styles.current[property];
+			style = node.style.current[property];
 		}
 		return style;
 	},
 	
 	calculateStyle: function(property) {
-		if (this.styles.calculated[property]) return this.styles.calculated[property];
+		if (this.style.calculated[property]) return this.style.calculated[property];
 		var value;
 		switch (property) {
 			case "height":
@@ -191,7 +185,7 @@ ART.Widget.Module.Styles = new Class({
 				//so we wait until the root widget is injected, and then try to repeat
 				if (value == 0 || (this.redraws == 0)) this.postpone()
 		}
-		this.styles.calculated[property] = value;
+		this.style.calculated[property] = value;
 		return value;
 	},
 	

@@ -2306,6 +2306,7 @@ Element.Properties.opacity = {
 
 };
 
+z = {}
 Element.implement({
 
 	setOpacity: function(value){
@@ -2317,6 +2318,8 @@ Element.implement({
 	},
 
 	setStyle: function(property, value){
+	  if (!z[property]) z[property] = 1
+	  else z[property]++;
 		switch (property){
 			case 'opacity': return this.set('opacity', parseFloat(value));
 			case 'float': property = (Browser.Engine.trident) ? 'styleFloat' : 'cssFloat';

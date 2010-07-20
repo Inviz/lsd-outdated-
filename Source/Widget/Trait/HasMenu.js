@@ -94,4 +94,4 @@ ART.Widget.Trait.HasMenu = new Class({
   getSelectedOptionPosition: $lambda(0)
 });
 
-ART.Widget.ignoredEvents.push('menu')
+ART.Widget.Ignore.events.push('menu')

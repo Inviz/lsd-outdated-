@@ -55,4 +55,4 @@ ART.Widget.Trait.Observed = new Class({
   }
 });
 
-ART.Widget.ignoredEvents.push('observer');
+ART.Widget.Ignore.events.push('observer');

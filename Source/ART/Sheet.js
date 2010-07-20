@@ -87,34 +87,6 @@ ART.Sheet = {};
 
 	var cache = {};
 	
-	ART.Sheet.lookup = function(selector){
-		if (cache[selector]) return cache[selector];
-		
-		var result = {styles: {}, rules: []}
-		
-		var parsed = parseSelector(SubtleSlickParse(selector)[0]);
-		rules.each(function(rule){
-			var i = rule.selector.length - 1, j = parsed.length - 1;
-			if (!containsAll(parsed[j], rule.selector[i])) return;
-			while (i-- > 0){
-				while (true){
-					if (j-- <= 0) return;
-					if (containsAll(parsed[j], rule.selector[i])) break;
-				}
-			}
-			result.rules.push(rule.selector.map(function(b) { return b.join("") }).join(" "));
-			
-			
-			$mixin(result.styles, rule.style);
-		});
-		
-		cache[selector] = result;
-		
-		return result;
-	};
-	
-	
-	
 	//static css compilation
 	var css = {
 	  selectors: [],
@@ -134,13 +106,7 @@ ART.Sheet = {};
   	}).join(' ');
 	}
 	
-	Element.Styles.Except = {
-	  backgroundColor: true,
-	  width: true,
-	  height: true,
-	  //display: true,
-	  minWidth: true
-	};
+	Element.Styles.Except = new ART.Hash('backgroundColor', 'width', 'height', 'minWidth');
 	
 	ART.Sheet.isElementStyle = function(cc) {
 	  return ((Element.Styles[cc] || Element.Styles.More[cc]) && !Element.Styles.Except[cc]);
@@ -251,7 +217,7 @@ ART.Sheet = {};
 	ART.Sheet.lookup = function(selector){
 		if (cache[selector]) return cache[selector];
 		
-		var result = {styles: {}, rules: [], implied: {}}
+		var result = {style: {}, rules: [], implied: {}}
 		
 		var parsed = parseSelector(SubtleSlickParse(selector)[0]);
 		rules.each(function(rule){
@@ -266,13 +232,13 @@ ART.Sheet = {};
 			result.rules.push(rule.selector.map(function(b) { return b.join("") }).join(" "));
 			
 			
-			$mixin(result.styles, rule.style);
+			for (var property in rule.style) result.style[property] = rule.style[property];
 		});
 		
-		for (var property in result.styles) {
+		for (var property in result.style) {
 		  if (ART.Sheet.isElementStyle(property)) {
-		    result.implied[property] = result.styles[property];
-		    delete result.styles[property];
+		    result.implied[property] = result.style[property];
+		    delete result.style[property];
 		  }
 		}
 		

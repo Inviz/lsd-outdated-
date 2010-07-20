@@ -1,24 +1,25 @@
-window#network:minified #toolbar
-  :display none
 window#network
   :stroke-width 1
   :stroke-color hsb(0, 0, 40, 0.5)
   :corner-radius-bottom-left 0
   :corner-radius-bottom-right 0
-window#network #content    
-  :height auto
-  :display block
-  :width 520px
-  :min-width 520px
-  :background-color hsb(0, 0, 93)
-  :border-top 1px solid #666
-window#network #actions
-  :float right
-  :margin-bottom 10px
-window#network #actions button
-  :corner-radius 10
-  :margin-left 5px
-  :margin-right 0px
-  :shadow-color hsb(0, 0, 10, 0.2)
-  :shadow-blur 3
-  :shadow-offset-y 1
+  
+  &:minified #toolbar
+    :display none
+  #content    
+    :height auto
+    :display block
+    :width 520px
+    :min-width 520px
+    :background-color hsb(0, 0, 93)
+    :border-top 1px solid #666
+    #actions
+      :float right
+      :margin-bottom 10px
+      button
+        :corner-radius 10
+        :margin-left 5px
+        :margin-right 0px
+        :shadow-color hsb(0, 0, 0, 0.2)
+        :shadow-blur 0
+        :shadow-offset-y 1

@@ -28,8 +28,8 @@
 	<script src="../ART/Source/ART.Font.js"></script>
 	
 	<script src="../Source/ART/ART.js"></script>
-	<script src="../Source/ART/Sheet.js"></script>
 	<script src="../Source/Widget/Widget.js"></script>
+	<script src="../Source/ART/Sheet.js"></script>
 	<script src="../Source/ART/Layout.js"></script>
 	<script src="../Source/ART/Glyphs.js"></script>
 	<script src="../Source/ART/Container.js"></script>
@@ -64,6 +64,7 @@
   <script src="../Source/Widget/Module/Styles.js"></script>
   <script src="../Source/Widget/Module/Cache.js"></script>
   <script src="../Source/Widget/Module/Container.js"></script>
+  <!-- <script src="../Source/Widget/Module/Selectability.js"></script> -->
   
 	<!-- these are used on widgets basis -->
   <script src="../Source/Widget/Trait/Aware.js"></script>
@@ -126,6 +127,13 @@
   		  
   		//ART.Sheet.compile();
   		
+	    var counter = {}
+	    counter.old = {
+	      redraws: ART.Widget.Paint.redraws,
+	      widgets: ART.Widget.count
+	    }
+  		
+	    if (window.console && console.profile) console.profile('Network render')
 	    $z = new Moo.Application.Browser;	
 	    $z.setStyles({top: 50, left: 50, zIndex: 400})
 			$z.header.title.setContent('Hello')
@@ -141,11 +149,24 @@
   		$p.header.title.setContent('Preferences');
 	    $p.setStyles({top: 50, left: 550, zIndex: 400});
 	    
-	    if (window.console && console.profile) console.profile('Network render')
+	    
+	    
+	    
   		$n = new Moo.Application.Preferences.Network;
   		$n.header.title.setContent('Network');
 	    $n.setStyles({top: 300, left: 300, zIndex: 400});
+	    
+	    
+	    counter.current = {
+	      redraws: ART.Widget.Paint.redraws,
+	      widgets: ART.Widget.count
+	    }
+	    counter.delta = {
+	      redraws: counter.current.redraws - counter.old.redraws,
+	      widgets: counter.current.widgets - counter.old.widgets,
+	    }
 	    if (window.console && console.profile) console.profileEnd('Network render')
+	    console.info('Widgets: ', counter.delta.widgets, 'Redraws: ', counter.delta.redraws)
 	    //$p.fit();
 		});
   		

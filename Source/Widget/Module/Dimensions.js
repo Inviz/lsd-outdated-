@@ -8,7 +8,7 @@ ART.Widget.Module.Dimensions = new Class({
 	},
 	
 	setHeight: function(value, light) {
-	  value = Math.max(this.styles.current.minHeight || 0, value);
+	  value = Math.max(this.style.current.minHeight || 0, value);
 		if (!light && (this.size.height == value)) return;
 		this.size.height = value;
 		if (!light) this.setStyle('height', value);
@@ -16,7 +16,7 @@ ART.Widget.Module.Dimensions = new Class({
 	},
 		
 	setWidth: function(value, light) {
-	  value = Math.max(this.styles.current.minWidth || 0, value);
+	  value = Math.max(this.style.current.minWidth || 0, value);
 		if (this.size.width == value) return;
 		this.size.width = value;
 		if (!light) this.setStyle('width', value);
@@ -24,7 +24,7 @@ ART.Widget.Module.Dimensions = new Class({
 	},
 	
 	getClientHeight: function() {
-	  var styles = this.styles.current;
+	  var styles = this.style.current;
 	  var height = styles.height;
   	if (!height || (height == "auto")) {
   	  height = this.element.offsetHeight;
@@ -36,9 +36,9 @@ ART.Widget.Module.Dimensions = new Class({
 	},
 	
 	getClientWidth: function() {
-	  var width = this.element.scrollWidth;
+	  var width = this.element.offsetWidth;
 	  if (width > 0) {
-  	  var styles = this.styles.current;
+  	  var styles = this.style.current;
 	    var parent = this.parentWidget;
 	    if (styles.width == "auto" && styles.display != "block") width -= ((this.offset.inside.left || 0) + (this.offset.inside.right || 0)) 
 	    width -= ((this.offset.paint.left || 0) + (this.offset.paint.right || 0)) 
@@ -47,7 +47,7 @@ ART.Widget.Module.Dimensions = new Class({
 	},
 	
 	getOffsetHeight: function() {;
-	  var styles = this.styles.current;
+	  var styles = this.style.current;
 		var height = this.getClientHeight();
 		height += (styles.strokeWidth || 0) * 2
 		height += styles.borderBottomWidth || 0;
@@ -56,7 +56,7 @@ ART.Widget.Module.Dimensions = new Class({
 	},
 	
 	getOffsetWidth: function() {
-	  var styles = this.styles.current;
+	  var styles = this.style.current;
 		var width = this.getClientWidth();
 		width += (styles.strokeWidth || 0) * 2
 		width += styles.borderLeftWidth || 0;
@@ -73,8 +73,8 @@ ART.Widget.Module.Dimensions = new Class({
 
 	getLayoutWidth: function() {
 		var width = this.getOffsetWidth();
-		width += ((this.offset.inside.left || 0) + (this.styles.current.marginLeft || 0));
-		width += ((this.offset.inside.right || 0) + (this.styles.current.marginRight || 0));
+		width += ((this.offset.inside.left || 0) + (this.style.current.marginLeft || 0));
+		width += ((this.offset.inside.right || 0) + (this.style.current.marginRight || 0));
 		return width;
 	}
 	

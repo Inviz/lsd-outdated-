@@ -53,7 +53,7 @@ ART.Shape.Rectangle = new Class({
 	},
 	
 	change: function(delta) {
-	  return this.paint(this.styles.width + delta * 2, this.styles.height + delta * 2, this.styles.cornerRadius.map(function(r) {
+	  return this.paint(this.style.width + delta * 2, this.style.height + delta * 2, this.style.cornerRadius.map(function(r) {
 	    return r + delta
 	  }))
 	},

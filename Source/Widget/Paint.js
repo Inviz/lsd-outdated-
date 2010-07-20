@@ -1,3 +1,6 @@
+z = {};
+c = {};
+
 ART.Widget.Paint = new Class({
   Extends: Class.inherit(
 		ART.Widget.Base,
@@ -11,7 +14,7 @@ ART.Widget.Paint = new Class({
   
 	build: Macro.onion(function() {
 		this.paint = new ART();
-		this.element.setStyle('position', this.styles.current.position || this.position || 'relative');
+		this.element.setStyle('position', this.style.current.position || this.position || 'relative');
 		$(this.paint).setStyles({
 			'position': 'absolute',
 			'top': 0,
@@ -34,12 +37,12 @@ ART.Widget.Paint = new Class({
 		  var last = padding[property];
       padding[property] = inside[property] + paint[property];
       var cc = 'padding' + property.capitalize();
-      if ($defined(last) ? (last != padding[property]) : padding[property]) this.element.setStyle(cc, padding[property]);
+      if ($defined(last) ? (last != padding[property]) : padding[property]) this.element.style[cc] = padding[property] + 'px';
       
       cc = 'margin' + property.capitalize();
       last = margin[property];
-      margin[property] =(this.styles.current[cc] || 0) - paint[property]
-      if ($defined(last) ? (last != margin[property]) : (margin[property] != 0)) this.element.setStyle(cc, margin[property]);
+      margin[property] =(this.style.current[cc] || 0) - paint[property]
+      if ($defined(last) ? (last != margin[property]) : (margin[property] != 0)) this.element.style[cc] = margin[property] + 'px';
 		}
 	},
 	
@@ -58,7 +61,7 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getCanvasOffset: function() {
-	  var styles = this.styles.current;
+	  var styles = this.style.current;
 		var blur = (styles.shadowBlur || 0);
 		var offset = {
 			x: (styles.shadowOffsetX || 0),
@@ -75,7 +78,7 @@ ART.Widget.Paint = new Class({
 	getPaintOffset: function() {
 		var offset = this.getCanvasOffset();
 		if (!this.shape) return offset;
-		var shape = this.shape.getOffset(this.styles.current, offset);
+		var shape = this.shape.getOffset(this.style.current, offset);
 		for (var i in offset) offset[i] += shape[i];
 		return offset;
 	},
@@ -85,7 +88,7 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getPadding: function() {
-	  var styles = this.styles.current;
+	  var styles = this.style.current;
 	  return {
 			top: styles.paddingTop || 0,
 			left: styles.paddingLeft || 0,
@@ -95,7 +98,7 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getInsideOffset: function() {
-		var stroke = (this.styles.current.strokeWidth || 0);
+		var stroke = (this.style.current.strokeWidth || 0);
 		var padding = this.getPadding();
 		for (var side in padding) padding[side] += stroke;
 		return padding;
@@ -127,11 +130,11 @@ ART.Widget.Paint = new Class({
 	},
 	
 	getStyle: function(property, value) {
-	  if (this.styles.computed[property]) return this.styles.computed[property]; 
+	  if (this.style.computed[property]) return this.style.computed[property]; 
 		var properties = ART.ComplexStyles[property];
 		if (properties) {
 			if (properties.set) properties = properties.get;
-			var current = this.styles.current;
+			var current = this.style.current;
 		  var result = [];
 		  var property;
 		  var i = 0;
@@ -139,7 +142,7 @@ ART.Widget.Paint = new Class({
 			  var value = current[property];
 				result.push(((isFinite(value)) ? value : this.getStyle(property)) || 0)
 		  }
-			return (this.styles.computed[property] = result);
+			return (this.style.computed[property] = result);
 		} else {
 			return this.parent.apply(this, arguments);
 		}
@@ -147,7 +150,7 @@ ART.Widget.Paint = new Class({
 	
 	setPaintStyle: function(property, value) {
 		if (ART.Styles[property] || this.properties.contains[property]) {
-			this.styles.paint[property] = /*this.paint.style[property] = */value;
+			this.style.paint[property] = value;
 			var properties = ART.ComplexStyles[property];
 			if (properties) {
 				if (properties.set) properties = properties.set;

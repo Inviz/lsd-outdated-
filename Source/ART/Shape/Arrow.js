@@ -3,14 +3,14 @@ ART.Shape.Arrow = new Class({
 	Extends: ART.Shape,
 	
 	
-	properties: ['width', 'height', 'cornerRadius', 'arrowWidth', 'arrowHeight', 'arrowSide', 'arrowPosition'],
+	properties: ['width', 'height', 'cornerRadius', 'arrowWidth', 'arrowHeight', 'arrowSide', 'arrowPosition', 'arrowX', 'arrowY'],
 	
-	initialize: function(width, height, radius, arrowWidth, arrowHeight, arrowSide, arrowPosition){
+	initialize: function(){
 		this.parent();
 		if (arguments.length >= 2) this.draw.apply(this, arguments);
 	},
 	
-	paint: function(width, height, radius, aw, ah, as, ap){
+	paint: function(width, height, radius, aw, ah, as, ap, ax, ay){
 
 		var path = new ART.Path;
 		
@@ -79,9 +79,9 @@ ART.Shape.Arrow = new Class({
 	},
 
 	change: function(delta) {
-	  return this.paint(this.styles.width + delta * 2, this.styles.height + delta * 2, this.styles.cornerRadius.map(function(r) {
+	  return this.paint(this.style.width + delta * 2, this.style.height + delta * 2, this.style.cornerRadius.map(function(r) {
 	    return r + delta
-	  }), this.styles.arrowWidth, this.styles.arrowHeight, this.styles.arrowSide, this.styles.arrowPosition)
+	  }), this.style.arrowWidth, this.style.arrowHeight, this.style.arrowSide, this.style.arrowPosition)
 	},
 
 	getOffset: function(styles, offset) {

@@ -20,13 +20,13 @@ ART.Widget.Trait.Dimensions = new Class({
     return fn.bind(environment)
   },
   
-  setHeight: function(height ) {
-    if (this.options.height && (this.size.height != height)) this.setElementStyle('height', height);
+  setHeight: function(height) {
+    if (height && (this.size.height != height)) this.setElementStyle('height', height);
     return this.parent.apply(this, arguments);
   },
   
   setWidth: function(width) {
-    if (this.options.width && (this.size.width != width))  this.setElementStyle('width', width);
+    if (width && (this.size.width != width))  this.setElementStyle('width', width);
     return this.parent.apply(this, arguments);
   },
   
@@ -47,4 +47,6 @@ ART.Widget.Trait.Dimensions = new Class({
         else console.error('Widget named ', name, ' was not found', [this, widget, this.parentWidget])
     }
   }
-})
+});
+
+ART.Widget.Ignore.attributes.push('width', 'height');

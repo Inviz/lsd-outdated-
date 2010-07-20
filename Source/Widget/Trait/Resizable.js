@@ -87,7 +87,7 @@ ART.Widget.Trait.Resizable = new Class({
 	  this.transform.apply(this, arguments);
 	  
 	  if (!this.cache.dependent) this.cache.dependent = this.collect(function(child) {
-	    return child.styles.current.width == 'inherit' || child.styles.current.width == 'auto'
+	    return child.style.current.width == 'inherit' || child.style.current.width == 'auto'
 	  }).concat(this.getResized())
     
 	},
@@ -122,4 +122,4 @@ ART.Widget.Trait.Resizable = new Class({
 	})
 });
 
-ART.Widget.ignoredEvents.push('resizer')
+ART.Widget.Ignore.events.push('resizer')

@@ -23,7 +23,8 @@ ART.Widget.Trait.Hoverable = new Class({
     	  this.removeEvents(this.events.hover);
   		}
   	})
-	}),
+	})
 });
 
-ART.Widget.ignoredEvents.push('hover')
+ART.Widget.Ignore.events.push('hover');
+ART.Widget.Ignore.attributes.push('hoverable');

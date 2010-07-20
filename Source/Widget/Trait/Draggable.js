@@ -83,4 +83,4 @@ ART.Widget.Trait.Draggable = new Class({
 	})
 });
 
-ART.Widget.ignoredEvents.push('dragger')
+ART.Widget.Ignore.events.push('dragger')

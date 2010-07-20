@@ -127,4 +127,4 @@ ART.Widget.Trait.Accessible = new Class({
 	})
 });
 
-ART.Widget.ignoredEvents.push('accessibility')
+ART.Widget.Ignore.events.push('accessibility')

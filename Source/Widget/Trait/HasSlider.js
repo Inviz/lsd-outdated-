@@ -57,4 +57,4 @@ ART.Widget.Trait.HasSlider = new Class({
 	
 });
 
-ART.Widget.ignoredEvents.push('slider')
+ART.Widget.Ignore.events.push('slider')

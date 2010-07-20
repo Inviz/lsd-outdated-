@@ -30,10 +30,14 @@ ART.Widget.Input.Radio = new Class({
 	},
 	
 	check: Macro.onion(function() {
-	  if (this.attributes.name) document.getElements('.art.input[name="' + this.attributes.name + '"]').each(function(element) {
+	  this.getGroup().each(function(element) {
 	    if (element != this.element && element.getAttribute('type') == 'radio') element.retrieve('widget').uncheck();
 	  }, this)
 	}),
+	
+	getGroup: function() {
+	  return (this.attributes.name) ? document.getElements('.art.input[name="' + this.attributes.name + '"]') : []
+	},
 	
 	retain: function() {
 	  this.check();

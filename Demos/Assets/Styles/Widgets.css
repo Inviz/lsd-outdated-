@@ -809,34 +809,30 @@ html > body .art.window.id-browser.is-minified .art.id-toolbar .art.button.id-fo
 html > body .art.window.id-browser.is-dragged {
 -art-stroke-dash: 10, 2, 2; }
 
-html > body .art.window.id-network.is-minified .art.id-toolbar {
-display: none; }
-
 html > body .art.window.id-network {
 -art-stroke-width: 1;
 -art-stroke-color: hsb(0, 0, 40, 0.5);
 -art-corner-radius-bottom-left: 0;
 -art-corner-radius-bottom-right: 0; }
-
+html > body .art.window.id-network.is-minified .art.id-toolbar {
+  display: none; }
 html > body .art.window.id-network .art.id-content {
-height: auto;
-display: block;
-width: 520px;
--art-min-width: 520px;
--art-background-color: hsb(0, 0, 93);
-border-top: 1px solid #666666; }
-
-html > body .art.window.id-network .art.id-actions {
-float: right;
-margin-bottom: 10px; }
-
-html > body .art.window.id-network .art.id-actions .art.button {
--art-corner-radius: 10;
-margin-left: 5px;
-margin-right: 0px;
--art-shadow-color: hsb(0, 0, 10, 0.2);
--art-shadow-blur: 3;
--art-shadow-offset-y: 1; }
+  height: auto;
+  display: block;
+  width: 520px;
+  -art-min-width: 520px;
+  -art-background-color: hsb(0, 0, 93);
+  border-top: 1px solid #666666; }
+html > body .art.window.id-network .art.id-content .art.id-actions {
+    float: right;
+    margin-bottom: 10px; }
+html > body .art.window.id-network .art.id-content .art.id-actions .art.button {
+      -art-corner-radius: 10;
+      margin-left: 5px;
+      margin-right: 0px;
+      -art-shadow-color: hsb(0, 0, 0, 0.2);
+      -art-shadow-blur: 0;
+      -art-shadow-offset-y: 1; }
 
 html > body .art.window.id-preferences {
 -art-stroke-width: 1;

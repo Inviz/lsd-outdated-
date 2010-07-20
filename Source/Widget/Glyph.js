@@ -16,7 +16,7 @@ ART.Widget.Glyph = new Class({
 	
 	initialize: function() {
 		this.parent.apply(this, arguments);
-		if (this.options.name) this.styles.current.glyphName = this.options.name;
+		if (this.options.name) this.style.current.glyphName = this.options.name;
 	},
 	
 	build: function() {

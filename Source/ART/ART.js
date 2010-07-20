@@ -91,6 +91,24 @@ $equals = function(one, another) {
 
 
 
+ART.Hash = function() {
+  var storage = {
+    push: function() {
+      Array.each(arguments, function(argument) {
+        this[argument] = true;
+      }, this);
+    },
+
+    contains: function(argument) {
+      return this[argument];
+    }
+  }
+  storage.push.apply(storage, arguments);
+  return storage;
+}
+
+
+
 ART.implement({
 
 	setHeight: function(height) {
@@ -107,18 +125,6 @@ ART.implement({
 
 ART.Features = {};
 ART.Features.Blur = Browser.Engine.gecko; //TODO: Figure it out
-
-ART.SVG.Element.implement({
-  
-	_writeTransform: function(){
-		var transforms = [];
-		for (var transform in this.transform) transforms.push(transform + '(' + this.transform[transform].join(',') + ')');
-		var string = transforms.join(' ');
-		if (string == this.lastTransform) return;
-		this.element.setAttribute('transform', string);
-		this.lastTransform = string;
-	}
-});
 
 
 Observer = new Class({

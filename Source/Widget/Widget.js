@@ -17,8 +17,6 @@ ART.Widget = new Class({
 	  'built': ['build', 'destroy'],
 		'attached': ['attach', 'detach']
 	}),
-	
-	insensitive: ['dirty', 'built', 'attached'],
   
   offset: {
     paint: {},
@@ -44,7 +42,10 @@ ART.Widget = new Class({
 		if (options) this.setOptions(options);
 
 		this.classes = (this.classes || []).concat(this.options.classes);
-		this.attributes = $extend(this.attributes || {}, this.options.attributes);
+		if (!this.attributes) this.attributes = {};
+		for (var attribute in this.options.attributes) {
+		  if (!ART.Widget.Ignore.attributes[attribute]) this.attributes[attribute] = this.options.attributes[attribute];
+		}
 		this.pseudos = [];
 		this.children = [];
 		this.update();
@@ -132,8 +133,8 @@ ART.Widget = new Class({
 			});
 		}
 		if (!this.parent.apply(this, arguments)) return;
-		this.styles.calculated = {};
-		this.styles.computed = {};
+		this.style.calculated = {};
+		this.style.computed = {};
 		return true;
 	},
 	
@@ -155,9 +156,9 @@ ART.Widget = new Class({
 	  var args = $A(arguments);
 	  args.splice(1, 2); //state + args
 		
-		if (this.insensitive && this.insensitive.contains(state)) return;
+		if (ART.Widget.Ignore.states[state]) return;
     this[value ? "setState" : "unsetState"].apply(this, args);
-    this.refresh();
+    if (this.redraws > 0) this.refresh();
     return true;
   },
   
@@ -281,15 +282,6 @@ ART.Widget = new Class({
 	
 });
 
-Element.Styles.More = {
-	'float': true,
-	'display': true,
-	'clear': true,
-	'cursor': true,
-	'verticalAlign': true,
-	'textAlign': true
-}
-
 //Basic widget initialization
 ART.Widget.count = 0;
 ART.Widget.create = function(klasses, a, b, c, d) {
@@ -322,8 +314,15 @@ ART.Widget.create = function(klasses, a, b, c, d) {
 
 
 
+Element.Styles.More = new ART.Hash('float', 'display', 'clear', 'cursor', 'verticalAlign', 'textAlign');
+
 ART.Widget.Base = Class.inherit(ART.Widget);
 ART.Widget.Module = {};
 ART.Widget.Trait = {};
-ART.Widget.Cache = {};
-ART.Widget.ignoredEvents = [];
+
+ART.Widget.Ignore = {};
+['events', 'states', 'attributes', 'styles'].each(function(type) {
+  ART.Widget.Ignore[type] = new ART.Hash
+});
+
+ART.Widget.Ignore.states.push('dirty', 'built', 'attached');

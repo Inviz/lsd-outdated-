@@ -11,4 +11,4 @@ ART.Widget.Trait.OuterClick = new Class({
   }
 });
 
-ART.Widget.ignoredEvents.push('outer');
+ART.Widget.Ignore.events.push('outer');

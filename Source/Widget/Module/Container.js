@@ -11,4 +11,6 @@ ART.Widget.Module.Container = new Class({
 		if (!this.container) this.container = new Moo.Container(this, this.options.container);
 		return this.container;
 	}
-})
+});
+
+ART.Widget.Ignore.attributes.push('container');
