@@ -1,5 +1,5 @@
 Moo.Application.Preferences.Network = new Class({
-	Extends: Class.inherit(
+	Includes: [	  
 	  ART.Widget.Window,
 	  ART.Widget.Trait.Draggable,
 	  ART.Widget.Trait.Resizable,
@@ -8,7 +8,7 @@ Moo.Application.Preferences.Network = new Class({
 	  Widget.Stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })
-	),
+	],
   
   options: {
     resizer: {

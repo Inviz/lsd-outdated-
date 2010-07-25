@@ -7,7 +7,7 @@ ART.Widget.Module.Shape = new Class({
     if (!this.shape) {
       this.shape = new ART.Shape[(name || this.options.shape).camelCase().capitalize()];
       this.addEvent('redraw', function() {
-        var style = this.getStyles.apply(this, this.shape.properties);
+        var style = this.getChangedStyles.apply(this, this.shape.properties);
         this.shape.style = style;
       }.bind(this))
     }

@@ -26,5 +26,5 @@ ART.Widget.Trait.Hoverable = new Class({
 	})
 });
 
-ART.Widget.Ignore.events.push('hover');
+ART.Widget.Ignore.events.push('hover'); 
 ART.Widget.Ignore.attributes.push('hoverable');

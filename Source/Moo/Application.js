@@ -1,9 +1,9 @@
 
 Moo.Application = new Class({
-	Extends: Class.inherit(
-	  ART.Widget.Window//,
+	Includes: [
+    ART.Widget.Window//,
 	  //ART.Widget.Trait.Draggable
-	),
+	],
 	
   expression: "window.fancy",
   
@@ -33,9 +33,9 @@ Moo.Application = new Class({
 
 
 Moo.Notification = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Window
-	),
+	],
   expression: "window.hud",
   
   layout: {

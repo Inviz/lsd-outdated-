@@ -1,12 +1,12 @@
 Moo.Application.Preferences = new Class({
-	Extends: Class.inherit(
-	  ART.Widget.Window,
+	Includes: [
+    ART.Widget.Window,
 	  ART.Widget.Trait.Draggable,
 	  ART.Widget.Trait.Fitting,
 	  Widget.Stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })
-	),
+	],
   
   expression: "window.fancy#preferences",
   

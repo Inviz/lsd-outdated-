@@ -69,7 +69,7 @@ Widget.Stateful = function(states, reflect) {
       if (this[state]) return false;
       this[state] = true; 
       
-    	if (Class.hasParent(arguments)) this.parent.apply(this, arguments);
+    	if (Class.hasParent(this)) this.parent.apply(this, arguments);
       this.fireEvent(enabler, arguments);
       if (this.onStateChange) this.onStateChange(state, true, arguments);
       return true;
@@ -80,7 +80,7 @@ Widget.Stateful = function(states, reflect) {
       if (!this[state]) return false;
       this[state] = false;
       
-  	  if (Class.hasParent(arguments)) this.parent.apply(this, arguments);
+  	  if (Class.hasParent(this)) this.parent.apply(this, arguments);
   	  
       this.fireEvent(disabler, arguments);
       if (this.onStateChange) this.onStateChange(state, false, arguments);

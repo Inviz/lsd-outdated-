@@ -8,7 +8,7 @@ License:
 // Base widget class.
 
 ART.Widget = new Class({
-	Extends: Widget.Stateful({
+	Includes: Widget.Stateful({
 	  'hidden': ['hide', 'show'],
 	  'active': ['activate', 'deactivate'],
 	  'focused': ['focus', 'blur'],
@@ -17,14 +17,6 @@ ART.Widget = new Class({
 	  'built': ['build', 'destroy'],
 		'attached': ['attach', 'detach']
 	}),
-  
-  offset: {
-    paint: {},
-    total: {},
-    inside: {},
-    padding: {},
-    margin: {}
-  },
 	
 	Implements: [Options, Events, Logger],
 	
@@ -49,6 +41,13 @@ ART.Widget = new Class({
 		this.pseudos = [];
 		this.children = [];
 		this.update();
+	  this.offset = {
+      paint: {},
+      total: {},
+      inside: {},
+      padding: {},
+      margin: {}
+    }
 		
 		//this.log('Init', this)
 	},
@@ -64,14 +63,15 @@ ART.Widget = new Class({
 		
 		if (this.options.id) this.element.addClass('id-' + this.options.id);
 		
-		this.classes.each(function(cls) {
+		if (this.classes) this.classes.each(function(cls) {
 		  this.addClass(cls);
 		}, this);
 		
 		if (this.attributes) 
 		  for (var name in this.attributes) 
 		    if (name != 'width' && name != 'height') 
-		      this.element.setAttribute(name, this.attributes[name])
+		      this.element.setAttribute(name, this.attributes[name]);
+		      
 		this.attach()
 	}),
 	
@@ -99,21 +99,19 @@ ART.Widget = new Class({
 	render: function(style){
 		if (this.selector && this.selector != this.getSelector()) this.update();
 		if (!this.parent.apply(this, arguments)) return; //only renders if dirty == true
-	  
 	  delete this.halted;
 	  
   	var size = this.size;
-  	this.findStyles();
-		
-	  this.renderStyles(style);
+  	if (this.findStyles() || style) this.renderStyles(style);
 		this.walk(function(child){
 			child.render();
 		});
-		var newSize = {height: this.getStyle('height'), width: this.getStyle('width')};
-		//console.log('resize',newSize, size)
-    if (size.height != newSize.height) this.setHeight(newSize.height, true);
-    if (size.width != newSize.width) this.setWidth(newSize.width, true);
-	  this.fireEvent('resize', [newSize, size])
+		if (size) {
+  	  var newSize = {height: this.getStyle('height'), width: this.getStyle('width')};
+  	  if (size.height != newSize.height) this.setHeight(newSize.height, true);
+      if (size.width != newSize.width) this.setWidth(newSize.width, true);
+  	  this.fireEvent('resize', [newSize, size])
+		}
     
 		return true;
 	},
@@ -233,6 +231,10 @@ ART.Widget = new Class({
     	this.render();
 		}
 	},
+	
+	dispose: function() {
+	  this.element.dispose();
+	},
 
 	setParent: function(widget){
 		this.parentWidget = widget;
@@ -306,7 +308,7 @@ ART.Widget.create = function(klasses, a, b, c, d) {
   	klasses = klasses.map(function(name) {
   	  return $type(name) == 'string' ? ART.Widget.Trait[name.camelCase().capitalize()] : name;
   	});
-  	widget = Class.inherit.apply(Class, [widget].concat(klasses));
+  	widget = Class.include(widget, klasses)
   }
 	ART.Widget.count++;
 	return new widget(a, b, c, d)
@@ -316,7 +318,9 @@ ART.Widget.create = function(klasses, a, b, c, d) {
 
 Element.Styles.More = new ART.Hash('float', 'display', 'clear', 'cursor', 'verticalAlign', 'textAlign');
 
-ART.Widget.Base = Class.inherit(ART.Widget);
+ART.Widget.Base = new Class({
+  Extends: ART.Widget
+});
 ART.Widget.Module = {};
 ART.Widget.Trait = {};
 

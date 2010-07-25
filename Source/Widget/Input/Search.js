@@ -1,5 +1,5 @@
 ART.Widget.Input.Search = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Input,
     Widget.Stateful({
     	'expanded': ['expand', 'collapse'],
@@ -12,7 +12,7 @@ ART.Widget.Input.Search = new Class({
     ART.Widget.Trait.Observed,
     ART.Widget.Trait.Aware,
     ART.Widget.Trait.Accessible
-  ),
+  ],
   
   layout: {
     'input-icon#glyph': {},
@@ -96,12 +96,12 @@ ART.Widget.Input.Search = new Class({
 });
 
 ART.Widget.Input.Option = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Container,
     Widget.Stateful({
       chosen: ['choose', 'forget']
     })
-  ),
+  ],
   
   events: {
     element: {
@@ -135,9 +135,9 @@ ART.Widget.Input.Option = new Class({
 ART.Widget.Input.Icon = new Class({
   name: 'button', 
   
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Button
-  ),
+  ],
   
   layered: {
     icon: ['icon']

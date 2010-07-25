@@ -1,9 +1,9 @@
 
 
 ART.Widget.Trait.HasMenu = new Class({	
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Trait.OuterClick
-  ),
+  ],
   
   options: {
     menu: {

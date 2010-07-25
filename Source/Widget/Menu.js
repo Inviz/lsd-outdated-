@@ -1,8 +1,8 @@
 ART.Widget.Menu = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Paint,
     Widget.Animated
-  ),
+  ],
   
   position: 'absolute',
   

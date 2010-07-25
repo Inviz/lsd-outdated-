@@ -220,10 +220,6 @@ html > body .art.window.fancy .art.button.id-back {
     -art-glyph: ART.Glyphs.triangleLeft; }
 html > body .art.window.fancy .art.button.id-forward {
     -art-glyph: ART.Glyphs.triangleRight; }
-html > body .art.window.fancy.is-minified .art.id-toolbar .art.button {
-  -art-glyph-scale: 1;
-  -art-glyph-top: 2;
-  -art-glyph-left: 2; }
 .art.window.fancy .art.scrollbar {
   position: absolute; }
 .art.window.fancy .art.scrollbar .art.track {

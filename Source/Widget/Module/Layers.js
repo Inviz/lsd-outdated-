@@ -14,11 +14,6 @@ ART.Widget.Module.Layers = new Class({
     }
   }),
   
-  canvas: {
-    x: 0,
-    y: 0
-  },
-  
   update: Macro.onion(function() {
     this.outside = {x: 0, y: 0};
     this.inside = {x: 0, y: 0};
@@ -47,6 +42,7 @@ ART.Widget.Module.Layers = new Class({
     
       var styles = this.getChangedStyles.apply(this, properties);
       if (styles) {
+        //console.log(this.selector, styles.height)
         instance.padding = this.inside;
         value = (args.draw || instance.paint).apply(instance, Hash.getValues(styles))
         if (value === false) {

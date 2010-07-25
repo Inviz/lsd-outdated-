@@ -44,7 +44,7 @@ ART.Widget.Trait.HasSlider = new Class({
 	},
 	
 	onSet: function() {
-	  if (Class.hasParent(arguments)) return this.parent.apply(this, arguments);
+	  if (Class.hasParent(this)) return this.parent.apply(this, arguments);
 	},
 	
 	getTrack: Macro.defaults(function() {

@@ -63,8 +63,8 @@ ART.Layout = new Class({
 })(ART.Layout.traitByAttribute = {});
 
 ART.Layout.build = function(selector, layout, parent, element) {
-  var parsed = SubtleSlickParse(selector)[0][0]
-  if (!parsed.tag) parsed.tag = 'container';
+  var parsed = Slick.parse(selector).expressions[0][0]
+  if (parsed.tag == '*') parsed.tag = 'container';
   var tag = parsed.tag;
   var options = {};
   var attributes = {};
@@ -72,14 +72,14 @@ ART.Layout.build = function(selector, layout, parent, element) {
 	var mixins = [];
 	var styles;
 	if (parsed.attributes) parsed.attributes.each(function(attribute) {
-	  if (attribute.name == "style") {
+	  if (attribute.key == "style") {
 	    styles = {};
 	    attribute.value.split(';').each(function(definition) {
 	      var bits = definition.split(':');
 	      styles[bits[0]] = bits[1];
 	    })
 	  } else {
-	    var name = attribute.name;
+	    var name = attribute.key;
 	    var value = attribute.value || true;
 	    if (name == 'type') tag += "-" + value;
 	    var bits = name.split('-');
@@ -112,12 +112,13 @@ ART.Layout.build = function(selector, layout, parent, element) {
   if (element) widget.inject(element, true)
   
   if (parsed.classes) {
-    widget.classes.push.apply(widget.classes, parsed.classes);
-    parsed.classes.each(widget.addClass.bind(widget));
+    var klasses = parsed.classes.map(function(klass) { return klass.value })
+    widget.classes.push.apply(widget.classes, klasses);
+    klasses.each(widget.addClass.bind(widget));
   }
 	if (parsed.pseudos) {
 	  parsed.pseudos.each(function(pseudo) {
-	    widget.setStateTo(pseudo.name, true)
+	    widget.setStateTo(pseudo.key, true)
 	  });
 	}
 	if (styles) widget.setStyles(styles);

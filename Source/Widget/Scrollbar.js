@@ -1,8 +1,8 @@
 ART.Widget.Scrollbar = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Paint,
     ART.Widget.Trait.HasSlider
-  ),
+  ],
   
   name: 'scrollbar',
   

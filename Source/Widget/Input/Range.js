@@ -1,10 +1,10 @@
 ART.Widget.Input.Range = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Paint,
     ART.Widget.Trait.HasSlider,
     ART.Widget.Trait.Focusable,
     ART.Widget.Trait.Accessible
-  ),
+  ],
   
   name: 'input',
 	
@@ -44,9 +44,9 @@ ART.Widget.Input.Range = new Class({
 })
 
 ART.Widget.Input.Range.Thumb = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Button
-  ),
+  ],
   
   name: 'thumb'
 });

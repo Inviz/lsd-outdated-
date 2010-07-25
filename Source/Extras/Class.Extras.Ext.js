@@ -1,61 +1,69 @@
 //basically, it's chained Extends.
 
-Class.inherit = function(kls) {
-	var args = [];
-	for (var i = 1, j = arguments.length; i < j; i++) args.push(arguments[i]);
-	return Class.prototype.inherit.apply(kls, args);
-};
 
-Class.Mergers = {
+(function() {
+  var getInstance = function(klass){
+  	klass.$prototyping = true;
+  	var proto = new klass;
+  	delete klass.$prototyping;
+  	return proto;
+  };
+  
+  Class.include = function(klass, klasses) {
+    return new Class({
+      Includes: Array.from(arguments).flatten()
+    });
+  }
+  
+  Class.flatten = function(items) {
+    return Array.from(items).filter($defined).map(function(item) {
+      if (item.parent) {
+        return [Class.flatten(item.parent), item]
+      } else {
+        return item
+      }
+    }).flatten();
+  }
+
+  Class.Mutators.Includes = function(items) {
+    var instance
+  	Class.flatten(items).each(function(parent){        
+      var baked = new Class;
+      if (instance) {
+        baked.parent = instance;
+        baked.prototype = getInstance(instance);
+      }
+      var proto = $extend({}, parent.prototype)
+      delete proto.$caller;
+      delete proto.$constructor;
+      delete proto.parent;
+      delete proto.caller;
+      for (var i in proto) if (proto[i] && proto[i].$owner && proto[i].$owner != parent && proto[i].$owner.parent) delete proto[i]
+      baked.implement(proto);
+      instance = baked
+  	}, this);
+  	this.parent = instance
+  	this.prototype = getInstance(instance);
+  }
+})();
+
+
+
+$extend(Class.Mutators, {
   events: function(mixin) {
-    this.events = $mixin(this.events || {}, mixin.events);
+    this.prototype.events = $mixin(this.prototype.events || {}, mixin);
   },
   shortcuts: function(mixin) {
-    this.shortcuts = $mixin(this.shortcuts || {}, mixin.shortcuts);
+    this.prototype.shortcuts = $mixin(this.prototype.shortcuts || {}, mixin);
   },
   layered: function(mixin) {
-    this.layered = $mixin(this.layered || {}, mixin.layered)
+    this.prototype.layered = $mixin(this.prototype.layered || {}, mixin)
   }
-}
+});
 
-Class.prototype.inherit = function() {
-	var klass = this;
-	Array.each(arguments, function(mixin) {		
-		var baked = new Class;
-		
-		//Extends didnt work here in IE. Had to do it like this.
-		
-		baked.parent = klass;
-		baked.prototype = Class.instantiate(klass);
-
-		this.implement('parent', function(){
-			var name = this.caller._name, previous = this.caller._owner.parent.prototype[name];
-			if (!previous) throw new Error('The method "' + name + '" has no parent.');
-			return previous.apply(this, arguments);
-		}.protect());
-		
-		var mixin = Class.instantiate(mixin);
-		
-		for (var property in Class.Mergers) {
-		  if (mixin[property]) {
-		    Class.Mergers[property].call(baked.prototype, mixin);
-		    delete mixin[property]
-		  }
-		}
-		baked.implement(mixin);
-		klass = baked;
-		
-		
-	}, this);
-	
-	
-	return klass;
-};
-
-Class.hasParent = function(args) {
-  var fn = args.callee;
-  var caller = fn.caller;
-  return !!(caller._owner.parent && caller._owner.parent.prototype[caller._name]);
+Class.hasParent = function(klass) {
+  var caller = klass.$caller;
+  return !!(caller.$owner.parent && caller.$owner.parent.prototype[caller.$name]);
 }
 Macro = {};
 Macro.onion = function(callback) {
@@ -75,7 +83,7 @@ Macro.setter = function(name, callback) {
 
 Macro.defaults = function(callback) {
   return function() {
-    if (Class.hasParent(arguments)) {
+    if (Class.hasParent(this)) {
       return this.parent.apply(this, arguments);
     } else {
       return callback.apply(this, arguments);

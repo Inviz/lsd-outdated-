@@ -3,7 +3,7 @@ ART.Widget.Trait.Chooser = new Class({
   
 	select: function(item, temp) {
 	  var chosen = this.chosen;
-    if (item && !(item instanceof ART.Widget)) item = this.findItemByValue(item);
+    if (item && !item.render) item = this.findItemByValue(item);
     if (!item && this.options.force) return false;
     var selected = this.selected;
     this.setSelectedItem.apply(this, arguments);  

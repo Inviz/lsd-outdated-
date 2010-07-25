@@ -5,12 +5,6 @@ ART.Widget.Module.Cache = new Class({
     environment: {} //both
   },
   
-  cached: {
-    environment: {
-      'getSelector': 'selector'
-    }
-  },
-  
   getCached: function(type, key, callback, args) {
     var env = this.cache[type];
     if (!env[key]) env[key] = callback.apply(this, args || []);

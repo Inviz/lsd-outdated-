@@ -1,5 +1,5 @@
 ART.Widget.Input.Checkbox = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Paint,
     ART.Widget.Trait.Touchable,
     ART.Widget.Trait.Focusable,
@@ -7,7 +7,7 @@ ART.Widget.Input.Checkbox = new Class({
     Widget.Stateful({
       'checked': ['check', 'uncheck', 'toggle']
     })
-  ),
+  ],
   
   name: 'input',
   

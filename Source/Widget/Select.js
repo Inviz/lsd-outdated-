@@ -1,5 +1,5 @@
 ART.Widget.Select = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Paint,
     Widget.Stateful({
     	'expanded': ['expand', 'collapse']
@@ -9,7 +9,7 @@ ART.Widget.Select = new Class({
     ART.Widget.Trait.Chooser,
     ART.Widget.Trait.Focusable,
     ART.Widget.Trait.Accessible
-  ),
+  ],
   
   name: 'select',
   
@@ -67,12 +67,12 @@ ART.Widget.Select.Button = new Class({
 })
 
 ART.Widget.Select.Option = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Container,
     Widget.Stateful({
       chosen: ['choose', 'forget']
     })
-  ),
+  ],
   
   events: {
     element: {

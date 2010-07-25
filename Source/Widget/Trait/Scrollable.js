@@ -7,11 +7,11 @@ ART.Widget.Trait.Scrollable = new Class({
     if (this.options.scrollable) this.addEvent('resize', function(size) {
       var scrolled = this.getScrolled ? $(this.getScrolled()) : this.element.getFirst();
       //console.error((this.options.scrollable), scrolled, size.width, scrolled.scrollWidth, this.getScrolled)
-      if (size.width < scrolled.scrollWidth) this.getHorizontalScrollbar().show();
-      else if (this.horizontal) this.horizontal.hide();
-
-      if (size.height < scrolled.scrollHeight) this.getVerticalScrollbar().show();
-      else if (this.vertical) this.vertical.hide();
+      //if (size.width < scrolled.scrollWidth) this.getHorizontalScrollbar().show();
+      //else if (this.horizontal) this.horizontal.hide();
+      //
+      //if (size.height < scrolled.scrollHeight) this.getVerticalScrollbar().show();
+      //else if (this.vertical) this.vertical.hide();
     }.bind(this))
   }),
   

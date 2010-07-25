@@ -13,7 +13,7 @@ License:
 
 ART.Widget.Window = new Class({
 	
-	Extends: Class.inherit(
+	Includes: [
 		ART.Widget.Paint,
 		ART.Widget.Trait.Aware,
 		Widget.Animated,
@@ -21,7 +21,7 @@ ART.Widget.Window = new Class({
 			'closed': ['close', 'open'],
 			'collapsed': ['collapse', 'expand']
 		})
-	),
+	],
 	
 	name: 'window',
 	
@@ -49,6 +49,7 @@ ART.Widget.Window = new Class({
 	},
 	
 	initialize: function() {
+	  console.log('Window', this)
 		this.parent.apply(this, arguments);
 		this.inject(document.body);
 		

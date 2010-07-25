@@ -1,12 +1,12 @@
 
 ART.Widget.Panel = new Class({
 	
-	Extends: Class.inherit(
+	Includes: [
 		ART.Widget.Paint,
 		Widget.Stateful({
 			'collapsed': ['collapse', 'expand']
 		})
-	),
+	],
 	
 	name: 'panel',
 	

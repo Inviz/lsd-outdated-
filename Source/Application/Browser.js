@@ -1,6 +1,6 @@
 
 Moo.Application.Browser = new Class({
-	Extends: Class.inherit(
+	Includes: [
 	  ART.Widget.Window,
 	  ART.Widget.Trait.Draggable,
 	  ART.Widget.Trait.Resizable,
@@ -9,7 +9,7 @@ Moo.Application.Browser = new Class({
 	  Widget.Stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })
-	),
+	],
 	
   expression: "window.fancy#browser[shape=arrow]",
   

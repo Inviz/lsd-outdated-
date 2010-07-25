@@ -6,7 +6,7 @@
   }
 
   ART.Widget.Base = new Class({
-    Extends: Class.inherit.apply(Class, ART.Widget.modules),
+    Includes: ART.Widget.modules,
 
     initialize: function() {
       this.parent.apply(this, arguments);

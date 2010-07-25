@@ -19,13 +19,13 @@ ART.Sheet = {};
 			}
 			if (chunk.id)	result.push('#' + chunk.id);
 			if (chunk.pseudos) chunk.pseudos.each(function(pseudo){
-				result.push(':' + pseudo.name);
+				result.push(':' + pseudo.key);
 			});
 			if (chunk.classes) chunk.classes.each(function(klass){
-				result.push('.' + klass);
+				result.push('.' + klass.value);
 			});
 			if (chunk.attributes) chunk.attributes.each(function(attribute){
-				result.push('[' + attribute.name + '=' + attribute.value + ']');
+				result.push('[' + attribute.key + '=' + attribute.value + ']');
 			});
 			return result;
 		});
@@ -43,7 +43,7 @@ ART.Sheet = {};
 	};
 
 	ART.Sheet.define = function(selectors, style){
-		SubtleSlickParse(selectors).each(function(selector){
+		Slick.parse(selectors).expressions.each(function(selector){
 			var rule = {
 				'specificity': getSpecificity(selector),
 				'selector': parseSelector(selector),
@@ -61,7 +61,7 @@ ART.Sheet = {};
 	ART.Sheet.match = (function() {
 	  var parsed = {};
 	  var parse = function(selector) {
-	    return parsed[selector] = (parsed[selector] || parseSelector(SubtleSlickParse(selector)[0]));
+	    return parsed[selector] = (parsed[selector] || parseSelector(Slick.parse(selector).expressions[0]));
 	  };
     var cache = {};
   	return function(selector, needle) {
@@ -99,7 +99,7 @@ ART.Sheet = {};
   	  if (parsed.id) classes.push('id-' + parsed.id);
   	  if (parsed.pseudos) {
     	  parsed.pseudos.each(function(pseudo) {
-    	    classes.push(pseudo.name);
+    	    classes.push(pseudo.key);
     	  });
     	};
   	  return classes.join('.')
@@ -112,7 +112,7 @@ ART.Sheet = {};
 	  return ((Element.Styles[cc] || Element.Styles.More[cc]) && !Element.Styles.Except[cc]);
 	}
 	ART.Sheet.define = function(selectors, style){
-		SubtleSlickParse(selectors).each(function(selector){
+		Slick.parse(selectors).expressions.each(function(selector){
 			var rule = {
 				'specificity': getSpecificity(selector),
 				'selector': parseSelector(selector),
@@ -129,7 +129,7 @@ ART.Sheet = {};
 			}
 			
 			rules.push(rule);
-
+      
 			rules.sort(function(a, b){
 				return a.specificity - b.specificity;
 			});
@@ -219,7 +219,7 @@ ART.Sheet = {};
 		
 		var result = {style: {}, rules: [], implied: {}}
 		
-		var parsed = parseSelector(SubtleSlickParse(selector)[0]);
+		var parsed = parseSelector(Slick.parse(selector).expressions[0]);
 		rules.each(function(rule){
 			var i = rule.selector.length - 1, j = parsed.length - 1;
 			if (!containsAll(parsed[j], rule.selector[i])) return;

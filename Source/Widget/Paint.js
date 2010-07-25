@@ -2,12 +2,12 @@ z = {};
 c = {};
 
 ART.Widget.Paint = new Class({
-  Extends: Class.inherit(
+  Includes: [
 		ART.Widget.Base,
 		Widget.Stateful({
 			'outdated': ['outdate', 'actualize']
 		})
-	),
+	],
 	
 	properties: [],
 	redraws: 0,
@@ -121,6 +121,7 @@ ART.Widget.Paint = new Class({
 	},
 	
 	setStyle: function(property, value) {
+	  //console.log(this.element, Array.from(arguments))
 		if (!this.parent.apply(this, arguments)) return;
 		switch(property) {
 			case "height": case "width":

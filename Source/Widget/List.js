@@ -1,11 +1,11 @@
 
 ART.Widget.List = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Paint,
     ART.Widget.Trait.HasList,
     ART.Widget.Trait.Focusable,
     ART.Widget.Trait.Accessible
-  ),
+  ],
   
   name: 'list',
 	
@@ -46,12 +46,12 @@ ART.Widget.List = new Class({
 });
 
 ART.Widget.List.Item = new Class({
-  Extends: Class.inherit(
+  Includes: [
     ART.Widget.Paint,
     Widget.Stateful({
       selected: ['select', 'unselect']
     })
-  ),
+  ],
   
   events: {
     element: {

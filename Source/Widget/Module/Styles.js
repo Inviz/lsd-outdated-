@@ -43,12 +43,18 @@ ART.Widget.Module.Styles = new Class({
 		var found = this.lookupStyles();
 		if (found) {
 			for (var property in found.style) if (property in this.style.given) delete found.style[property];
-			this.style.found = found.style;
-			this.setStyles(found.style, true);
-			
+			var rendered = false;
+			for (var property in found.style) if (!$equals(found.style[property], this.style.current[property])) {
+  			this.style.found = found.style;
+  			this.setStyles(found.style, true);
+  			rendered = true
+  			break;
+			}	
+			if (!rendered) return false;
 			for (var property in found.implied) if (property in this.style.given) delete found.implied[property];
 			this.style.implied = found.implied;
 			$extend(this.style.current, this.style.implied);
+			return true;
 		}
 	},
 
@@ -104,9 +110,12 @@ ART.Widget.Module.Styles = new Class({
 	getStyle: function(property) {
 	  if (this.style.computed[property]) return this.style.computed[property];
 		var value = this.style.current[property];
-		if (value == "inherit") value = this.inheritStyle(property);
-		if (value == "auto") value = this.calculateStyle(property);
-		if (property == 'height') value = this.getClientHeight();
+		if (property == 'height') {
+		  value = this.getClientHeight();
+		} else {
+  		if (value == "inherit") value = this.inheritStyle(property);
+  		if (value == "auto") value = this.calculateStyle(property);
+		}
 		this.style.computed[property] = value;
 		return value;
 	},
@@ -123,7 +132,7 @@ ART.Widget.Module.Styles = new Class({
     var last = $extend({}, this.style.last[hash]);
     if (this.size.height) {
       var size = $merge(this.size);
-      if (this.style.current.height != 'auto') size.height += (this.style.current.paddingTop || 0) + (this.style.current.paddingBottom || 0)      
+      //if (this.style.current.height != 'auto') size.height += (this.style.current.paddingTop || 0) + (this.style.current.paddingBottom || 0)      
       $extend(styles, size);
       //return styles;
     }
