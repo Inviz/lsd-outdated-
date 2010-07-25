@@ -1,6 +1,6 @@
 (function(addEvents, removeEvents) {
 
-  ART.Widget.Module.Events = new Class({
+  Widget.Module.Events = new Class({
 
     events: {
       element: {},

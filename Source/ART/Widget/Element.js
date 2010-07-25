@@ -1,10 +1,9 @@
 ART.Widget.Element = new Class({
   Includes: [
     ART.Widget,
-    ART.Widget.Module.Value,
-    //ART.Widget.Module.Selectability,
+    //Widget.Module.Selectability,
     ART.Widget.Module.Position,
-    ART.Widget.Module.Events,
+    Widget.Module.Events,
     ART.Widget.Module.LayoutEvents,
     ART.Widget.Module.Container    
   ],

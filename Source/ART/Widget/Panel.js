@@ -3,7 +3,7 @@ ART.Widget.Panel = new Class({
 	
 	Includes: [
 		ART.Widget.Paint,
-		Widget.Stateful({
+		Macro.stateful({
 			'collapsed': ['collapse', 'expand']
 		})
 	],

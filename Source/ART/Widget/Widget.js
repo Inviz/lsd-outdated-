@@ -1,0 +1,63 @@
+(function(Old) {
+  // you can specify ART.Widget.modules as an array of classes to disable autoloading
+  if (!Old.modules) {
+    Old.modules = []
+    for (var name in Old.Module) Old.modules.push(Old.Module[name]);
+  }
+
+  ART.Widget = new Class({
+    Includes: [
+      Macro.stateful({
+    	  'hidden': ['hide', 'show'],
+    	  'active': ['activate', 'deactivate'],
+    	  'focused': ['focus', 'blur'],
+    	  'disabled': ['disable', 'enable'],
+    	  'dirty': ['update', 'render'],
+    	  'built': ['build', 'destroy'],
+    		'attached': ['attach', 'detach']
+      }),
+    ].concat([Old.Base, Widget.modules, Old.modules].flatten()),
+    
+    ns: 'art',
+    name: 'widget',
+    
+    options: {
+      classes: [],
+      element: {
+        tag: 'div'
+      }
+    },
+    
+
+    initialize: function(options) {
+      this.setOptions(options);
+      
+  		this.classes = (this.classes || []).concat(this.options.classes);
+  		if (!this.attributes) this.attributes = {};
+  		for (var attribute in this.options.attributes) {
+  		  if (!ART.Widget.Ignore.attributes[attribute]) this.attributes[attribute] = this.options.attributes[attribute];
+  		}
+  		this.pseudos = [];
+  		this.children = [];
+  		this.update();
+  	  this.offset = {
+        paint: {},
+        total: {},
+        inside: {},
+        padding: {},
+        margin: {}
+      }
+      
+      this.parent.apply(this, arguments);
+      
+  		if (this.expression) this.applyExpression(this.expression);
+  		if (this.layout) this.setLayout(this.layout);
+    }
+  });
+    
+  ['Ignore', 'Module', 'Trait', 'modules', 'create', 'count'].each(function(property) { 
+    ART.Widget[property] = Old[property]
+  });
+  ART.Widget.Base = Old.Base;
+
+})(ART.Widget);

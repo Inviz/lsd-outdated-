@@ -11,7 +11,7 @@ ART.Widget.Button = new Class({
 
 	Includes: [
 		ART.Widget.Paint,
-		ART.Widget.Trait.Touchable
+		Widget.Trait.Touchable
 	],
 
 	name: 'button',

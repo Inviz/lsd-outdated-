@@ -5,7 +5,7 @@ Moo.Application.Preferences.Network = new Class({
 	  ART.Widget.Trait.Resizable,
 	  ART.Widget.Trait.ResizableContainer,
 	  ART.Widget.Trait.Fitting,
-	  Widget.Stateful({
+	  Macro.stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })
 	],

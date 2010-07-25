@@ -6,18 +6,13 @@ License:
 */
 
 // Window Widget. Work in progress.
-
-
-
-
-
 ART.Widget.Window = new Class({
 	
 	Includes: [
 		ART.Widget.Paint,
 		ART.Widget.Trait.Aware,
-		Widget.Animated,
-		Widget.Stateful({
+		Widget.Trait.Animated,
+		Macro.stateful({
 			'closed': ['close', 'open'],
 			'collapsed': ['collapse', 'expand']
 		})
@@ -49,7 +44,6 @@ ART.Widget.Window = new Class({
 	},
 	
 	initialize: function() {
-	  console.log('Window', this)
 		this.parent.apply(this, arguments);
 		this.inject(document.body);
 		
@@ -66,3 +60,5 @@ ART.Widget.Window = new Class({
 	}
 	
 });
+
+ART.Widget.Ignore.states.push('dirty');

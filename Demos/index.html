@@ -12,12 +12,9 @@
 	<script src="../Source/Extras/Class.Extras.Ext.js"></script>
 	<script src="../Source/Extras/Class.Refactor.js"></script>
 	<script src="../Source/Extras/Element.Ext.js"></script>
-	<script src="../Source/Extras/Widget.js"></script>
 	<script src="../Source/Extras/QFocuser.js"></script>
 	<script src="../Source/Extras/Event.Ext.js"></script>
 	<script src="../Source/Extras/Element.Event.Ext.js"></script>
-	
-	
 	
 	<script src="../ART/Source/ART.js"></script>
 	<script src="../ART/Source/ART.SVG.js"></script>
@@ -27,7 +24,20 @@
 	<script src="../ART/Source/ART.Font.js"></script>
 	
 	<script src="../Source/ART/ART.js"></script>
+	
+	
+	<script src="../Source/Widget/Base.js"></script>
+	<script src="../Source/Widget/Module/Events.js"></script>
+	<script src="../Source/Widget/Module/Selectability.js"></script>
+	<script src="../Source/Widget/Trait/Shy.js"></script>
+	<script src="../Source/Widget/Trait/Accessible.js"></script>
+	<script src="../Source/Widget/Trait/Observed.js"></script>
+	<script src="../Source/Widget/Trait/OuterClick.js"></script>
+	<script src="../Source/Widget/Trait/Touchable.js"></script>
+  <script src="../Source/Widget/Trait/Value.js"></script>
 	<script src="../Source/Widget/Widget.js"></script>
+	
+	<script src="../Source/ART/Widget/Base.js"></script>
 	<script src="../Source/ART/Sheet.js"></script>
 	<script src="../Source/ART/Layout.js"></script>
 	<script src="../Source/ART/Glyphs.js"></script>
@@ -48,69 +58,61 @@
 	<script src="../Source/ART/Shape/Rectangle.js"></script>
 	<script src="../Source/ART/Shape/Arrow.js"></script>
 	
-
 	
 	<!-- these are autoincluded to all widgets -->
-  <script src="../Source/Widget/Module/Events.js"></script>
-  <script src="../Source/Widget/Module/Expression.js"></script>
-  <script src="../Source/Widget/Module/Shape.js"></script>
-  <script src="../Source/Widget/Module/Layers.js"></script>
-  <script src="../Source/Widget/Module/Layout.js"></script>
-  <script src="../Source/Widget/Module/LayoutEvents.js"></script>
-  <script src="../Source/Widget/Module/Position.js"></script>
-  <script src="../Source/Widget/Module/Value.js"></script>
-  <script src="../Source/Widget/Module/Dimensions.js"></script>
-  <script src="../Source/Widget/Module/Styles.js"></script>
-  <script src="../Source/Widget/Module/Cache.js"></script>
-  <script src="../Source/Widget/Module/Container.js"></script>
-  <!-- <script src="../Source/Widget/Module/Selectability.js"></script> -->
+  <script src="../Source/ART/Widget/Module/Expression.js"></script>
+  <script src="../Source/ART/Widget/Module/Shape.js"></script>
+  <script src="../Source/ART/Widget/Module/Layers.js"></script>
+  <script src="../Source/ART/Widget/Module/Layout.js"></script>
+  <script src="../Source/ART/Widget/Module/LayoutEvents.js"></script>
+  <script src="../Source/ART/Widget/Module/Position.js"></script>
+  <script src="../Source/ART/Widget/Module/Dimensions.js"></script>
+  <script src="../Source/ART/Widget/Module/Styles.js"></script>
+  <script src="../Source/ART/Widget/Module/Cache.js"></script>
+  <script src="../Source/ART/Widget/Module/Container.js"></script>
+  <!-- <script src="../Source/ART/Widget/Module/Selectability.js"></script> -->
   
 	<!-- these are used on widgets basis -->
-  <script src="../Source/Widget/Trait/Aware.js"></script>
-	<script src="../Source/Widget/Trait/Draggable.js"></script>
-	<script src="../Source/Widget/Trait/HasInput.js"></script>
-	<script src="../Source/Widget/Trait/HasSlider.js"></script>
-	<script src="../Source/Widget/Trait/Hoverable.js"></script>
-	<script src="../Source/Widget/Trait/OuterClick.js"></script>
-	<script src="../Source/Widget/Trait/Observed.js"></script>
-	<script src="../Source/Widget/Trait/Resizable.js"></script>
-	<script src="../Source/Widget/Trait/ResizableContainer.js"></script>
-	<script src="../Source/Widget/Trait/Shy.js"></script>
-	<script src="../Source/Widget/Trait/Touchable.js"></script>
-	<script src="../Source/Widget/Trait/HasList.js"></script>
-	<script src="../Source/Widget/Trait/HasMenu.js"></script>
-	<script src="../Source/Widget/Trait/Accessible.js"></script>
-	<script src="../Source/Widget/Trait/Dimensions.js"></script>
-  <script src="../Source/Widget/Trait/Chooser.js"></script>
-  <script src="../Source/Widget/Trait/Scrollable.js"></script>
-  <script src="../Source/Widget/Trait/Fitting.js"></script>
-  <script src="../Source/Widget/Trait/Focusable.js"></script>
+  <script src="../Source/ART/Widget/Trait/Aware.js"></script>
+	<script src="../Source/ART/Widget/Trait/Draggable.js"></script>
+	<script src="../Source/ART/Widget/Trait/HasInput.js"></script>
+	<script src="../Source/ART/Widget/Trait/HasSlider.js"></script>
+	<script src="../Source/ART/Widget/Trait/Hoverable.js"></script>
+	<script src="../Source/ART/Widget/Trait/Resizable.js"></script>
+	<script src="../Source/ART/Widget/Trait/ResizableContainer.js"></script>
+	<script src="../Source/ART/Widget/Trait/HasList.js"></script>
+	<script src="../Source/ART/Widget/Trait/HasMenu.js"></script>
+	<script src="../Source/ART/Widget/Trait/Dimensions.js"></script>
+  <script src="../Source/ART/Widget/Trait/Chooser.js"></script>
+  <script src="../Source/ART/Widget/Trait/Scrollable.js"></script>
+  <script src="../Source/ART/Widget/Trait/Fitting.js"></script>
+  <script src="../Source/ART/Widget/Trait/Focusable.js"></script>
 	
-	<script src="../Source/Widget/Base.js"></script>
-	<script src="../Source/Widget/Element.js"></script>
-  <script src="../Source/Widget/Paint.js"></script>
-	<script src="../Source/Widget/Button.js"></script>
-	<script src="../Source/Widget/Window.js"></script>
-	<script src="../Source/Widget/Section.js"></script>
-	<script src="../Source/Widget/Container.js"></script>
-	<script src="../Source/Widget/Glyph.js"></script>
-	<script src="../Source/Widget/Scrollbar.js"></script>
-	<script src="../Source/Widget/Label.js"></script>
-	<script src="../Source/Widget/Form.js"></script>
-	<script src="../Source/Widget/Select.js"></script>
-	<script src="../Source/Widget/Menu.js"></script>
-	<script src="../Source/Widget/Panel.js"></script>
-	<script src="../Source/Widget/Toolbar.js"></script>
-	<script src="../Source/Widget/List.js"></script>
+	<script src="../Source/ART/Widget/Widget.js"></script>
+	<script src="../Source/ART/Widget/Element.js"></script>
+  <script src="../Source/ART/Widget/Paint.js"></script>
+	<script src="../Source/ART/Widget/Button.js"></script>
+	<script src="../Source/ART/Widget/Window.js"></script>
+	<script src="../Source/ART/Widget/Section.js"></script>
+	<script src="../Source/ART/Widget/Container.js"></script>
+	<script src="../Source/ART/Widget/Glyph.js"></script>
+	<script src="../Source/ART/Widget/Scrollbar.js"></script>
+	<script src="../Source/ART/Widget/Label.js"></script>
+	<script src="../Source/ART/Widget/Form.js"></script>
+	<script src="../Source/ART/Widget/Select.js"></script>
+	<script src="../Source/ART/Widget/Menu.js"></script>
+	<script src="../Source/ART/Widget/Panel.js"></script>
+	<script src="../Source/ART/Widget/Toolbar.js"></script>
+	<script src="../Source/ART/Widget/List.js"></script>
 	
-	<script src="../Source/Widget/Input.js"></script>
-	<script src="../Source/Widget/Input/Range.js"></script>
-	<script src="../Source/Widget/Input/Date.js"></script>
-	<script src="../Source/Widget/Input/Combo.js"></script>
-	<script src="../Source/Widget/Input/Radio.js"></script>
-	<script src="../Source/Widget/Input/Checkbox.js"></script>
-	<script src="../Source/Widget/Input/Search.js"></script>
-	<script src="../Source/Widget/Textarea.js"></script>
+	<script src="../Source/ART/Widget/Input.js"></script>
+	<script src="../Source/ART/Widget/Input/Range.js"></script>
+	<script src="../Source/ART/Widget/Input/Date.js"></script>
+	<script src="../Source/ART/Widget/Input/Combo.js"></script>
+	<script src="../Source/ART/Widget/Input/Radio.js"></script>
+	<script src="../Source/ART/Widget/Input/Checkbox.js"></script>
+	<script src="../Source/ART/Widget/Input/Search.js"></script>
+	<script src="../Source/ART/Widget/Textarea.js"></script>
 	
 	
 	<script src="../Source/Moo/Application.js"></script>
@@ -139,7 +141,7 @@
 			$z.content.setContent(new Element('div', {'html': 'Orange box of truth (250x100)', 'styles': {'background': 'orange', width: 250, height: 100}}))
 			$z.fit();
 			
-  		$y = new Moo.Notification("Hello");
+  		$y = new Moo.Notification();
   		$y.header.title.setContent('Warning');
   		$y.content.setContent('Alerto!');
   		

@@ -1,4 +1,4 @@
-ART.Widget.Module.Selectability = new Class({
+Widget.Module.Selectability = new Class({
   
   attach: Macro.onion(function() {
     if (this.options.at) this.positionAt(this.options.at)

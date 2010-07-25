@@ -1,4 +1,4 @@
-ART.Widget.Module.Value = new Class({
+Widget.Trait.Value = new Class({
 
 	setValue: function(item) {
 	  var value = this.value;
@@ -19,5 +19,10 @@ ART.Widget.Module.Value = new Class({
 	},
 
 	formatValue: $arguments(0),
-	processValue: $arguments(0)
+	processValue: $arguments(0),
+	
+	onChange: function() {
+	  this.fireEvent('change', arguments)
+	  return true;
+	}
 })

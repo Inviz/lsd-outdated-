@@ -101,7 +101,7 @@
 
 
 
-ART.Widget.Trait.Accessible = new Class({
+Widget.Trait.Accessible = new Class({
 	
 	Implements: [Shortcuts],
 	
@@ -127,4 +127,4 @@ ART.Widget.Trait.Accessible = new Class({
 	})
 });
 
-ART.Widget.Ignore.events.push('accessibility')
+Widget.Ignore.events.push('accessibility')

@@ -2,7 +2,7 @@
 
 ART.Widget.Trait.HasMenu = new Class({	
   Includes: [
-    ART.Widget.Trait.OuterClick
+    Widget.Trait.OuterClick
   ],
   
   options: {

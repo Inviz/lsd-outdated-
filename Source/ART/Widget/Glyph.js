@@ -1,7 +1,7 @@
 ART.Widget.Glyph = new Class({
   Includes: [
 		ART.Widget.Paint,
-  	ART.Widget.Trait.Touchable
+  	Widget.Trait.Touchable
 	],
 	
   name: 'glyph',

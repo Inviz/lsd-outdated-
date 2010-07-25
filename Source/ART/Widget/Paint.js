@@ -1,10 +1,7 @@
-z = {};
-c = {};
-
 ART.Widget.Paint = new Class({
   Includes: [
-		ART.Widget.Base,
-		Widget.Stateful({
+		ART.Widget,
+		Macro.stateful({
 			'outdated': ['outdate', 'actualize']
 		})
 	],

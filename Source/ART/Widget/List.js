@@ -4,7 +4,7 @@ ART.Widget.List = new Class({
     ART.Widget.Paint,
     ART.Widget.Trait.HasList,
     ART.Widget.Trait.Focusable,
-    ART.Widget.Trait.Accessible
+    Widget.Trait.Accessible
   ],
   
   name: 'list',
@@ -48,7 +48,7 @@ ART.Widget.List = new Class({
 ART.Widget.List.Item = new Class({
   Includes: [
     ART.Widget.Paint,
-    Widget.Stateful({
+    Macro.stateful({
       selected: ['select', 'unselect']
     })
   ],

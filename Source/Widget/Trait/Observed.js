@@ -1,5 +1,5 @@
-ART.Widget.Trait.Observed = new Class({
-  Extends: Widget.Stateful({
+Widget.Trait.Observed = new Class({
+  Extends: Macro.stateful({
   	'filled': ['fill', 'empty']
   }),
   
@@ -55,4 +55,4 @@ ART.Widget.Trait.Observed = new Class({
   }
 });
 
-ART.Widget.Ignore.events.push('observer');
+Widget.Ignore.events.push('observer');

@@ -1,6 +1,6 @@
 
 ART.Widget.Trait.Resizable = new Class({
-  Extends: Widget.Stateful({
+  Extends: Macro.stateful({
     'resized': ['transform', 'finalize']
   }),
 

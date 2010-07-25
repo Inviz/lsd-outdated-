@@ -1,5 +1,5 @@
 
-ART.Widget.Trait.Touchable = new Class({
+Widget.Trait.Touchable = new Class({
   options: {
     touch: {}
   },

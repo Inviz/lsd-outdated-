@@ -1,14 +1,14 @@
 ART.Widget.Select = new Class({
   Includes: [
     ART.Widget.Paint,
-    Widget.Stateful({
+    Macro.stateful({
     	'expanded': ['expand', 'collapse']
     }),
     ART.Widget.Trait.HasMenu,
     ART.Widget.Trait.HasList,
     ART.Widget.Trait.Chooser,
     ART.Widget.Trait.Focusable,
-    ART.Widget.Trait.Accessible
+    Widget.Trait.Accessible
   ],
   
   name: 'select',
@@ -69,7 +69,7 @@ ART.Widget.Select.Button = new Class({
 ART.Widget.Select.Option = new Class({
   Includes: [
     ART.Widget.Container,
-    Widget.Stateful({
+    Macro.stateful({
       chosen: ['choose', 'forget']
     })
   ],

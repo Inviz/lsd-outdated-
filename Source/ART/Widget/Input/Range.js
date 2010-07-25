@@ -3,7 +3,7 @@ ART.Widget.Input.Range = new Class({
     ART.Widget.Paint,
     ART.Widget.Trait.HasSlider,
     ART.Widget.Trait.Focusable,
-    ART.Widget.Trait.Accessible
+    Widget.Trait.Accessible
   ],
   
   name: 'input',

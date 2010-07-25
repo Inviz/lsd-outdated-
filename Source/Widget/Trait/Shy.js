@@ -1,5 +1,5 @@
 //Widgets take no space
-ART.Widget.Trait.Shy = new Class({
+Widget.Trait.Shy = new Class({
   attach: Macro.onion(function() {
     this.onDOMInject(function(size) {
       this.element.setStyle('margin-' + (this.getStyle('float') == 'right' ? 'left' : 'right'), - this.element.scrollWidth)
@@ -8,4 +8,4 @@ ART.Widget.Trait.Shy = new Class({
   })
 });
 
-ART.Widget.Ignore.attributes.push('shy');
+Widget.Ignore.attributes.push('shy');

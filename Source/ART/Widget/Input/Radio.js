@@ -1,10 +1,10 @@
 ART.Widget.Input.Radio = new Class({
   Includes: [
     ART.Widget.Paint,
-    ART.Widget.Trait.Touchable,
+    Widget.Trait.Touchable,
     ART.Widget.Trait.Focusable,
-    ART.Widget.Trait.Accessible,
-    Widget.Stateful({
+    Widget.Trait.Accessible,
+    Macro.stateful({
       'checked': ['check', 'uncheck']
     })
   ],

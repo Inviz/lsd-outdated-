@@ -1,7 +1,7 @@
 ART.Widget.Input.Search = new Class({
   Includes: [
     ART.Widget.Input,
-    Widget.Stateful({
+    Macro.stateful({
     	'expanded': ['expand', 'collapse'],
     	'detailed': ['enrich', 'clean'],
     	'uniconed': ['uniconize', 'iconize']
@@ -11,7 +11,7 @@ ART.Widget.Input.Search = new Class({
     ART.Widget.Trait.Chooser,
     ART.Widget.Trait.Observed,
     ART.Widget.Trait.Aware,
-    ART.Widget.Trait.Accessible
+    Widget.Trait.Accessible
   ],
   
   layout: {
@@ -98,7 +98,7 @@ ART.Widget.Input.Search = new Class({
 ART.Widget.Input.Option = new Class({
   Includes: [
     ART.Widget.Container,
-    Widget.Stateful({
+    Macro.stateful({
       chosen: ['choose', 'forget']
     })
   ],

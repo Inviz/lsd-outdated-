@@ -1,7 +1,7 @@
 ART.Widget.Menu = new Class({
   Includes: [
     ART.Widget.Paint,
-    Widget.Animated
+    Widget.Trait.Animated
   ],
   
   position: 'absolute',

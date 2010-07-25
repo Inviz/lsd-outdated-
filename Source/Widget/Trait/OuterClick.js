@@ -1,6 +1,4 @@
-
-
-ART.Widget.Trait.OuterClick = new Class({
+Widget.Trait.OuterClick = new Class({
   
   attachOuterClick: function() {
     this.addEvents(this.events.outer);
@@ -11,4 +9,4 @@ ART.Widget.Trait.OuterClick = new Class({
   }
 });
 
-ART.Widget.Ignore.events.push('outer');
+Widget.Ignore.events.push('outer');

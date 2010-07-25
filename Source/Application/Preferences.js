@@ -3,7 +3,7 @@ Moo.Application.Preferences = new Class({
     ART.Widget.Window,
 	  ART.Widget.Trait.Draggable,
 	  ART.Widget.Trait.Fitting,
-	  Widget.Stateful({
+	  Macro.stateful({
 	    'minified': ['minify', 'enlarge', 'mutate']
 	  })
 	],

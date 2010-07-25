@@ -1,5 +1,5 @@
 ART.Widget.Trait.Hoverable = new Class({
-  Extends: Widget.Stateful({
+  Extends: Macro.stateful({
     'hover': ['mouseenter', 'mouseleave']
   }),
   
