@@ -101,7 +101,7 @@
 
 
 
-Widget.Trait.Accessible = new Class({
+Widget.Trait.Accessibility = new Class({
 	
 	Implements: [Shortcuts],
 	

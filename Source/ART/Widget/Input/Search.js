@@ -7,11 +7,11 @@ ART.Widget.Input.Search = new Class({
     	'uniconed': ['uniconize', 'iconize']
     }),
     ART.Widget.Trait.HasMenu,
-    ART.Widget.Trait.HasList,
-    ART.Widget.Trait.Chooser,
-    ART.Widget.Trait.Observed,
     ART.Widget.Trait.Aware,
-    Widget.Trait.Accessible
+    Widget.Trait.List,
+    Widget.Trait.Choice,
+    Widget.Trait.Observed,
+    Widget.Trait.Accessibility
   ],
   
   layout: {

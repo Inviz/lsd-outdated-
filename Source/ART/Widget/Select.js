@@ -5,10 +5,10 @@ ART.Widget.Select = new Class({
     	'expanded': ['expand', 'collapse']
     }),
     ART.Widget.Trait.HasMenu,
-    ART.Widget.Trait.HasList,
-    ART.Widget.Trait.Chooser,
-    ART.Widget.Trait.Focusable,
-    Widget.Trait.Accessible
+    Widget.Trait.List,
+    Widget.Trait.Choice,
+    Widget.Trait.Focus,
+    Widget.Trait.Accessibility
   ],
   
   name: 'select',

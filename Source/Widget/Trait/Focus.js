@@ -1,4 +1,4 @@
-ART.Widget.Trait.Focusable = new Class({
+Widget.Trait.Focus = new Class({
   options: {
     tabindex: 0
   },

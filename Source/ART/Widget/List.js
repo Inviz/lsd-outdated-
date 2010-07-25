@@ -2,9 +2,9 @@
 ART.Widget.List = new Class({
   Includes: [
     ART.Widget.Paint,
-    ART.Widget.Trait.HasList,
-    ART.Widget.Trait.Focusable,
-    Widget.Trait.Accessible
+    Widget.Trait.List,
+    Widget.Trait.Focus,
+    Widget.Trait.Accessibility
   ],
   
   name: 'list',

@@ -1,5 +1,5 @@
 //Trait that completes HasList. Adds a capability to first choose something and then select (think dropdown)
-ART.Widget.Trait.Chooser = new Class({
+Widget.Trait.Choice = new Class({
   
 	select: function(item, temp) {
 	  var chosen = this.chosen;
