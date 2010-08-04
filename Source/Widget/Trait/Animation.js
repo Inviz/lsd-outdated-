@@ -1,4 +1,4 @@
-Widget.Trait.Animated = new Class({
+Widget.Trait.Animation = new Class({
 	
 	getAnimation: function() {
 		if (!this.animation) this.animation = this.getAnimatedElement().get('fade');

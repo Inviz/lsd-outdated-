@@ -6,17 +6,18 @@
   }
 
   ART.Widget = new Class({
-    Includes: [
-      Macro.stateful({
-    	  'hidden': ['hide', 'show'],
-    	  'active': ['activate', 'deactivate'],
-    	  'focused': ['focus', 'blur'],
-    	  'disabled': ['disable', 'enable'],
-    	  'dirty': ['update', 'render'],
-    	  'built': ['build', 'destroy'],
-    		'attached': ['attach', 'detach']
-      }),
-    ].concat([Old.Base, Widget.modules, Old.modules].flatten()),
+
+    States: {
+  	  'hidden': ['hide', 'show'],
+  	  'active': ['activate', 'deactivate'],
+  	  'focused': ['focus', 'blur'],
+  	  'disabled': ['disable', 'enable'],
+  	  'built': ['build', 'destroy', false],
+  		'attached': ['attach', 'detach', false],
+  	  'dirty': ['update', 'render', false]
+    },
+    
+    Includes: [Old.Base, Widget.modules, Old.modules].flatten(),
     
     ns: 'art',
     name: 'widget',

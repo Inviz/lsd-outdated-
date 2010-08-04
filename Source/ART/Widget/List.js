@@ -46,12 +46,11 @@ ART.Widget.List = new Class({
 });
 
 ART.Widget.List.Item = new Class({
-  Includes: [
-    ART.Widget.Paint,
-    Macro.stateful({
-      selected: ['select', 'unselect']
-    })
-  ],
+  Extends: ART.Widget.Paint,
+  
+  States: {
+    selected: ['select', 'unselect']
+  },
   
   events: {
     element: {

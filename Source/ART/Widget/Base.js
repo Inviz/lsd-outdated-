@@ -214,6 +214,6 @@ ART.Widget.create = function(klasses, a, b, c, d) {
 Element.Styles.More = new ART.Hash('float', 'display', 'clear', 'cursor', 'verticalAlign', 'textAlign');
 
 ART.Widget.Module = {};
-ART.Widget.Trait = {};
+ART.Widget.Trait = $mixin(Widget.Trait);
 
 ART.Widget.Ignore = $mixin(Widget.Ignore);

@@ -11,12 +11,13 @@ ART.Widget.Window = new Class({
 	Includes: [
 		ART.Widget.Paint,
 		ART.Widget.Trait.Aware,
-		Widget.Trait.Animated,
-		Macro.stateful({
-			'closed': ['close', 'open'],
-			'collapsed': ['collapse', 'expand']
-		})
+		Widget.Trait.Animation
 	],
+	
+	States: {
+		'closed': ['close', 'open'],
+		'collapsed': ['collapse', 'expand']
+	},
 	
 	name: 'window',
 	

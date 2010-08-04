@@ -16,7 +16,7 @@
   }
   
   Class.flatten = function(items) {
-    return Array.from(items).filter($defined).map(function(item) {
+    return Array.from(items).filter($defined).map(function(item, i) {
       if (item.parent) {
         return [Class.flatten(item.parent), item]
       } else {
@@ -26,8 +26,8 @@
   }
 
   Class.Mutators.Includes = function(items) {
-    var instance
-  	Class.flatten(items).each(function(parent){        
+    var instance = this.parent ? this.parent : items.shift();
+  	Class.flatten(items).each(function(parent){
       var baked = new Class;
       if (instance) {
         baked.parent = instance;
@@ -61,6 +61,62 @@ $extend(Class.Mutators, {
   }
 });
 
+Class.Stateful = function(states) {
+  var proto = {};
+  
+  $extend(proto, {
+    options: {
+      states: {}
+    },
+    setStateTo: function(state, to) {
+      return this[this.options.states[state][to ? 'enabler' : 'disabler']]()
+    }
+  });
+
+  Hash.each(states, function(methods, state) {
+    var options = Array.link(methods, {enabler: String.type, disabler: String.type, toggler: String.type, reflect: $defined})
+    //enable reflection by default
+    if (!$defined(options.reflect)) options.reflect = true;
+    
+    proto.options.states[state] = options;
+
+    proto[options.enabler] = function() {
+      if (this[state]) return false;
+      this[state] = true; 
+
+    	if (Class.hasParent(this)) this.parent.apply(this, arguments);
+      this.fireEvent(options.enabler, arguments);
+      if (this.onStateChange && options.reflect) this.onStateChange(state, true, arguments);
+      return true;
+    }
+
+    proto[options.disabler] = function() {
+      if (!this[state]) return false;
+      this[state] = false;
+
+  	  if (Class.hasParent(this)) this.parent.apply(this, arguments);
+
+      this.fireEvent(options.disabler, arguments);
+      if (this.onStateChange && options.reflect) this.onStateChange(state, false, arguments);
+      return true;
+    }
+
+    if (options.toggler) proto[options.toggler] = function() {
+      return this[this[state] ? options.disabler : options.enabler].apply(this, arguments)
+    }
+  });
+  
+  return new Class(proto)
+}
+
+Class.Mutators.States = function(states) {
+  var klasses = [Class.Stateful(states)];
+  if (this.parent) klasses.push(this.parent);
+  this.implement('Includes', klasses);
+}
+
+
+
 Class.hasParent = function(klass) {
   var caller = klass.$caller;
   return !!(caller.$owner.parent && caller.$owner.parent.prototype[caller.$name]);
@@ -89,62 +145,4 @@ Macro.defaults = function(callback) {
       return callback.apply(this, arguments);
     }
   }
-}
-
-Macro.stateful = function(states, reflect) {
-  var proto = reflect ? {
-    setStatefulClassName: function(state, value) {
-      this.element[value ? 'addClass' : 'removeClass'](state);
-    },
-    
-    onStateChange: function(state, value, args) {
-      return this.setStatefulClassName.apply(this, arguments);
-    }
-  } : {};
-  
-  $extend(proto, {
-    options: {
-      states: {}
-    },
-    setStateTo: function(state, to) {
-      return this[this.options.states[state][to ? 0 : 1]]()
-    }
-  });
-  
-
-  Hash.each(states, function(methods, state) {
-    var enabler = methods[0];
-    var disabler = methods[1];
-    var toggler = methods[2];
-    
-    proto.options.states[state] = methods;
-    
-    proto[enabler] = function() {
-      if (this[state]) return false;
-      this[state] = true; 
-      
-    	if (Class.hasParent(this)) this.parent.apply(this, arguments);
-      this.fireEvent(enabler, arguments);
-      if (this.onStateChange) this.onStateChange(state, true, arguments);
-      return true;
-    }
-    
-    proto[disabler] = function() {
-      
-      if (!this[state]) return false;
-      this[state] = false;
-      
-  	  if (Class.hasParent(this)) this.parent.apply(this, arguments);
-  	  
-      this.fireEvent(disabler, arguments);
-      if (this.onStateChange) this.onStateChange(state, false, arguments);
-      return true;
-    }
-    
-    if (toggler) proto[toggler] = function() {
-      return this[this[state] ? disabler : enabler].apply(this, arguments)
-    }
-  });
-  
-  return new Class(proto);
 }

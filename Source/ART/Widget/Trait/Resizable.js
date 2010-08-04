@@ -1,8 +1,8 @@
 
 ART.Widget.Trait.Resizable = new Class({
-  Extends: Macro.stateful({
+  States: {
     'resized': ['transform', 'finalize']
-  }),
+  },
 
   options: {
     resizer: {
@@ -107,10 +107,7 @@ ART.Widget.Trait.Resizable = new Class({
       child.update();
     })
 	  
-	  //console.infox(this.content.appearance.right.dirty,this.content.appearance.right.outdated)
 	  this.render();
-	  
-	  //console.log(this.content.appearance.right.dirty,this.content.appearance.right.outdated)
 	},
 	
 	getHandle: Macro.defaults(function() {

@@ -4,11 +4,12 @@ Moo.Application.Preferences.Network = new Class({
 	  ART.Widget.Trait.Draggable,
 	  ART.Widget.Trait.Resizable,
 	  ART.Widget.Trait.ResizableContainer,
-	  ART.Widget.Trait.Fitting,
-	  Macro.stateful({
-	    'minified': ['minify', 'enlarge', 'mutate']
-	  })
+	  ART.Widget.Trait.Fitting
 	],
+
+  States: {
+    'minified': ['minify', 'enlarge', 'mutate']
+  },
   
   options: {
     resizer: {

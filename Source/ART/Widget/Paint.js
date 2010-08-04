@@ -1,10 +1,9 @@
 ART.Widget.Paint = new Class({
-  Includes: [
-		ART.Widget,
-		Macro.stateful({
-			'outdated': ['outdate', 'actualize']
-		})
-	],
+  Extends: ART.Widget,
+	
+	States: {
+	  'outdated': ['outdate', 'actualize']
+	},
 	
 	properties: [],
 	redraws: 0,

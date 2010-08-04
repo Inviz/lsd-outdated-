@@ -5785,15 +5785,15 @@ Class.Mutators.Binds = function(binds){
     return binds;
 };
 
-Class.Mutators.initialize = function(initialize){
-	return function(){
-		Array.from(this.Binds).each(function(name){
-			var original = this[name];
-			if (original) this[name] = original.bind(this);
-		}, this);
-		return initialize.apply(this, arguments);
-	};
-};
+//Class.Mutators.initialize = function(initialize){
+//	return function(){
+//		Array.from(this.Binds).each(function(name){
+//			var original = this[name];
+//			if (original) this[name] = original.bind(this);
+//		}, this);
+//		return initialize.apply(this, arguments);
+//	};
+//};
 
 
 /*

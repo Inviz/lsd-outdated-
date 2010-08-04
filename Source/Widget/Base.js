@@ -15,8 +15,6 @@ Widget.Base = new Class({
 	onStateChange: function(state, value, args) {
 	  var args = $A(arguments);
 	  args.splice(1, 2); //state + args
-
-		if (Widget.Ignore.states[state]) return;
     this[value ? "setState" : "unsetState"].apply(this, args);
     if (this.redraws > 0) this.refresh();
     return true;

@@ -1,7 +1,7 @@
-Widget.Trait.Observed = new Class({
-  Extends: Macro.stateful({
+Widget.Trait.Observer = new Class({
+  States: {
   	'filled': ['fill', 'empty']
-  }),
+  },
   
   options: {
     observer: {
@@ -13,8 +13,8 @@ Widget.Trait.Observed = new Class({
   events: {
     observer: {
       self: {
-        focus: 'attachObserved',
-        blur: 'detachObserved'
+        focus: 'attachObserver',
+        blur: 'detachObserver'
       }
     }
   },
@@ -27,12 +27,12 @@ Widget.Trait.Observed = new Class({
     this.removeEvents(this.events.observer);
   }),
   
-  attachObserved: function() {
+  attachObserver: function() {
     if (!this.observer) this.observer = new Observer(this.getObservedElement(), this.onChange.bind(this), this.options.observer)
     this.observer.resume();
   },
   
-  detachObserved: function() {
+  detachObserver: function() {
     this.observer.pause();
   },
   

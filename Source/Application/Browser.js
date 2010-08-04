@@ -1,22 +1,23 @@
 
-Moo.Application.Browser = new Class({
+Moo.Application.Browser = new Class({  
 	Includes: [
 	  ART.Widget.Window,
 	  ART.Widget.Trait.Draggable,
 	  ART.Widget.Trait.Resizable,
 	  ART.Widget.Trait.ResizableContainer,
-	  ART.Widget.Trait.Fitting,
-	  Macro.stateful({
-	    'minified': ['minify', 'enlarge', 'mutate']
-	  })
+	  ART.Widget.Trait.Fitting
 	],
+	
+  States: {
+    'minified': ['minify', 'enlarge', 'mutate']
+  },
 	
   expression: "window.fancy#browser[shape=arrow]",
   
 	layout: {
 	  'section#header': {
       'button#toggler[shy]': {},
-	    '#buttons[hoverable][shy]': {
+	    '#buttons[hoverable][shy=true]': {
         'button#close': {},
 	      'button#minimize': {},
         'button#maximize': {}

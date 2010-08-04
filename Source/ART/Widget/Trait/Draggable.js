@@ -1,8 +1,8 @@
 
 ART.Widget.Trait.Draggable = new Class({
-  Extends: Macro.stateful({
+  States: {
     'dragged': ['drag', 'drop']
-  }),
+  },
   
   options: {
     dragger: {

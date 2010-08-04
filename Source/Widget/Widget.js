@@ -14,16 +14,18 @@ if (!Old.modules) {
 }
 
 Widget = new Class({
-  Includes: [
-    Macro.stateful({
-  	  'hidden': ['hide', 'show'],
-  	  'active': ['activate', 'deactivate'],
-  	  'focused': ['focus', 'blur'],
-  	  'disabled': ['disable', 'enable'],
-  	  'built': ['build', 'destroy'],
-  		'attached': ['attach', 'detach']
-    })
-  ].concat(Old.modules),
+    
+  States: {
+  /* name          enabler     disabler      fires state change? */
+	  'hidden':   [ 'hide',     'show'               ],
+	  'active':   [ 'activate', 'deactivate'         ],
+	  'focused':  [ 'focus',    'blur'               ],
+	  'disabled': [ 'disable',  'enable'             ],
+	  'built':    [ 'build',    'destroy',     false ],
+		'attached': [ 'attach',   'detach',      false ]
+  },
+  
+  Includes: Old.modules,
   
 	initialize: function(element, options){
 		this.parent.apply(this, arguments);
@@ -43,5 +45,3 @@ Widget = new Class({
 Widget.Base = Old.Base;
 
 })(Widget);
-
-Widget.Ignore.states.push('built', 'attached');
