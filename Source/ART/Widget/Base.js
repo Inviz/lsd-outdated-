@@ -30,72 +30,13 @@ ART.Widget.Base = new Class({
 	},
   
 	getSelector: function(){
-		var selector = (this.parentWidget) ? this.parentWidget.getSelector() + ' ' : '';
+		var selector = (this.parentNode) ? this.parentNode.getSelector() + ' ' : '';
 		selector += this.name;
 		if (this.options.id) selector += "#" + this.options.id;
 		if (this.classes.length) selector += '.' + this.classes.join('.');
 		if (this.pseudos.length) selector += ':' + this.pseudos.join(':');
 		if (this.attributes) for (var name in this.attributes) selector += '[' + name + '=' + this.attributes[name] + ']';
 		return selector;
-	},
-
-	addPseudo: function(pseudo){
-		this.pseudos.include(pseudo);
-	},
-
-	removePseudo: function(pseudo){
-		this.pseudos.erase(pseudo);
-	},
-	
-	adopt: function(widget) {
-		if (widget.options.id) {
-			if (this[widget.options.id]) this[widget.options.id].dispose();
-			this[widget.options.id] = widget;
-		}
-		this.children.push(widget);
-	  widget.setParent(this);
-	  $(this).adopt(widget);
-		this.fireEvent('adopt', [widget, widget.options.id])
-		
-	  var parent = widget;
-	  while (parent = parent.parentWidget) parent.fireEvent('hello', widget)
-	},
-	
-	inject: function(widget, quiet) {
-		widget.adopt(this);
-		var element = $(widget);
-		this.parentNode = element;
-		this.fireEvent('inject', arguments);
-		this.fireEvent('afterInject', arguments);
-		if ((element == widget) && (quiet !== true)) {
-		  var postponed = false
-    	this.render();
-		  this.walk(function(child) {
-		    if (child.postponed) {
-		      postponed = true;
-		      child.update();
-		    }
-		    child.fireEvent('dominject', element)
-		    child.dominjected = true;
-		  });
-		  if (postponed && !this.dirty) this.dirty = true;
-    	this.render();
-		}
-	},
-	
-	walk: function(callback) {
-	  callback(this);
-	  this.children.each(function(child) {
-	    child.walk(callback)
-	  });
-	},
-	
-	collect: function(callback) {
-	  var result = [];
-	  this.walk(function(child) {
-	    if (callback(child)) result.push(child);
-	  });
-	  return result;
 	},
 
 	render: function(style){
@@ -141,40 +82,6 @@ ART.Widget.Base = new Class({
 	refresh: function(recursive) {
 		this.update(recursive);
 		return this.render();
-	},
-
-
-	setParent: function(widget){
-		this.parentWidget = widget;
-	},
-  
-	getChildren: function() {
-	  return this.children;
-	},
-
-  getRoot: function() {
-    var widget = this;
-    while (widget.parentWidget) widget = widget.parentWidget;
-    return widget;
-  },
-
-	onDOMInject: function(callback) {
-	  var root = this.getRoot();
-	  if (!root.parentWidget && root.parentNode) callback(root) 
-	  else this.addEvent('dominject', callback)
-	},
-	
-	addAction: function(options) {
-	  this.addEvents({
-	    enable:  options.enable.bind(this),
-	    attach:  options.enable.bind(this),
-	    disable: options.disable.bind(this),
-	    detach:  options.disable.bind(this)
-	  });
-	  this.onWidgetReady(function() {
-	    if (!this.disabled) options.enable.call(this);
-	  });
-	  return true;
 	}
 	
 });

@@ -33,18 +33,18 @@ ART.Widget.Trait.Dimensions = new Class({
   getByExpression: function(name) {
     switch(name) {
       case "parent":
-        return this.parentWidget;
+        return this.parentNode;
       case "next":
-        var children = this.parentWidget.children;
+        var children = this.parentNode.childNodes;
         return children[children.indexOf(this) + 1];
       case "previous":
-        var children = this.parentWidget.children;
+        var children = this.parentNode.childNodes;
         return children[children.indexOf(this) - 1];
       default: 
         var widget = this;
-        while (widget && !widget[name]) widget = widget.parentWidget;
+        while (widget && !widget[name]) widget = widget.parentNode;
         if (widget && widget[name]) return widget[name];
-        else console.error('Widget named ', name, ' was not found', [this, widget, this.parentWidget])
+        else console.error('Widget named ', name, ' was not found', [this, widget, this.parentNode])
     }
   }
 });

@@ -41,6 +41,7 @@ ART.Widget.Module.Layers = new Class({
       value = instance.value || empty;
     
       var styles = this.getChangedStyles.apply(this, properties);
+      //console.log('redraw', args.layer, this.selector, styles)
       if (styles) {
         //console.log(this.selector, styles.height)
         instance.padding = this.inside;

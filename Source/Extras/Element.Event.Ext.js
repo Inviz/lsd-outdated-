@@ -16,6 +16,7 @@
 						event.key = this.retrieve('keypress:key');
 						event.type = 'keypress';
 						event.from = 'keypress';
+						console.log('keypress, real one', event)
             this.fireEvent('keypress', event)
 					}.bind(this),
 					keyup: function() {
@@ -41,7 +42,7 @@
 			if (event.firesKeyPressEvent(this.retrieve('keypress:code'))) {
 				event.pressed = true;
 				event.stopPropagation();
-				return false;
+				return true;
 			} else {  
 				event.type = 'keypress';
 				event.from = 'keypress';

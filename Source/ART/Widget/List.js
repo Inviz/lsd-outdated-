@@ -68,5 +68,9 @@ ART.Widget.List.Item = new Class({
 	
   select: Macro.onion(function() {
     this.listWidget.select(this)
+  }),
+  
+  unselect: Macro.onion(function() {
+    this.refresh();
   })
 })

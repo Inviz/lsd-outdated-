@@ -1,11 +1,7 @@
 Widget.Module.Selectability = new Class({
   
-  attach: Macro.onion(function() {
-    if (this.options.at) this.positionAt(this.options.at)
-  }),
-  
   render: Macro.onion(function() {
-    switch (this.style.userSelect) {
+    switch (this.style.current.userSelect) {
       case "none":
         if (this.selectable !== false) this.disableSelection();
       default:
@@ -14,7 +10,7 @@ Widget.Module.Selectability = new Class({
   }),
   
   disableSelection: function() {
-    this.element.disableSelection();
+    $$(this.element, this.element.getElements('*')).disableSelection();
     this.selectable = false;
   },
   

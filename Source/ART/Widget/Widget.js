@@ -33,13 +33,7 @@
     initialize: function(options) {
       this.setOptions(options);
       
-  		this.classes = (this.classes || []).concat(this.options.classes);
-  		if (!this.attributes) this.attributes = {};
-  		for (var attribute in this.options.attributes) {
-  		  if (!ART.Widget.Ignore.attributes[attribute]) this.attributes[attribute] = this.options.attributes[attribute];
-  		}
   		this.pseudos = [];
-  		this.children = [];
   		this.update();
   	  this.offset = {
         paint: {},

@@ -5,8 +5,8 @@ Widget.Trait.Focus = new Class({
   
   getFocuser: Macro.setter('focuser', function() {
     return new QFocuser(this.getWrapper(), {
-      onWidgetFocus: this.onFocus.bind(this),
-      onWidgetBlur: this.onBlur.bind(this),
+      onFocus: this.onFocus.bind(this),
+      onBlur: this.onBlur.bind(this),
       tabIndex: this.options.tabindex
     })
   }),

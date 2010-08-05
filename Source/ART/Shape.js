@@ -4,4 +4,4 @@ ART.Shape.implement({
     if (this.style) shape.draw(this.change(delta))
     return shape;
   }
-})
+});

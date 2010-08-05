@@ -48,13 +48,13 @@ ART.Widget.Scrollbar = new Class({
 	},
 	
 	adaptToSize: function(size){
-	  if (!size || $chk(size.height)) size = this.parentWidget.size;
+	  if (!size || $chk(size.height)) size = this.parentNode.size;
 	  var other = (this.options.mode == 'vertical') ? 'horizontal' : 'vertical';
 	  var prop = (this.options.mode == 'vertical') ? 'height' : 'width';
 	  var setter = 'set' + prop.capitalize();
 	  var value = size[prop];
 	  if (isNaN(value) || !value) return;
-	  var invert = this.parentWidget[other];
+	  var invert = this.parentNode[other];
 	  var scrolled = this.getScrolled();
 	  $(scrolled).setStyle(prop, size[prop])
 	  var ratio = size[prop] / $(scrolled).scrollWidth
@@ -75,21 +75,21 @@ ART.Widget.Scrollbar = new Class({
 	onSet: function(value) {
     var prop = (this.options.mode == 'vertical') ? 'height' : 'width';
     var direction = (this.options.mode == 'vertical') ? 'top' : 'left';
-    var result = value * this.parentWidget.element['scroll' + prop.capitalize()];
+    var result = value * this.parentNode.element['scroll' + prop.capitalize()];
     $(this.getScrolled())['scroll' + direction.capitalize()] = result
 	},
 	
 	getScrolled: function() {
 	  if (!this.scrolled) {
 	    var parent = this;
-      while ((parent = parent.parentWidget) && !parent.getScrolled);
-      this.scrolled = parent.getScrolled ? parent.getScrolled() : this.parentWidget.element;
+      while ((parent = parent.parentNode) && !parent.getScrolled);
+      this.scrolled = parent.getScrolled ? parent.getScrolled() : this.parentNode.element;
 	  }
 	  return this.scrolled;
 	},
 	
 	dispose: function() {
-	  var parent = this.parentWidget;
+	  var parent = this.parentNode;
 	  if (!this.parent.apply(this, arguments)) return;
 	  parent.removeEvents(this.events.parent);
 	  return true;

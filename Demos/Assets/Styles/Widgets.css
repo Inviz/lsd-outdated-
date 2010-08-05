@@ -323,9 +323,7 @@ padding: 0px;
 line-height: 1.7em;
 vertical-align: middle;
 font-family: Helvetica;
-font-size: 12px;
--art-shadow-blur: 11;
--art-shadow-color: hsb(0, 0, 0); }
+font-size: 12px; }
 .art.button .container {
   text-shadow: 0 1px 0 #e5e5ee;
   -art-filter: dropshadow(color=#e5e5ee, offX=0, offY=1px); }
@@ -406,7 +404,8 @@ margin-top: 20px; }
 .art.list {
 width: auto;
 height: auto;
-z-index: 25; }
+z-index: 25;
+-art-user-select: none; }
 .art.list.is-focused {
   -art-shadow-color: hsb(212, 58, 93);
   -art-shadow-blur: 10;
@@ -429,7 +428,9 @@ html > body .art.list.id-networks .art.item {
   padding-right: 5px;
   padding-bottom: 5px; }
 html > body .art.list.id-networks .art.item.is-selected {
-    color: white; }
+    color: white;
+    -art-reflection-color: "[hsb(0, 0, 74, 0.3), hsb(0, 0, 58, 0.3)]";
+    -art-fill-color: "[hsb(223, 19, 80), hsb(222, 28, 72)]"; }
 html > body .art.list.id-networks h2, html > body .art.list.id-networks p {
   font-size: 1em;
   line-height: 1em;
@@ -598,7 +599,7 @@ height: 88px; }
 .art.input.is-focused, .art.textarea.is-focused {
 -art-shadow-color: hsb(212, 58, 93);
 -art-shadow-blur: 5;
--art-shadow-offset-y: 0;
+-art-shadow-offset-y: 1;
 -art-stroke-color: hsb(212, 58, 93); }
 
 .art.input input, .art.textarea textarea {

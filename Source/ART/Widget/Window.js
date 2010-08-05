@@ -44,14 +44,6 @@ ART.Widget.Window = new Class({
   	background: ['fill', ['backgroundColor']],
 	},
 	
-	initialize: function() {
-		this.parent.apply(this, arguments);
-		this.inject(document.body);
-		
-	
-		return true;
-	},
-	
 	close: Macro.onion(function() {
 		this.hide();
 	}),

@@ -4,7 +4,7 @@
 	  'glyphColor', 'glyphShadow', 'glyphSize', 'glyphStroke', 'glyph', 'glyphColor', 'glyphColor', 'glyphHeight', 'glyphWidth', 'glyphTop', 'glyphLeft', 		
 		'cornerRadius', 'cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight',		
 		'reflectionColor',  'backgroundColor', 'strokeColor', 'fillColor',
-		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY'
+		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY', 'userSelect'
 	)
 	
 	ART.Styles.Defaults = {
@@ -130,6 +130,7 @@ ART.Widget.Module.Styles = new Class({
     var styles = this.getStyles.apply(this, arguments);
     var hash = $A(arguments).join('')  
     var last = $extend({}, this.style.last[hash]);
+    if (!this.style.last[hash]) this.style.last[hash] = {};
     if (this.size.height) {
       var size = $merge(this.size);
       //if (this.style.current.height != 'auto') size.height += (this.style.current.paddingTop || 0) + (this.style.current.paddingBottom || 0)      
@@ -141,8 +142,9 @@ ART.Widget.Module.Styles = new Class({
     for (var property in styles) {
       var value = styles[property];
       if (!$equals(last[property], value)) {
+        //console.error('update', this.selector, property, value, last[property])
         changed = true;
-        break;
+        this.style.last[hash][property] = value;
       }
       delete last[property];
     };
@@ -150,7 +152,6 @@ ART.Widget.Module.Styles = new Class({
       changed = true;
       break;
     }
-    this.style.last[hash] = styles;    
     return changed ? styles : false;
   },
 	
@@ -172,8 +173,8 @@ ART.Widget.Module.Styles = new Class({
 	inheritStyle: function(property) {
 		var node = this;
 		var style = node.style.current[property];
-		while ((style == 'inherit' || !style) && node.parentWidget) {
-			node = node.parentWidget;
+		while ((style == 'inherit' || !style) && node.parentNode) {
+			node = node.parentNode;
 			style = node.style.current[property];
 		}
 		return style;

@@ -41,7 +41,7 @@ ART.Widget.Module.Cache = new Class({
   }),
   
   getSelector: function() {
-		var root = (this.parentWidget) ? this.parentWidget.getSelector() + ' ' : '';
+		var root = (this.parentNode && this.parentNode.getSelector) ? this.parentNode.getSelector() + ' ' : '';
     var key = 'selector';
     var env = this.cache.environment;
     var selector = env[key];

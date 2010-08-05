@@ -26,7 +26,7 @@ Widget.Trait.List = new Class({
     if (item && !item.render) item = this.findItemByValue(item);
     if (!item && this.options.force) return false;
     var selected = this.selected;
-    this.setSelectedItem.apply(this, arguments);  
+    this.setSelectedItem.apply(this, arguments); 
     if ((selected != item) && selected && selected.unselect) selected.unselect();
     item.select();
     return item;

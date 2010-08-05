@@ -19,14 +19,6 @@ Widget.Base = new Class({
     if (this.redraws > 0) this.refresh();
     return true;
   },
-
-  addClass: function(name) {
-    if (this.element) this.element.addClass(name);
-  },
-
-  removeClass: function(name) {
-    if (this.element) this.element.removeClass(name);
-  },
   
   setState: function(state) {
     this.addClass('is-' + state);
@@ -42,14 +34,14 @@ Widget.Base = new Class({
 	  this.element.dispose();
 	},
 	
-	onWidgetReady: function(callback) {
-	  this.onDOMInject(callback.bind(this))
+	destroy: function() {
+	  this.dispose();
+	  this.element.destroy();
 	},
 
 	onDOMInject: function(callback) {
-	  var root = this.getRoot();
-	  if (!root.parentWidget && root.parentNode) callback(root) 
-	  else this.addEvent('dominject', callback)
+	  if (this.document) callback.call(this, $(this.document)) 
+	  else this.addEvent('dominject', callback.bind(this))
 	},
 	
 	addAction: function(options) {
@@ -59,7 +51,7 @@ Widget.Base = new Class({
 	    disable: options.disable.bind(this),
 	    detach:  options.disable.bind(this)
 	  });
-	  this.onWidgetReady(function() {
+	  this.onDOMInject(function() {
 	    if (!this.disabled) options.enable.call(this);
 	  });
 	  return true;
@@ -72,10 +64,7 @@ Widget.Base = new Class({
 	
 	getWrapper: function() {
 	  return this.wrapper || this.element;
-	},
-	
-	addPseudo: function() {},
-	removePseudo: function() {}
+	}
 });
 Widget.Module = {};
 Widget.Trait = {};

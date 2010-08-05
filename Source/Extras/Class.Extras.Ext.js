@@ -38,7 +38,10 @@
       delete proto.$constructor;
       delete proto.parent;
       delete proto.caller;
-      for (var i in proto) if (proto[i] && proto[i].$owner && proto[i].$owner != parent && proto[i].$owner.parent) delete proto[i]
+      for (var i in proto) {
+        var fn = proto[i];
+        if (fn && fn.$owner && (fn.$owner != parent) && fn.$owner.parent) delete proto[i]
+      }
       baked.implement(proto);
       instance = baked
   	}, this);

@@ -25,7 +25,7 @@ ART.Widget.Trait.HasSlider = new Class({
   
   adaptSize: function(current, old) {
     var prop = this.options.mode == 'vertical' ? 'height' : 'width';
-    if (current[prop] != old[prop]) this.setStyle(prop, this.parentWidget.getStyle(prop) - this.getStyle(prop));
+    if (current[prop] != old[prop]) this.setStyle(prop, this.parentNode.getStyle(prop) - this.getStyle(prop));
   },
 	
 	getSlider: function(regenerate) {

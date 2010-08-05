@@ -71,9 +71,9 @@
 		  }, this)
 		},
 		
-		getKeyListener: function() {
+		getKeyListener: Macro.defaults(function() {
 			return this.element;
-		},
+		}),
 
 		enableShortcuts: function() {
 			if (!this.shortcutter) {
@@ -87,6 +87,7 @@
 			}
 			if (this.shortcutting) return;
 			this.shortcutting = true;
+			//(function(){ console.log(document.activeElement); }).periodical(100);
 			this.getKeyListener().addEvent('keypress', this.shortcutter);
 		},
 
