@@ -64,6 +64,10 @@ Widget.Base = new Class({
 	
 	getWrapper: function() {
 	  return this.wrapper || this.element;
+	},
+	
+	$family: function() {
+	  return "object";
 	}
 });
 Widget.Module = {};

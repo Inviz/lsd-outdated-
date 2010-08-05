@@ -1,8 +1,10 @@
 ART.Widget.Module.DOM = new Class({
   initialize: function() {
     this.childNodes = [];
+    this.nodeType = 1;
     this.parentNode = this.nextSibling = this.previousSibling = null;
-    return this.parent.apply(this, arguments);
+    this.parent.apply(this, arguments);
+    this.nodeName = this.name;
   },
   
   getElementsByTagName: function(tagName) {
@@ -17,20 +19,6 @@ ART.Widget.Module.DOM = new Class({
       nodeValue: this.getAttribute(attribute)
     }
   },
-	
-	adopt: function(widget) {
-		if (widget.options.id) {
-			if (this[widget.options.id]) this[widget.options.id].dispose();
-			this[widget.options.id] = widget;
-		}
-		this.childNodes.push(widget);
-	  if (!(widget instanceof ART.Document)) widget.setParent(this);
-	  $(this).adopt(widget);
-		this.fireEvent('adopt', [widget, widget.options.id])
-		
-	  var parent = widget;
-	  while (parent = parent.parentNode) parent.fireEvent('hello', widget)
-	},
   
 	getChildren: function() {
 	  return this.childNodes;
@@ -43,13 +31,35 @@ ART.Widget.Module.DOM = new Class({
   },
   
 	setParent: function(widget){
+	  var siblings = widget.childNodes;
+	  var length = siblings.length;
+	  if (length == 1) widget.firstChild = this;
+	  widget.lastChild = this;
+	  var previous = siblings[siblings.length - 2];
+	  if (previous) {
+  	  previous.nextSibling = this;
+  	  this.previousSibling = previous;
+	  }
 	  this.parentNode = widget;
+	},
+
+	adopt: function(widget) {
+		if (widget.options.id) {
+			if (this[widget.options.id]) this[widget.options.id].dispose();
+			this[widget.options.id] = widget;
+		}
+		this.childNodes.push(widget);
+	  widget.setParent(this);
+	  $(this).adopt(widget);
+		this.fireEvent('adopt', [widget, widget.options.id])
+
+	  var parent = widget;
+	  while (parent = parent.parentNode) parent.fireEvent('hello', widget)
 	},
 	
 	inject: function(widget, quiet) {
 		widget.adopt(this);
 		var element = $(widget);
-		//this.parentNode = element;
 		this.fireEvent('inject', arguments);
 		this.fireEvent('afterInject', arguments);
 		var isDocument = (widget instanceof ART.Document);
@@ -68,6 +78,15 @@ ART.Widget.Module.DOM = new Class({
 		  if (postponed && !this.dirty) this.dirty = true;
     	this.render();
 		}
+	},
+	
+	dispose: function() {
+	  var parent = this.parentNode;
+	  parent.childNodes.erase(this);
+	  if (parent.firstChild == this) delete parent.firstChild;
+	  if (parent.lastChild == this) delete parent.lastChild;
+	  delete this.parentNode;
+	  return this.parent.apply(this, arguments);
 	},
 	
 	walk: function(callback) {
