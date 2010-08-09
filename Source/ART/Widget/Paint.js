@@ -117,7 +117,6 @@ ART.Widget.Paint = new Class({
 	},
 	
 	setStyle: function(property, value) {
-	  //console.log(this.element, Array.from(arguments))
 		if (!this.parent.apply(this, arguments)) return;
 		switch(property) {
 			case "height": case "width":

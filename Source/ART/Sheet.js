@@ -11,26 +11,6 @@ ART.Sheet = {};
 	// http://www.w3.org/TR/CSS21/cascade.html#specificity
 	var rules = [];
 
-	var parseSelector = function(selector){
-		return selector.map(function(chunk){
-			var result = [];
-			if (chunk.tag && chunk.tag != '*'){
-				result.push(chunk.tag);
-			}
-			if (chunk.id)	result.push('#' + chunk.id);
-			if (chunk.pseudos) chunk.pseudos.each(function(pseudo){
-				result.push(':' + pseudo.key);
-			});
-			if (chunk.classes) chunk.classes.each(function(klass){
-				result.push('.' + klass.value);
-			});
-			if (chunk.attributes) chunk.attributes.each(function(attribute){
-				result.push('[' + attribute.key + '=' + attribute.value + ']');
-			});
-			return result;
-		});
-	};
-
 	var getSpecificity = function(selector){
 		specificity = 0;
 		selector.each(function(chunk){
@@ -46,7 +26,7 @@ ART.Sheet = {};
 		Slick.parse(selectors).expressions.each(function(selector){
 			var rule = {
 				'specificity': getSpecificity(selector),
-				'selector': parseSelector(selector),
+				'selector': selector,
 				'style': {}
 			};
 			for (p in style) rule.style[p.camelCase()] = style[p];
@@ -59,29 +39,40 @@ ART.Sheet = {};
 	};
 	
 	ART.Sheet.match = (function() {
-	  var parsed = {};
-	  var parse = function(selector) {
-	    return parsed[selector] = (parsed[selector] || parseSelector(Slick.parse(selector).expressions[0]));
-	  };
-    var cache = {};
-  	return function(selector, needle) {
-  		if (cache[selector]) return cache[selector];
-  	  var first = parse(selector);
-  	  var second = parse(needle);
-  	  var i = second.length - 1, j = first.length - 1;
-			if (!containsAll(first[j], second[i])) return;
-			while (i-- >  0){
-				while (true){
-					if (j-- <= 0) return;
-					if (containsAll(first[j], second[i])) break;
-				}
-			}
-			return true;
-  	};
+	  return $lambda(false)
+	  //var parsed = {};
+	  //var parse = function(selector) {
+	  //  return parsed[selector] = (parsed[selector] || parseSelector(Slick.parse(selector).expressions[0]));
+	  //};
+    //var cache = {};
+  	//return function(selector, needle) {
+  	//	if (cache[selector]) return cache[selector];
+  	//  var first = parse(selector);
+  	//  var second = parse(needle);
+  	//  var i = second.length - 1, j = first.length - 1;
+		//	if (!containsAll(first[j], second[i])) return;
+		//	while (i-- >  0){
+		//		while (true){
+		//			if (j-- <= 0) return;
+		//			if (containsAll(first[j], second[i])) break;
+		//		}
+		//	}
+		//	return true;
+  	//};
 	})();
 
 	var containsAll = function(self, other){
 	  for (var i = 0, j = other.length; i < j; i++) if (!self.contains(other[i])) return false;
+	  return true;
+	};
+	
+	var containsAllParsed = function(self, other) {
+	  if (other.tag && (other.tag != '*') && (self.nodeName != other.tag)) return false;
+	  if (other.id && (self.options.id != other.id)) return false;
+	  if (!self.classes) console.log(self)
+	  if (other.classes) for (var i = 0, j; j = other.classes[i]; i++) if (self.classes.indexOf(j.value) == -1) return false;
+	  if (other.pseudos) for (var i = 0, j; j = other.pseudos[i]; i++) if (self.pseudos.indexOf(j.key) == -1) return false;
+	  if (other.attributes) for (var i = 0, j; j = other.attributes[i]; i++) if (self.attributes[j.key] != j.value) return false;
 	  return true;
 	};
 
@@ -114,9 +105,10 @@ ART.Sheet = {};
 	ART.Sheet.define = function(selectors, style){
 		Slick.parse(selectors).expressions.each(function(selector){
 			var rule = {
-				'specificity': getSpecificity(selector),
-				'selector': parseSelector(selector),
-				'style': {}
+				specificity: getSpecificity(selector),
+				selector: selectors,
+				parsed: selector,
+				style: {}
 			};
 			for (p in style) {
 			  var cc = p.camelCase();
@@ -214,22 +206,22 @@ ART.Sheet = {};
 	
 	
 	
-	ART.Sheet.lookup = function(selector){
+	ART.Sheet.lookup = function(selector, parsed){
 		if (cache[selector]) return cache[selector];
 		
 		var result = {style: {}, rules: [], implied: {}}
 		
-		var parsed = parseSelector(Slick.parse(selector).expressions[0]);
+		if (!parsed) parsed = Slick.parse(selector).expressions[0];
 		rules.each(function(rule){
-			var i = rule.selector.length - 1, j = parsed.length - 1;
-			if (!containsAll(parsed[j], rule.selector[i])) return;
+			var i = rule.parsed.length - 1, j = parsed.length - 1;
+			if (!containsAllParsed(parsed[j], rule.parsed[i])) return;
 			while (i-- > 0){
 				while (true){
 					if (j-- <= 0) return;
-					if (containsAll(parsed[j], rule.selector[i])) break;
+					if (containsAllParsed(parsed[j], rule.parsed[i])) break;
 				}
 			}
-			result.rules.push(rule.selector.map(function(b) { return b.join("") }).join(" "));
+			result.rules.push(rule.selector);
 			
 			
 			for (var property in rule.style) result.style[property] = rule.style[property];

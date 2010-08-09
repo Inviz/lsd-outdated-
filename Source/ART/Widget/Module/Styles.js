@@ -62,7 +62,10 @@ ART.Widget.Module.Styles = new Class({
 		if (!selector) selector = this.getSelector();
     if (this.selector != selector) {
 			this.selector = selector;
-			var result = ART.Sheet.lookup(selector);
+			var bits = [this];
+			var parent = this;
+			while (parent = parent.parentNode) bits.unshift(parent);
+			var result = ART.Sheet.lookup(selector, bits);
 			if (!$equals(result.rules, this.rules)) {
 				this.rules = result.rules;
 				for (var i in result.style) return result;

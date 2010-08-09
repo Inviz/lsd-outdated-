@@ -8,9 +8,13 @@ ART.Widget.Module.DOM = new Class({
   },
   
   getElementsByTagName: function(tagName) {
-    return this.collect(tagName == '*' ? null : function(child){
-      return child.name == tagName;
-    })
+    var found = [];
+    var all = tagName == "*";
+    for (var i = 0, child; child = this.childNodes[i]; i++) {
+      if (all || tagName == child.nodeName) found.push(child);
+      found.push.apply(found, child.getElementsByTagName(tagName))
+    }
+    return found;
   },
   
   getAttributeNode: function(attribute) {
@@ -49,7 +53,7 @@ ART.Widget.Module.DOM = new Class({
 			this[widget.options.id] = widget;
 		}
 		this.childNodes.push(widget);
-	  widget.setParent(this);
+	  if (!(this instanceof ART.Document)) widget.setParent(this);
 	  $(this).adopt(widget);
 		this.fireEvent('adopt', [widget, widget.options.id])
 
