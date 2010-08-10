@@ -25,6 +25,8 @@ ART.Widget.Trait.Resizable = new Class({
     resizer: {}
   },
   
+  cache: {},
+  
   getResizer: Macro.setter('resizer', function() {
     var resized = this.getResized();
     var element = $(resized)//.setStyle('overflow', 'hidden');

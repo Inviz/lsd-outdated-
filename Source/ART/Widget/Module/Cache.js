@@ -38,23 +38,6 @@ ART.Widget.Module.Cache = new Class({
   setParent: Macro.onion(function() {
     this.cache.parent = {};
     this.cache.environment = {};
-  }),
-  
-  getSelector: function() {
-		var root = (this.parentNode && this.parentNode.getSelector) ? this.parentNode.getSelector() + ' ' : '';
-    var key = 'selector';
-    var env = this.cache.environment;
-    var selector = env[key];
-    if (!selector) {
-  		selector = this.name;
-  		if (this.options.id) selector += "#" + this.options.id;
-  		if (this.classes.length) selector += '.' + this.classes.join('.');
-  		if (this.pseudos.length) selector += ':' + this.pseudos.join(':');
-  		if (this.attributes) for (var name in this.attributes) selector += '[' + name + '=' + this.attributes[name] + ']';
-  	  env[key] = selector;
-    }
-    return root + selector;
-  }
-  
+  })  
 });
   

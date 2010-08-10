@@ -38,40 +38,23 @@ ART.Sheet = {};
 		});
 	};
 	
-	ART.Sheet.match = (function() {
-	  return $lambda(false)
-	  //var parsed = {};
-	  //var parse = function(selector) {
-	  //  return parsed[selector] = (parsed[selector] || parseSelector(Slick.parse(selector).expressions[0]));
-	  //};
-    //var cache = {};
-  	//return function(selector, needle) {
-  	//	if (cache[selector]) return cache[selector];
-  	//  var first = parse(selector);
-  	//  var second = parse(needle);
-  	//  var i = second.length - 1, j = first.length - 1;
-		//	if (!containsAll(first[j], second[i])) return;
-		//	while (i-- >  0){
-		//		while (true){
-		//			if (j-- <= 0) return;
-		//			if (containsAll(first[j], second[i])) break;
-		//		}
-		//	}
-		//	return true;
-  	//};
-	})();
-
-	var containsAll = function(self, other){
-	  for (var i = 0, j = other.length; i < j; i++) if (!self.contains(other[i])) return false;
-	  return true;
+	ART.Sheet.match = function(selector, needle) {
+	  if (!selector[0].combinator) selector = Slick.parse(selector).expressions[0];
+	  var i = needle.length - 1, j = selector.length - 1;
+		if (!match(needle[i], selector[j])) return;
+		while (j-- >  0) {
+			while (true){
+				if (i-- <= 0) return;
+				if (match(needle[i], selector[j])) break;
+			}
+		}
+		return true;
 	};
-	
-	var containsAllParsed = function(self, other) {
+	var match = function(self, other) {
 	  if (other.tag && (other.tag != '*') && (self.nodeName != other.tag)) return false;
 	  if (other.id && (self.options.id != other.id)) return false;
-	  if (!self.classes) console.log(self)
-	  if (other.classes) for (var i = 0, j; j = other.classes[i]; i++) if (self.classes.indexOf(j.value) == -1) return false;
-	  if (other.pseudos) for (var i = 0, j; j = other.pseudos[i]; i++) if (self.pseudos.indexOf(j.key) == -1) return false;
+	  if (other.classes) for (var i = 0, j; j = other.classes[i]; i++) if (!self.classes[j.value]) return false;
+	  if (other.pseudos) for (var i = 0, j; j = other.pseudos[i]; i++) if (!self.pseudos[j.key]) return false;
 	  if (other.attributes) for (var i = 0, j; j = other.attributes[i]; i++) if (self.attributes[j.key] != j.value) return false;
 	  return true;
 	};
@@ -108,7 +91,8 @@ ART.Sheet = {};
 				specificity: getSpecificity(selector),
 				selector: selectors,
 				parsed: selector,
-				style: {}
+				style: {},
+				implied: {}
 			};
 			for (p in style) {
 			  var cc = p.camelCase();
@@ -116,8 +100,10 @@ ART.Sheet = {};
 			    var cssed = toCSSSelector(selector);
 			    if (!css.rules[cssed]) css.rules[cssed] = {};
 			    css.rules[cssed][cc] = style[p];
+    			rule.implied[cc] = style[p];
+			  } else {
+    			rule.style[cc] = style[p];
 			  }
-  			rule.style[cc] = style[p];
 			}
 			
 			rules.push(rule);
@@ -206,35 +192,21 @@ ART.Sheet = {};
 	
 	
 	
-	ART.Sheet.lookup = function(selector, parsed){
-		if (cache[selector]) return cache[selector];
+	ART.Sheet.lookup = function(hierarchy){
+		//if (cache[selector]) return cache[selector];
 		
 		var result = {style: {}, rules: [], implied: {}}
 		
-		if (!parsed) parsed = Slick.parse(selector).expressions[0];
 		rules.each(function(rule){
-			var i = rule.parsed.length - 1, j = parsed.length - 1;
-			if (!containsAllParsed(parsed[j], rule.parsed[i])) return;
-			while (i-- > 0){
-				while (true){
-					if (j-- <= 0) return;
-					if (containsAllParsed(parsed[j], rule.parsed[i])) break;
-				}
-			}
+		  if (!ART.Sheet.match(rule.parsed, hierarchy)) return;
 			result.rules.push(rule.selector);
 			
 			
 			for (var property in rule.style) result.style[property] = rule.style[property];
+			for (var property in rule.implied) result.implied[property] = rule.implied[property];
 		});
 		
-		for (var property in result.style) {
-		  if (ART.Sheet.isElementStyle(property)) {
-		    result.implied[property] = result.style[property];
-		    delete result.style[property];
-		  }
-		}
-		
-		cache[selector] = result;
+		//cache[selector] = result;
 		
 		return result;
 	};

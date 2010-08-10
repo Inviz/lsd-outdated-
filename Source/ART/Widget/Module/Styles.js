@@ -58,18 +58,11 @@ ART.Widget.Module.Styles = new Class({
 		}
 	},
 
-	lookupStyles: function(selector) {
-		if (!selector) selector = this.getSelector();
-    if (this.selector != selector) {
-			this.selector = selector;
-			var bits = [this];
-			var parent = this;
-			while (parent = parent.parentNode) bits.unshift(parent);
-			var result = ART.Sheet.lookup(selector, bits);
-			if (!$equals(result.rules, this.rules)) {
-				this.rules = result.rules;
-				for (var i in result.style) return result;
-			}
+	lookupStyles: function() {
+		var result = ART.Sheet.lookup(this.getHierarchy());
+		if (!$equals(result.rules, this.rules)) {
+			this.rules = result.rules;
+			for (var i in result.style) return result;
 		}
 		return false;
 	},
@@ -206,5 +199,9 @@ ART.Widget.Module.Styles = new Class({
 	  if (!this.halt('postponed')) return;
 	  this.postponed = true;
 		return true;
+	},
+	
+	match: function(selector) {
+	  return ART.Sheet.match(selector, this.getHierarchy())
 	}
 });

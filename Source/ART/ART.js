@@ -92,19 +92,38 @@ $equals = function(one, another) {
 
 
 ART.Hash = function() {
-  var storage = {
-    push: function() {
-      Array.each(arguments, function(argument) {
-        this[argument] = true;
-      }, this);
-    },
+  this.push.apply(this, arguments);
+}
 
-    contains: function(argument) {
-      return this[argument];
+ART.Hash.prototype = {
+  push: function() {
+    Array.each(arguments, function(argument) {
+      this[argument] = true;
+    }, this);
+  },
+
+  contains: function(argument) {
+    return this[argument];
+  },
+  
+  concat: function(array) {
+    this.push.apply(this, array);
+    return this;
+  },
+  
+  each: function(callback, bound) {
+    for (var key in this) {
+      if (this.hasOwnProperty(key)) callback.call(bound || this, key, this[key]);
     }
+  },
+
+  include: function(value) {
+    this[value] = value;
+  },
+
+  erase: function(value) {
+    delete this[value];
   }
-  storage.push.apply(storage, arguments);
-  return storage;
 }
 
 

@@ -11,7 +11,7 @@ ART.Widget.Trait.Aware = new Class({
     }.bind(this);
     selectors.each(function(selector) {
       var check = function(widget) {
-        if (ART.Sheet.match(widget.getSelector(), selector)) widget.onDOMInject(function() { 
+        if (widget.match(selector)) widget.onDOMInject(function() { 
           remove(selector, widget)
         });
       };

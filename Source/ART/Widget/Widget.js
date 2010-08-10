@@ -33,7 +33,6 @@
     initialize: function(options) {
       this.setOptions(options);
       
-  		this.pseudos = [];
   		this.update();
   	  this.offset = {
         paint: {},

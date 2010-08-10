@@ -34,6 +34,16 @@ ART.Widget.Module.DOM = new Class({
     return widget;
   },
   
+  getHierarchy: function() {
+    var widgets = [this];
+    var widget = this;
+    while (widget.parentNode) {
+      widget = widget.parentNode;
+      widgets.unshift(widget)
+    }
+    return widgets;
+  },
+  
 	setParent: function(widget){
 	  var siblings = widget.childNodes;
 	  var length = siblings.length;

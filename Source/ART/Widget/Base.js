@@ -40,14 +40,14 @@ ART.Widget.Base = new Class({
 	},
 
 	render: function(style){
-		if (this.selector && this.selector != this.getSelector()) this.update();
 		if (!this.parent.apply(this, arguments)) return; //only renders if dirty == true
 	  delete this.halted;
 
   	var size = this.size;
   	if (this.findStyles() || style) this.renderStyles(style);
-		this.walk(function(child){
-			child.render();
+		this.childNodes.each(function(child){
+		  child.update();
+		  child.render();
 		});
 		if (size) {
   	  var newSize = {height: this.getStyle('height'), width: this.getStyle('width')};
