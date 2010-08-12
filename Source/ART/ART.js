@@ -118,7 +118,7 @@ ART.Hash.prototype = {
   },
 
   include: function(value) {
-    this[value] = value;
+    this[value] = true;
   },
 
   erase: function(value) {

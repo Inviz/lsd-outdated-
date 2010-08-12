@@ -41,25 +41,38 @@ ART.Sheet = {};
 	ART.Sheet.match = function(selector, needle) {
 	  if (!selector[0].combinator) selector = Slick.parse(selector).expressions[0];
 	  var i = needle.length - 1, j = selector.length - 1;
-		if (!match(needle[i], selector[j])) return;
+		if (!match.all(needle[i], selector[j])) return;
 		while (j-- >  0) {
 			while (true){
 				if (i-- <= 0) return;
-				if (match(needle[i], selector[j])) break;
+				if (match.structure(needle[i], selector[j])) {
+				  if (j == 0)
+				  if (match.state(needle[i], selector[j])) break;
+				};
 			}
 		}
 		return true;
 	};
-	var match = function(self, other) {
-	  if (other.tag && (other.tag != '*') && (self.nodeName != other.tag)) return false;
-	  if (other.id && (self.options.id != other.id)) return false;
-	  if (other.classes) for (var i = 0, j; j = other.classes[i]; i++) if (!self.classes[j.value]) return false;
-	  if (other.pseudos) for (var i = 0, j; j = other.pseudos[i]; i++) if (!self.pseudos[j.key]) return false;
-	  if (other.attributes) for (var i = 0, j; j = other.attributes[i]; i++) if (self.attributes[j.key] != j.value) return false;
-	  return true;
-	};
-
-	var cache = {};
+	
+	var match = {
+	  structure: function(self, other) {
+  	  if (other.tag && (other.tag != '*') && (self.nodeName != other.tag)) return false;
+  	  if (other.id && (self.options.id != other.id)) return false;
+  	  if (other.attributes) for (var i = 0, j; j = other.attributes[i]; i++) if (self.attributes[j.key] != j.value) return false;
+  	  return true;
+  	},
+  	
+  	state: function(self, other) {
+  	  if (other.classes) for (var i = 0, j; j = other.classes[i]; i++) if (!self.classes[j.value]) return false;
+  	  if (other.pseudos) for (var i = 0, j; j = other.pseudos[i]; i++) if (!self.pseudos[j.key]) return false;
+  	  return true;
+  	},
+  	
+  	all: function(self, other) {
+  	  return match.structure(self, other) && match.state(self, other)
+  	}
+	}
+	$m = match;
 	
 	//static css compilation
 	var css = {
@@ -192,15 +205,32 @@ ART.Sheet = {};
 	
 	
 	
-	ART.Sheet.lookup = function(hierarchy){
+	ART.Sheet.lookup = function(hierarchy, scope){
 		//if (cache[selector]) return cache[selector];
 		
-		var result = {style: {}, rules: [], implied: {}}
+		var result = {style: {}, rules: [], implied: {}, possible: []};
 		
-		rules.each(function(rule){
-		  if (!ART.Sheet.match(rule.parsed, hierarchy)) return;
+		(scope || rules).each(function(rule){
+	    var selector = rule.parsed;
+		  var needle = hierarchy;
+		  var i = needle.length - 1, j = selector.length - 1;
+  		if (!match.structure(needle[i], selector[j])) return;
+			if (!match.state(needle[i], selector[j])) {
+			  if (!scope) result.possible.push(rule);
+			  return;
+			} else {
+			  if (!scope && j == 0) result.possible.push(rule);
+			}
+  		while (j-- >  0) {
+  			while (true){
+  				if (i-- <= 0) return;
+  				if (match.structure(needle[i], selector[j])) {
+  				  if (!scope && j == 0) result.possible.push(rule);
+  				  if (match.state(needle[i], selector[j])) break;
+  				};
+  			}
+  		}
 			result.rules.push(rule.selector);
-			
 			
 			for (var property in rule.style) result.style[property] = rule.style[property];
 			for (var property in rule.implied) result.implied[property] = rule.implied[property];

@@ -39,6 +39,11 @@ ART.Widget.Module.Styles = new Class({
 		paint: {},      //styles that are currently used to paint
 	},
 	
+	rules: {
+	  current: [],
+	  possible: null
+	},
+	
 	findStyles: function() {
 		var found = this.lookupStyles();
 		if (found) {
@@ -59,9 +64,10 @@ ART.Widget.Module.Styles = new Class({
 	},
 
 	lookupStyles: function() {
-		var result = ART.Sheet.lookup(this.getHierarchy());
-		if (!$equals(result.rules, this.rules)) {
-			this.rules = result.rules;
+		var result = ART.Sheet.lookup(this.getHierarchy(), this.rules.possible);
+		if (!$equals(result.rules, this.rules.current)) {
+			this.rules.current = result.rules;
+			if (!this.rules.possible) this.rules.possible = result.possible;
 			for (var i in result.style) return result;
 		}
 		return false;

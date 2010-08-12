@@ -18,7 +18,7 @@ Moo.Application = new Class({
 	  },
 	  'section#content[container]': {
       'label#for-whatever[for=minimize]': 'Whatever:',
-	    'input#whatever[name=whatever][type=text]': {},
+	    'input#whatever[name=whatever]': {},
 	    'textarea#soever[name=soever]': {},
 	    'input[type=range]#count': {},
 	  },
