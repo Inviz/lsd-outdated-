@@ -113,9 +113,7 @@ Class.Stateful = function(states) {
 }
 
 Class.Mutators.States = function(states) {
-  var klasses = [Class.Stateful(states)];
-  if (this.parent) klasses.push(this.parent);
-  this.implement('Includes', klasses);
+  this.implement('Includes', [Class.Stateful(states)]);
 }
 
 
