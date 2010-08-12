@@ -116,5 +116,9 @@ ART.Widget.Module.DOM = new Class({
 	    if (!callback || callback(child)) result.push(child);
 	  });
 	  return result;
+	},
+
+	match: function(selector) {
+	  return ART.Sheet.match(selector, this.getHierarchy())
 	}
 })

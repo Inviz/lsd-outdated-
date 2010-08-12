@@ -1,4 +1,4 @@
-ART.Widget.Module.Shape = new Class({
+ART.Widget.Trait.Shape = new Class({
   options: {
     shape: 'rectangle'
   },

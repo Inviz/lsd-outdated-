@@ -1,5 +1,9 @@
 ART.Widget.Paint = new Class({
-  Extends: ART.Widget,
+  Includes: [
+    ART.Widget,
+    ART.Widget.Trait.Shape,
+    ART.Widget.Trait.Layers
+  ],
 	
 	States: {
 	  'outdated': ['outdate', 'actualize']

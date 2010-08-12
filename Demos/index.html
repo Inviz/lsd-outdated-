@@ -66,8 +66,6 @@
 	
 	<!-- these are autoincluded to all widgets -->
   <script src="../Source/ART/Widget/Module/Expression.js"></script>
-  <script src="../Source/ART/Widget/Module/Shape.js"></script>
-  <script src="../Source/ART/Widget/Module/Layers.js"></script>
   <script src="../Source/ART/Widget/Module/Layout.js"></script>
   <script src="../Source/ART/Widget/Module/LayoutEvents.js"></script>
   <script src="../Source/ART/Widget/Module/Position.js"></script>
@@ -80,6 +78,8 @@
 	<script src="../Source/ART/Document.js"></script>
   
 	<!-- these are used on widgets basis -->
+  <script src="../Source/ART/Widget/Trait/Shape.js"></script>
+  <script src="../Source/ART/Widget/Trait/Layers.js"></script>
   <script src="../Source/ART/Widget/Trait/Aware.js"></script>
 	<script src="../Source/ART/Widget/Trait/Draggable.js"></script>
 	<script src="../Source/ART/Widget/Trait/HasInput.js"></script>
@@ -132,15 +132,9 @@
   		  
   		//ART.Sheet.compile();
   		
-	    var counter = {}
-	    counter.old = {
-	      redraws: ART.Widget.Paint.redraws,
-	      widgets: ART.Widget.count
-	    }
 
       $d = new ART.Document
   		
-	    if (window.console && console.profile) console.profile('Network render')
 	    $z = new Moo.Application.Browser();
 	    $z.inject($d);	
 	    $z.setStyles({top: 50, left: 50, zIndex: 400})
@@ -161,6 +155,12 @@
 	    
 	    
 	    
+	    var counter = {}
+	    counter.old = {
+	      redraws: ART.Widget.Paint.redraws,
+	      widgets: ART.Widget.count
+	    }
+	    if (window.console && console.profile) console.profile('Network render')
 	    
   		$n = new Moo.Application.Preferences.Network;
   		$n.inject($d);	

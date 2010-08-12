@@ -1,12 +1,12 @@
 ART.Widget.Element = new Class({
-  Includes: [
-    ART.Widget,
-    //Widget.Module.Selectability,
-    ART.Widget.Module.Position,
-    Widget.Module.Events,
-    ART.Widget.Module.LayoutEvents,
-    ART.Widget.Module.Container    
-  ],
+
+  Extends: ART.Widget,
+
+  options: {
+    element: {
+      tag: 'div'
+    }
+  },
   
   style: {
     current: {
@@ -40,7 +40,6 @@ ART.Widget.Element = new Class({
     return true;
   },
   
-  findStyles: $lambda,
-  renderStyles: $lambda,
-  renderStyles: $lambda
+  findStyles: $lambda(false),
+  renderStyles: $lambda(false)
 })

@@ -205,9 +205,5 @@ ART.Widget.Module.Styles = new Class({
 	  if (!this.halt('postponed')) return;
 	  this.postponed = true;
 		return true;
-	},
-	
-	match: function(selector) {
-	  return ART.Sheet.match(selector, this.getHierarchy())
 	}
 });

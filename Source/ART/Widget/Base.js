@@ -46,8 +46,7 @@ ART.Widget.Base = new Class({
   	var size = this.size;
   	if (this.findStyles() || style) this.renderStyles(style);
 		this.childNodes.each(function(child){
-		  child.update();
-		  child.render();
+		  child.refresh();
 		});
 		if (size) {
   	  var newSize = {height: this.getStyle('height'), width: this.getStyle('width')};

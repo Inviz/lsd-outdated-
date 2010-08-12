@@ -2,7 +2,7 @@
 
 var empty = {translate: {x: 0, y: 0}, outside: {x: 0, y: 0}, inside: {x: 0, y: 0}};
 
-ART.Widget.Module.Layers = new Class({
+ART.Widget.Trait.Layers = new Class({
 
   layers: {},
 
