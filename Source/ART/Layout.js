@@ -53,7 +53,7 @@ ART.Layout = new Class({
     if (!$defined(cache[name])) {
       switch(name) {
         case "height": case "width":
-          name = 'dimensions';
+          name = 'liquid';
           break;
       }
       cache[name] = ART.Widget.Trait[name.capitalize()] || null;

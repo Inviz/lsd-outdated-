@@ -2,6 +2,7 @@ ART.Widget.Paint = new Class({
   Includes: [
     ART.Widget,
     ART.Widget.Trait.Shape,
+    ART.Widget.Trait.Dimensions,
     ART.Widget.Trait.Layers
   ],
 	
