@@ -43,7 +43,6 @@ ART.Widget.Trait.Layers = new Class({
       var styles = this.getChangedStyles.apply(this, properties);
       //console.log('redraw', args.layer, this.selector, styles)
       if (styles) {
-        //console.log(this.selector, styles.height)
         instance.padding = this.inside;
         value = (args.draw || instance.paint).apply(instance, Hash.getValues(styles))
         if (value === false) {
@@ -57,13 +56,14 @@ ART.Widget.Trait.Layers = new Class({
           if (!injected) {
             instance.inject(this.paint);
             injected = true;
+          } else {
+            if (instance.update) instance.update(this.paint)
           }
         }
         instance.value = value;
       } else {
         //this.log('unchanged')
       } 
-      
       instance.translate(value.translate.x + this.outside.x, value.translate.y + this.outside.y);
       this.outside.x += value.outside.x;
       this.outside.y += value.outside.y;

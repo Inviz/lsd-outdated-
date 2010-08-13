@@ -7,6 +7,10 @@ ART.Layer.Shadow = new Class({
   
   paint: function(stroke, shadow, color, x, y, quality) {
     if (!color || (!shadow && !x && !y)) return false;
+    if (!stroke) stroke = 0;
+    if (!shadow) shadow = 0;
+    if (!x) x = 0;
+    if (!y) y = 0;
     
     if (ART.Features.Blur && (quality == 'best' || shadow > 10)) {
       return ART.Layer.ShadowBlur.prototype.paint.apply(this, arguments);
@@ -17,6 +21,10 @@ ART.Layer.Shadow = new Class({
 
   inject: function(node) {
     this.parent.apply(this, arguments);
+    this.update(node);
+  },
+  
+  update: function(node) {
     for (var i = 0, j = this.layers.length; i < j; i++) if (this.layers[i]) this.layers[i].inject(node)
   },
   
@@ -67,39 +75,24 @@ ART.Layer.ShadowOnion = new Class({
       var fill = new Color(color);
       fill.base = fill.alpha;
       //var node = this.element.parentNode;
-      for (var i = 0; i < Math.max(shadow, 1); i++) {
+      var layers = Math.max(shadow, 1);
+      for (var i = 0; i < layers; i++) {
         if (shadow == 0) {
           fill.alpha = Math.min(fill.base * 2, 1)
         } else {
           fill.alpha = fill.base / 2 * (i == shadow ? .29 : (.2 - shadow * 0.017) + Math.sqrt(i / 100));
         }
-        //if (fill.alpha < 0.02) continue;
+        if (fill.alpha < 0.02) continue;
         var rectangle = this.layers[i];
         if (!rectangle) rectangle = this.layers[i] = ART.Layer.Shadow.Layer.getInstance(this);
         rectangle.base = this.base;
         rectangle.shadow = this;
-        rectangle.produce(stroke - i  + shadow / 2);
+        rectangle.produce(stroke / 2 + shadow / 2 - i);
         rectangle.fill(fill);
-        //if (node) {
-        //  var layer = this.layers[i - 1];
-        //  
-        //  if (layer) {
-        //    if (layer.element.nextSibling) {
-        //      node.insertBefore(rectangle.element, layer.element.nextSibling);
-        //    } else {
-        //      node.appendChild(rectangle.element)
-        //    }
-        //  } else {
-        //    rectangle.inject(this.container)
-        //  }
-        //}
       }
-      for (var i = Math.max(shadow, 1), j = this.layers.length; i < j; i++) {
-        if (this.layers[i]) ART.Layer.Shadow.Layer.release(this.layers[i]);
-        this.layers.splice(i, 1);
-        i--;
-        j--;
-      }
+      var length = this.layers.length;
+      for (var i = layers; i < length; i++) if (this.layers[i]) ART.Layer.Shadow.Layer.release(this.layers[i]);
+      this.layers.splice(layers, length);      
     } else {
       this.layers.each(ART.Layer.Shadow.Layer.release);
       this.layers = [];
@@ -135,6 +128,7 @@ ART.Layer.Shadow.Layer.getInstance = function() {
   return ART.Layer.Shadow.Layer.stack.pop() || (new ART.Layer.Shadow.Layer);
 }
 ART.Layer.Shadow.Layer.release = function(layer) {
-  if (layer.element) layer.element.parentNode.removeChild(layer.element);
+  var shape = layer.shape;
+  if (shape) shape.element.parentNode.removeChild(shape.element);
   ART.Layer.Shadow.Layer.stack.push(layer);
 };

@@ -6,7 +6,7 @@ Widget.Trait.Choice = new Class({
     if (item && !item.render) item = this.findItemByValue(item);
     if (!item && this.options.force) return false;
     var selected = this.selected;
-    this.setSelectedItem.apply(this, arguments);  
+    this.setSelectedItem.apply(this, arguments);
     if (temp !== true) {
       this.setValue(item);
     } else {

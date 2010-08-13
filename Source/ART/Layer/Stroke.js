@@ -5,6 +5,7 @@ ART.Layer.Stroke = new Class({
   
   paint: function(strokeColor, stroke, cap, dash, color) {
     if (!color && (!stroke || !strokeColor)) return false;
+    if (!stroke) stroke = 0;
     this.produce(stroke / 2)
   	this.shape.stroke(strokeColor, stroke, cap);
   	this.shape.fill.apply(this.shape, color ? $splat(color) : null);

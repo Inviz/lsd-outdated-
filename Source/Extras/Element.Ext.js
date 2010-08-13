@@ -95,73 +95,7 @@ Element.implement({
     }
     return this;
   }
-})
-
-
-
-
-
-
-Fx.Fade = new Class({
-	Extends: Fx.Tween,
-	
-	options: {
-		property: 'opacity'
-	},
-	
-	start: function(how) {
-		var toggle;
-		how = $pick(how, 'toggle');
-		
-		var start = Fx.Tween.prototype.start.bind(this);
-		
-		switch (how){
-			case 'in': start(1); break;
-			case 'out': start(0); break;
-			case 'show': this.show(); break;
-			case 'hide': this.hide(); break;
-			case 'toggle':
-				var flag = this.element.retrieve('fade:flag', this.element.get('opacity') == 1);
-				start(flag ? 0 : 1);
-				this.element.store('fade:flag', !flag);
-				toggle = true;
-			break;
-			default: start(arguments);
-		}
-		if (!toggle) this.element.eliminate('fade:flag');
-		return this;
-	},
-	
-	hide: function() {
-		return this.set(0);
-	}, 
-	
-	show: function() {
-		return this.set(1);
-	}
 });
-
-Element.Properties.fade = {
-
-	set: function(options){
-		var tween = this.retrieve('fade');
-		if (tween) tween.cancel();
-		return this.eliminate('fade').store('fade:options', $extend({link: 'cancel'}, options));
-	},
-
-	get: function(options){
-		if (options || !this.retrieve('fade')){
-			if (options || !this.retrieve('fade:options')) this.set('fade', options);
-			this.store('fade', new Fx.Fade(this, this.retrieve('fade:options')));
-		}
-		return this.retrieve('fade');
-	}
-
-};
-
-
-
-
 
 
 

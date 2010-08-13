@@ -7,13 +7,6 @@
 		'shadowColor', 'shadowBlur', 'shadowOffsetX', 'shadowOffsetY', 'userSelect'
 	)
 	
-	ART.Styles.Defaults = {
-	  shadowBlur: 0,
-	  shadowOffsetX: 0,
-	  shadowOffsetY: 0,
-	  strokeWidth: 0
-	};
-	
 	ART.ComplexStyles = {
 		'cornerRadius': {
 			set: ['cornerRadiusTopLeft', 'cornerRadiusBottomLeft', 'cornerRadiusTopRight', 'cornerRadiusBottomRight'],

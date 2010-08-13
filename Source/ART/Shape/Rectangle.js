@@ -63,7 +63,7 @@ ART.Shape.Rectangle = new Class({
 		return {
 			left: ((styles.width == 'auto') ? Math.max(stroke - offset.left, 0) : stroke),
 			top: 0,
-			right: stroke,
+			right: ((styles.width == 'auto') ? Math.max(stroke - offset.right, 0) : stroke),
 			bottom: stroke
 		}
 	}

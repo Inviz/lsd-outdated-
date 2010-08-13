@@ -4,6 +4,10 @@ ART.Layer.InnerShadow = new Class({
   properties: ['strokeWidth', 'innerShadowBlur', 'innerShadowColor', 'innerShadowOffsetX', 'innerShadowOffsetY'],
 
   paint: function(stroke, shadow, color, x, y) {
+    if (!stroke) stroke = 0;
+    if (!shadow) shadow = 0;
+    if (!x) x = 0;
+    if (!y) y = 0;
     if (shadow > 0 || y > 0 || x > 0) {
       var fill = new Color(color);
       fill.base = fill.alpha;
@@ -41,7 +45,7 @@ ART.Layer.InnerShadow = new Class({
     for (var i = 0, j = this.layers.length; i < j; i++) 
       if (this.layers[i]) 
         this.layers[i].translate(i - Math.max(0, y - x) / 2, i + Math.max(0, x - y) / 2)
-  }
+  } 
 })
 ART.Layer.InnerShadow.Layer = new Class({
   Extends: ART.Layer,

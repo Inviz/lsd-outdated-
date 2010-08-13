@@ -4,6 +4,13 @@ ART.Widget.Menu = new Class({
     Widget.Trait.Animation
   ],
   
+  options: {
+    animation: {
+      duration: 0,
+      value: 0
+    }
+  },
+  
   position: 'absolute',
   
   name: 'menu',

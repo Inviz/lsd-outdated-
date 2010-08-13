@@ -74,7 +74,6 @@ ART.Widget.Trait.HasMenu = new Class({
   
   buildMenu: function() {
     this.applyLayout('menu#menu');
-    this.menu.getAnimation().hide();
   },
   
   expand: Macro.onion(function() {
@@ -87,7 +86,7 @@ ART.Widget.Trait.HasMenu = new Class({
   
   collapse: Macro.onion(function() {
     this.menu.hide();
-    this.repositionMenu();
+    //this.repositionMenu();
     //this.detachOuterClick();
   }),
   
